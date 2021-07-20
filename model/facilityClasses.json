@@ -1,0 +1,26 @@
+{
+    "Health Center": [
+        "hcii",
+        "hc_ii",
+        "hc_iii",
+        "hciv",
+        "hc_iv",
+        "hciii",
+        "clinic",
+        "specialized_clinic",
+        "drug_shop"
+    ],
+    "Hospital": [
+        "hospital",
+        "rrh",
+        "nbb",
+        "rbb",
+        "nrh",
+        "bcdp"
+    ],
+    "Vaccine Store": [
+        "district_vaccine_store",
+        "national_vaccine_store",
+        "regional_vaccine_store"
+    ]
+}

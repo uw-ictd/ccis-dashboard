@@ -1,0 +1,80 @@
+<%- include('partials/head.ejs') -%>
+<script type="text/javascript" src="main.js"></script>
+
+<body>
+    <!-- begin top bar -->
+    <div id="top-wrapper">
+        <div id="title">CCIS Dashboard</div>
+        <div id="key-indicators-container"> </div>
+        <div id="filter">
+            <table>
+                <tr>
+                    <td><span class="smalltitle">Filter</span></td>
+                </tr>
+                <tr>
+                    <td>Facilty type:</td>
+                    <td>
+                        <%- include('partials/groupedDropdown', { id: 'facility-selector', classes: facilityClasses }); %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Refrigerator/freezer type:</td>
+                    <td>
+                        <%- include('partials/groupedDropdown', { id: 'refrigerator-selector', classes: refrigeratorClasses }); %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Refrigerator/freezer maintenance priority:</td>
+                    <td>
+                        <%- include('partials/ungroupedDropdown', { id: 'maintenance-selector', options: maintenancePriorities }); %>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div>
+            <!-- Visualization selection and button -->
+            <div>
+                Select a visualization:
+                <select id="visualization-selector">
+                    <% Object.keys(visualizations).forEach( x => { %>
+                        <option value="<%=x%>"><%=x%></option>
+                    <% }); %>
+                </select>
+            </div>
+            <button id="display" type="button" onclick="drawVisualization()">Display</button>
+        </div>
+        <div>
+            <!-- Export selection and button -->
+            <div>
+                Select the data you would like to export:
+                <select id="export-selector">
+                    <% Object.entries(exportOptions).forEach(([ key, name ]) => { %>
+                    <option value="<%=key%>"><%=name%></option>
+                    <% }); %>
+                </select>
+            </div>
+            <button id="export" type="button" onclick="exportTables()">Export</button>
+        </div>
+    </div>
+    <!--end top bar -->
+
+    <!-- begin map and charts -->
+    <div id="main-wrapper">
+        <div id="map"></div>
+        <div id="viz-wrapper">
+            <div id="map-container"></div>
+            <div id="chart-wrapper">
+                <div id="chart-container"></div>
+                <div id="legend-container"></div>
+            </div>
+        </div>
+    </div>
+    <!-- end map and charts -->
+</body>
+
+<script>
+    window.facilityClasses = <%- JSON.stringify(facilityClasses) -%>;
+    window.refrigeratorClasses = <%- JSON.stringify(refrigeratorClasses) -%>;
+</script>
+
+</html>

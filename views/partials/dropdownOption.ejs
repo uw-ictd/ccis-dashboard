@@ -1,0 +1,8 @@
+<%# In the current implementation, this separator must unfortunately be %>
+<%# defined twice: here and in frontend-src/groupedMultiselect.js, and they %>
+<%# must agree. %>
+<% const SEPARATOR = '|'; %>
+
+<option value="#<%=id%><%=SEPARATOR%><%=value%>" class="<%=className%>">
+    <%=value%>
+</option>

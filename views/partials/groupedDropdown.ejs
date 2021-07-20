@@ -1,0 +1,10 @@
+<select id="<%=id%>" multiple>
+    <% Object.keys(classes).forEach(x => { %>
+        <%- include('dropdownOption', { id: id, value: x, className: 'parent' }); %>
+    <% }); %>
+    <% Object.values(classes).forEach(arr => { %>
+        <% arr.forEach( x => { %>
+            <%- include('dropdownOption', { id: id, value: x, className: 'child' }); %>
+        <% }); %>
+    <% }); %>
+</select>

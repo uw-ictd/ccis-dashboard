@@ -1,0 +1,10 @@
+// For Jest, which uses babel-jest by default
+// This configuration is copied from:
+//   https://jestjs.io/docs/en/webpack#using-with-webpack-2
+{
+  "env": {
+    "test": {
+      "plugins": ["transform-es2015-modules-commonjs"]
+    }
+  }
+}
