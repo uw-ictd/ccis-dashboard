@@ -81,6 +81,6 @@ function getMaintenancePriorityInfo(facility) {
     const description = `&#160;low : ${facility[`maintenance_priority${MAP_SEPARATOR}low`]}
         <br>&#160;medium : ${facility[`maintenance_priority${MAP_SEPARATOR}medium`]}
         &#160;&#160;<br>high : ${facility[`maintenance_priority${MAP_SEPARATOR}high`]}`;
-    const iconImage = `url(/images/priority-${getHighestMaintenancePriority(facility)}.png)`;
+    const iconImage = `url(./images/priority-${getHighestMaintenancePriority(facility)}.png)`;
     return { description, iconImage };
 }
