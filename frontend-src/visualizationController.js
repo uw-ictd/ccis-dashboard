@@ -10,7 +10,7 @@ let maps = [];
 
 function drawVisualization(mapboxDependency, regionSelector) {
     const vizName = getVisualizationName();
-    return post('/api/query', {
+    return post('./api/query', {
         visualization: vizName,
         filter: getFilterParams(regionSelector)
     }).then(async (body) => {

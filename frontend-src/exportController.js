@@ -1,8 +1,8 @@
 const converter = require('json-2-csv');
 const exportOptions = require('../shared/exportOptions');
 const { post } = require('./httpTools');
-const API_RAW = '/api/rawTable';
-const API_BIG = '/api/bigTable';
+const API_RAW = './api/rawTable';
+const API_BIG = './api/bigTable';
 
 function exportTables() {
     const tableName = getTableName();
