@@ -1,19 +1,30 @@
-# CCIS-Dashboard
+# CCIS Dashboard
+
+This repository contains the dashboard component of the CCIS system, along with the dashboard's database. For a complete deployment including a webserver, an ODK-X sync endpoint, and ODK-X authentication server, see one of the server setup repositories:
+* [uganda-ccis-server-setup](https://github.com/uw-ictd/uganda-ccis-server-setup)
 
 ## Production deployment with Docker
 1. Install [Docker](https://docs.docker.com/get-docker/) and [git](https://git-scm.com/downloads)
 2. Clone this repository and `cd` into it
 3. Get a [Mapbox token](#mapbox-api)
 4. Setup your `.env` file ([instructions below](#environment-variables))
-5. Build the docker container
+5. Build the dashboard's database
 ```
-docker build -t ccis-dashboard .
+docker build -t ccis/dashboard-database docker-database/ -f docker-database/deploymentDB/Dockerfile
 ```
-6. Start the application, replacing `80` with the port where the application should be available
+6. Build the dashboard docker container (this uses the `MAPBOX_API_TOKEN` environment variable)
 ```
-docker run -p 80:8000 ccis-dashboard
+docker build -t ccis/dashboard .
 ```
-7. Application should now be available from outside the docker container at `localhost:80`. Setup a webserver (e.g. nginx) to expose the application to the internet
+7. Start the database, providing an admin password of your choice
+```
+docker run -p 5432:5432 -e POSTGRES_PASSWORD=ReplaceMe -e POSTGRES_DB=coldchain ccis/dashboard-database
+```
+8. Start the application, replacing `80` with the port where the application should be available
+```
+docker run -p 80:8000 ccis/dashboard
+```
+9. Application should now be available from outside the docker container at `localhost:80`. Setup a webserver (e.g. nginx) to expose the application to the internet and run with https
 
 ## Mapbox API
 To use the Mapbox API, you must have an API key. The API key is used as an identifier for billing purposes. To create a Mabox API Key, first make a [Mapbox account](https://www.mapbox.com/), then [generate a new one](https://docs.mapbox.com/help/glossary/access-token/) or use your default public token.
@@ -34,10 +45,10 @@ ODKX_AUTH_URL=
 ODKX_TEST_USER=
 ODKX_TEST_PASSWORD=
 ```
-* `DB_SERVER` is the URL of a Microsoft T-SQL server
-* `DB_NAME` is the name of a database on that server
-* `DB_USER` and `DB_PASS` are the login credentials for a (read-only) user on that database
-* `MAPBOX_API_TOKEN` is the token generated above
+* `DB_SERVER` is the URL of a Postgres server. Use `localhost` to connect to a local dockerized database
+* `DB_NAME` is the name of a database on that server. Use `coldchain` if using the `deploymentDB` database
+* `DB_USER` and `DB_PASS` are the login credentials for a (read-only) user on that database. Use `dashboard` and `EnsureFirewallConfigured` with the `deploymentDB` database
+* `MAPBOX_API_TOKEN` is the token generated above. This is the only environment variable needed at build time
 * `COOKIE_KEY` should be newly-generated, a strong random secret which is used to encrypt authentication details
 * `ODKX_AUTH_URL` is the URL of an ODK-X sync endpoint
 * `ODKX_TEST_USER` and `ODKX_TEST_PASSWORD` are only required for testing. These are credentials for a user on that ODK-X server

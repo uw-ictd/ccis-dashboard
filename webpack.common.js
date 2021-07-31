@@ -2,10 +2,10 @@ const path = require('path');
 const DotenvWebpackPlugin = require('dotenv-webpack');
 
 module.exports = {
-    entry: './frontend-src/index.js',
+    entry: './src/frontend-src/index.js',
     output: {
         filename: 'main.js',
-        path: path.resolve(__dirname, 'public')
+        path: path.resolve(__dirname, 'src', 'public')
     },
     module: {
         rules: [
