@@ -11,9 +11,10 @@ const connectDB = require('./model/db');
 require('./util/env');
 
 // error and exit if .env file doesn't exist
-if (!fs.existsSync('.env')) {
+if ((!process.env.PRODUCTION || process.env.PRODUCTION.toLowerCase === 'false')
+    && !fs.existsSync('.env')) {
     console.error('.env file not found. Please refer to README.md for .env setup instructions');
-    process.exit();
+    process.exit(1);
 }
 
 function createApp(db) {
