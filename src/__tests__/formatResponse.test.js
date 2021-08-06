@@ -1,5 +1,5 @@
 const { fromPairs } = require('lodash');
-const { formatForD3Stack, makeMetadata, colorLabelAsKeys, mapToObject } = require('../controller/formatResponse')._test;
+const { formatForD3Stack, makeMetadata, colorlabelAsKeys, mapToObject } = require('../controller/formatResponse')._test;
 
 describe('formatForD3Stack tests', () => {
     test('mapToObject should convert to native javascript objects', () => {
@@ -13,13 +13,13 @@ describe('formatForD3Stack tests', () => {
 
     const fullColorDomain = ['Model 1', 'Model 2', 'Model 3', 'Model 4'];
     const rowSubset = [
-        { xlabel: '2015', repeatLabel: 'Gas', colorLabel: 'Model 1', count: 10 },
-        { xlabel: '2015', repeatLabel: 'Gas', colorLabel: 'Model 2', count: 13 },
-        { xlabel: '2015', repeatLabel: 'Gas', colorLabel: 'Model 3', count: 30 }
+        { xlabel: '2015', repeatlabel: 'Gas', colorlabel: 'Model 1', count: 10 },
+        { xlabel: '2015', repeatlabel: 'Gas', colorlabel: 'Model 2', count: 13 },
+        { xlabel: '2015', repeatlabel: 'Gas', colorlabel: 'Model 3', count: 30 }
     ];
 
-    test('colorLabelAsKeys should aggregate data', () => {
-        expect(colorLabelAsKeys(fullColorDomain, rowSubset)).toEqual( {
+    test('colorlabelAsKeys should aggregate data', () => {
+        expect(colorlabelAsKeys(fullColorDomain, rowSubset)).toEqual( {
             'Model 1': 10,
             'Model 2': 13,
             'Model 3': 30,
@@ -27,8 +27,8 @@ describe('formatForD3Stack tests', () => {
         });
     });
 
-    test('colorLabelAsKeys should return a JSON serializable object', () => {
-        const output = colorLabelAsKeys(fullColorDomain, rowSubset);
+    test('colorlabelAsKeys should return a JSON serializable object', () => {
+        const output = colorlabelAsKeys(fullColorDomain, rowSubset);
         expect(JSON.parse(JSON.stringify(output))).toEqual(output);
     });
 
@@ -40,20 +40,20 @@ describe('formatForD3Stack tests', () => {
     test('formatForD3Stack should return a multiply-nested array', () => {
         const fullColorDomain = [ 'Model 1', 'Model 2', 'Model 3' ];
         const rows = [
-            { xlabel: '2013', repeatLabel: 'Gas', colorLabel: 'Model 1', count: 10 },
-            { xlabel: '2013', repeatLabel: 'Gas', colorLabel: 'Model 2', count: 13 },
-            { xlabel: '2014', repeatLabel: 'Gas', colorLabel: 'Model 2', count: 20 },
-            { xlabel: '2014', repeatLabel: 'Gas', colorLabel: 'Model 3', count: 30 },
-            { xlabel: '2015', repeatLabel: 'Gas', colorLabel: 'Model 1', count: 10 },
-            { xlabel: '2015', repeatLabel: 'Gas', colorLabel: 'Model 2', count: 13 },
-            { xlabel: '2015', repeatLabel: 'Gas', colorLabel: 'Model 3', count: 30 },
-            { xlabel: '2013', repeatLabel: 'Electric', colorLabel: 'Model 1', count: 10 },
-            { xlabel: '2013', repeatLabel: 'Electric', colorLabel: 'Model 2', count: 13 },
-            { xlabel: '2013', repeatLabel: 'Electric', colorLabel: 'Model 3', count: 20 },
-            { xlabel: '2014', repeatLabel: 'Electric', colorLabel: 'Model 1', count: 10 },
-            { xlabel: '2014', repeatLabel: 'Electric', colorLabel: 'Model 2', count: 13 },
-            { xlabel: '2014', repeatLabel: 'Electric', colorLabel: 'Model 3', count: 30 },
-            { xlabel: '2015', repeatLabel: 'Electric', colorLabel: 'Model 3', count: 30 }
+            { xlabel: '2013', repeatlabel: 'Gas', colorlabel: 'Model 1', count: 10 },
+            { xlabel: '2013', repeatlabel: 'Gas', colorlabel: 'Model 2', count: 13 },
+            { xlabel: '2014', repeatlabel: 'Gas', colorlabel: 'Model 2', count: 20 },
+            { xlabel: '2014', repeatlabel: 'Gas', colorlabel: 'Model 3', count: 30 },
+            { xlabel: '2015', repeatlabel: 'Gas', colorlabel: 'Model 1', count: 10 },
+            { xlabel: '2015', repeatlabel: 'Gas', colorlabel: 'Model 2', count: 13 },
+            { xlabel: '2015', repeatlabel: 'Gas', colorlabel: 'Model 3', count: 30 },
+            { xlabel: '2013', repeatlabel: 'Electric', colorlabel: 'Model 1', count: 10 },
+            { xlabel: '2013', repeatlabel: 'Electric', colorlabel: 'Model 2', count: 13 },
+            { xlabel: '2013', repeatlabel: 'Electric', colorlabel: 'Model 3', count: 20 },
+            { xlabel: '2014', repeatlabel: 'Electric', colorlabel: 'Model 1', count: 10 },
+            { xlabel: '2014', repeatlabel: 'Electric', colorlabel: 'Model 2', count: 13 },
+            { xlabel: '2014', repeatlabel: 'Electric', colorlabel: 'Model 3', count: 30 },
+            { xlabel: '2015', repeatlabel: 'Electric', colorlabel: 'Model 3', count: 30 }
         ];
         expect(formatForD3Stack(rows, fullColorDomain)).toEqual([
             [ 'Gas', [
@@ -98,7 +98,7 @@ describe('formatForD3Stack tests', () => {
 
     test('formatForD3Stack should insert zeros for missing data', () => {
         const rows = [
-            { xlabel: '2013', repeatLabel: 'Gas', colorLabel: 'Model 1', count: 10 }
+            { xlabel: '2013', repeatlabel: 'Gas', colorlabel: 'Model 1', count: 10 }
         ];
         expect(formatForD3Stack(rows, fullColorDomain)).toEqual([
             [ 'Gas', [
@@ -113,18 +113,18 @@ describe('formatForD3Stack tests', () => {
 describe('makeMetadata tests', () => {
     test('makeMetadata should make fullDomain and fullColorDomain', () => {
         const rows = [
-            { xlabel: '2013', repeatLabel: 'Gas', colorLabel: 'Model 1', count: 10 },
-            { xlabel: '2013', repeatLabel: 'Gas', colorLabel: 'Model 2', count: 13 },
-            { xlabel: '2014', repeatLabel: 'Gas', colorLabel: 'Model 2', count: 20 },
-            { xlabel: '2014', repeatLabel: 'Electric', colorLabel: 'Model 2', count: 13 },
-            { xlabel: '2014', repeatLabel: 'Electric', colorLabel: 'Model 3', count: 30 },
-            { xlabel: '2015', repeatLabel: 'Electric', colorLabel: 'Model 3', count: 30 }
+            { xlabel: '2013', repeatlabel: 'Gas', colorlabel: 'Model 1', count: 10 },
+            { xlabel: '2013', repeatlabel: 'Gas', colorlabel: 'Model 2', count: 13 },
+            { xlabel: '2014', repeatlabel: 'Gas', colorlabel: 'Model 2', count: 20 },
+            { xlabel: '2014', repeatlabel: 'Electric', colorlabel: 'Model 2', count: 13 },
+            { xlabel: '2014', repeatlabel: 'Electric', colorlabel: 'Model 3', count: 30 },
+            { xlabel: '2015', repeatlabel: 'Electric', colorlabel: 'Model 3', count: 30 }
         ];
         const legendData = [
-            { colorLabel: 'Model 1' },
-            { colorLabel: 'Model 2' },
-            { colorLabel: 'Model 3' },
-            { colorLabel: 'Model 4' }
+            { colorlabel: 'Model 1' },
+            { colorlabel: 'Model 2' },
+            { colorlabel: 'Model 3' },
+            { colorlabel: 'Model 4' }
         ];
         expect(makeMetadata({}, rows, legendData)).toEqual({
             fullDomain: [ '2013', '2014', '2015' ],

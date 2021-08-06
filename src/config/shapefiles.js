@@ -9,6 +9,11 @@ const level3Uganda = require('./Uganda_Districts_2020.json');
 module.exports = {
     levelNames: [ 'Region (Level 2)', 'District (Level 3)' ],
     levels: [ level2Uganda, level3Uganda ],
+    // The map will only show boundaries between these two levels
+    // Each must be an element of levelNames
+    // `topLevel` must come before `bottomLevel` in `levelNames` and `levels`
+    topLevel: 'Region (Level 2)',
+    bottomLevel: 'District (Level 3)',
     // This defines where to look up the level names: the strings here are keys
     // to the `properties` object of an individual geoJSON Feature
     regionNameKeys: [ 'ccisRegionName', 'ccisDistrictName' ]

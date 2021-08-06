@@ -4,8 +4,8 @@
 //const boundaries = level2Uganda.features.concat(level3Uganda.features);
 
 // Call this in `map.on('load', ...)`
-function RegionSelector(map, shapefiles, config) {
-    this._SELECT_OPACITY = 0.6;
+function RegionSelector(map, shapefiles) {
+    this._SELECT_OPACITY = 0.7;
     this._DESELECT_OPACITY = 0.1;
     this._SEPARATOR = '|';
     this._TOP = '__top__';
@@ -25,8 +25,8 @@ function RegionSelector(map, shapefiles, config) {
     this._getIDsFromLevel = getIDsFromLevel;
     this._regionNameKeys = shapefiles.regionNameKeys;
     // The map will only show boundaries between these two levels
-    this._topLevelIndex = shapefiles.levelNames.indexOf(config.topLevel);
-    this._bottomLevelIndex = shapefiles.levelNames.indexOf(config.bottomLevel);
+    this._topLevelIndex = shapefiles.levelNames.indexOf(shapefiles.topLevel);
+    this._bottomLevelIndex = shapefiles.levelNames.indexOf(shapefiles.bottomLevel);
     this._hierarchy = this._makeHierarchy(shapefiles);
 
     this.getSelectedRegions = getSelectedRegions;
@@ -148,7 +148,8 @@ function addLayerToMap(geoJSONFeature) {
         source: layerID,
         layout: { visibility: 'none' },
         paint: {
-            'fill-color': 'purple',
+            'fill-color': '#935181',
+            'fill-outline-color': '#7A3166',
             'fill-opacity': this._DESELECT_OPACITY
         }
     });
@@ -174,7 +175,7 @@ function getSelectedRegions() {
         }
     }
     // We can return regions from the selection that were in levels above
-    // `config.topLevel` with this
+    // `shapefiles.topLevel` with this
     this._getIDsFromLevel(0).forEach(helper);
     return regions.map(id => id.split(this._SEPARATOR));
 }

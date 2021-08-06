@@ -1,7 +1,7 @@
 const request = require('supertest');
 const { getServer, closeServer }  = require('../server');
 const { TEST_USER, TEST_PASSWORD, dbOptionsSeeded, silenceErrors, mapSeries } = require('../testUtils');
-const visualizations = require('../shared/visualizations');
+const visualizations = require('../config/visualizations');
 let agent;
 
 beforeAll(async () => {
@@ -42,7 +42,7 @@ describe('Login tests', () => {
             .send(`password=${TEST_PASSWORD}`)
             .redirects(5)
             .expect(200);
-        expect(response.text).toContain('<div id="map"');
+        expect(response.text).toContain('<div class="map"');
     });
 });
 
@@ -50,7 +50,7 @@ describe('/api/query integration tests', () => {
    test('A normal visualization should return some data', async () => {
         const response = await agent.post('/api/query')
             .send({
-                visualization: 'Refrigerator/freezer utilization',
+                visualization: 'CCE utilization',
                 filter: null
             });
         expect(response.statusCode).toBe(200);
@@ -68,7 +68,7 @@ describe('/api/query integration tests', () => {
     test('Server responds when a filter is specified', async () => {
         const response = await agent.post('/api/query')
             .send({
-                visualization: 'Refrigerator/freezer utilization',
+                visualization: 'CCE utilization',
                 filter: {
                     facilityTypes: [ 'public_hcii' ],
                     refrigeratorTypes: [ 'VLS 054 SDD Greenline' ],
@@ -100,8 +100,9 @@ describe('/api/query integration tests', () => {
         expect(responseBody.error).toContain('"visualization" is required');
     });
 
-    test('All visualizations should run without error', async () => {
-        await mapSeries(Object.keys(visualizations), async (vizName) => {
+    const vizNames = Object.keys(visualizations);
+    vizNames.forEach((vizName, index) => {
+        test(`[${index+1}/${vizNames.length}] Visualization should run without error: ${vizName}`, async () => {
             const response = await agent.post('/api/query')
                 .send({
                     visualization: vizName,
@@ -109,7 +110,5 @@ describe('/api/query integration tests', () => {
                 });
             expect(response.statusCode).toBe(200);
         });
-    // This is a slow test because it runs a lot of visualizations
-    // Takes about 50 seconds to run 19 tests, but ideally we'd be under 1s/query
-    }, 80000);
+    });
 });

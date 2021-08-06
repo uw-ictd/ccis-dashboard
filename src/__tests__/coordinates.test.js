@@ -1,8 +1,8 @@
 const makeMarkerInfo = require('../frontend-src/coordinates');
 
 const zeroData = [{
-    Location_latitude: '0',
-    Location_longitude: '0',
+    location_latitude: '0',
+    location_longitude: '0',
     facility_name: 'A hospital',
     id_health_facilities: '1234',
     maintenance_priority$high: 0,
@@ -13,8 +13,8 @@ const zeroData = [{
 }];
 
 const populatedData = [{
-    Location_latitude: '0',
-    Location_longitude: '0',
+    location_latitude: '0',
+    location_longitude: '0',
     facility_name: 'Facility1',
     id_health_facilities: 'id1',
     maintenance_priority$high: 1,
@@ -24,8 +24,8 @@ const populatedData = [{
     maintenance_priority$not_applicable: 0,
 },
 {
-    Location_latitude: '0',
-    Location_longitude: '0',
+    location_latitude: '0',
+    location_longitude: '0',
     facility_name: 'Facility2',
     id_health_facilities: 'id2',
     maintenance_priority$high: 0,
@@ -35,8 +35,8 @@ const populatedData = [{
     maintenance_priority$not_applicable: 0,
 },
 {
-    Location_latitude: '0',
-    Location_longitude: '0',
+    location_latitude: '0',
+    location_longitude: '0',
     facility_name: 'Facility3',
     id_health_facilities: 'id3',
     maintenance_priority$high: 0,

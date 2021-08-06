@@ -39,6 +39,7 @@ DB_SERVER=
 DB_NAME=
 DB_USER=
 DB_PASS=
+DB_SSL=
 MAPBOX_API_TOKEN=
 COOKIE_KEY=
 ODKX_AUTH_URL=
@@ -48,10 +49,14 @@ ODKX_TEST_PASSWORD=
 * `DB_SERVER` is the URL of a Postgres server. Use `localhost` to connect to a local dockerized database
 * `DB_NAME` is the name of a database on that server. Use `coldchain` if using the `deploymentDB` database
 * `DB_USER` and `DB_PASS` are the login credentials for a (read-only) user on that database. Use `dashboard` and `EnsureFirewallConfigured` with the `deploymentDB` database
+* `DB_SSL` is an optional boolean which should be left out when connecting to a local database. To connect to a remote database server, `DB_SSL=true` may be required
 * `MAPBOX_API_TOKEN` is the token generated above. This is the only environment variable needed at build time
 * `COOKIE_KEY` should be newly-generated, a strong random secret which is used to encrypt authentication details
 * `ODKX_AUTH_URL` is the URL of an ODK-X sync endpoint
 * `ODKX_TEST_USER` and `ODKX_TEST_PASSWORD` are only required for testing. These are credentials for a user on that ODK-X server
+
+## Deployment Configuration
+For a new deployment, update the files in the `config` folder with your shapefiles, intended visualizations, tab structure
 
 ## Development installation
 Clone the repository and `cd` into it. Set up your `.env` file.\

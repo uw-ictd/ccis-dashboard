@@ -10,8 +10,8 @@ function multiselect(id) {
  * When called on a multiple-select dropdown, this returns all the selected
  * values.
  */
-function getSelection(id) {
-    const selectedElements = document.querySelectorAll(`#${id} :checked`);
+function getSelection(selectorStr) {
+    const selectedElements = document.querySelectorAll(`${selectorStr} :checked`);
     return Array.from(selectedElements).map(element => element.value);
 }
 

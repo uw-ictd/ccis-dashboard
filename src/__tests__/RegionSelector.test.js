@@ -74,18 +74,15 @@ const levelMock = [
 const shapesMock = {
     levelNames: [ 'Level 1', '2', '3', '4', '5', 'Lowest level (6)' ],
     regionNameKeys: [ '1', '2', '3', '4', '5', '6' ],
-    levels: levelMock
-};
-
-const configMock = {
     topLevel: '3',
-    bottomLevel: '5'
+    bottomLevel: '5',
+    levels: levelMock
 };
 
 describe('Region selection tests', () => {
     test('After deselecting regions, getSelectedRegions is correct', async () => {
         const map = new MapMock();
-        const regionSelector = new RegionSelector(map, shapesMock, configMock);
+        const regionSelector = new RegionSelector(map, shapesMock);
         // Start at level 3, deselect 'Region'
         map.click(['top', 'Country', 'Region'].join(regionSelector._SEPARATOR));
         await nextTick();
@@ -96,7 +93,7 @@ describe('Region selection tests', () => {
 
     test('After deselecting and selecting regions, getSelectedRegions is correct', async () => {
         const map = new MapMock();
-        const regionSelector = new RegionSelector(map, shapesMock, configMock);
+        const regionSelector = new RegionSelector(map, shapesMock);
         map.click(['top', 'Country', 'Region'].join(regionSelector._SEPARATOR));
         map.click(['top', 'Country', 'Another region'].join(regionSelector._SEPARATOR));
         map.click(['top', 'Country', 'Another region'].join(regionSelector._SEPARATOR));
@@ -108,7 +105,7 @@ describe('Region selection tests', () => {
 
     test('When all the children are selected, the parent is too', () => {
         const map = new MapMock();
-        const regionSelector = new RegionSelector(map, shapesMock, configMock);
+        const regionSelector = new RegionSelector(map, shapesMock);
         expect(regionSelector.getSelectedRegions().sort()).toEqual([
             [ 'top' ],
             [ 'top', 'Country' ],
@@ -119,7 +116,7 @@ describe('Region selection tests', () => {
 
     test('RegionSelector can change levels and select new regions', async () => {
         const map = new MapMock();
-        const regionSelector = new RegionSelector(map, shapesMock, configMock);
+        const regionSelector = new RegionSelector(map, shapesMock);
         map.dblclick(['top', 'Country', 'Region'].join(regionSelector._SEPARATOR));
         await nextTick();
         // Now at Level 4

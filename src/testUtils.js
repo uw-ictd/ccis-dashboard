@@ -21,12 +21,12 @@ const dbOptionsSeeded = {
     port: 5438
 };
 
-async function displayViz(By, until, driver, vizName) {
+async function displayViz(By, until, driver, vizName, tabLabel) {
     const dropdownElt = driver.wait(until.elementLocated(
-        By.css(`#visualization-selector > option[value='${vizName}']`)
+        By.css(`#${tabLabel} .visualization-selector > option[value='${vizName}']`)
     ));
     await dropdownElt.click();
-    return driver.findElement(By.id('display')).click();
+    return driver.findElement(By.css(`#${tabLabel} .display`)).click();
 }
 
 async function logIn(By, until, driver, URL) {

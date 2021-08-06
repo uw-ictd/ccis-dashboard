@@ -66,6 +66,7 @@ function connect(options) {
         password: process.env.DB_PASS,
         host: process.env.DB_SERVER,
         database: process.env.DB_NAME,
+        ssl: process.env.DB_SSL,
         // configuring the pool
         max: 10,
         idleTimeoutMillis: 2*60000 // 45s - 2min
@@ -95,7 +96,7 @@ async function query(queryStr, transactionRequest) {
     } catch (err) {
         console.error('SQL error for query:', queryStr);
         console.error(err);
-        return result;
+        return result; // This is returned so tests have access to the error
     }
 }
 

@@ -1,5 +1,5 @@
 const express = require('express');
-const visualizations = require('../shared/visualizations');
+const visualizations = require('../config/visualizations');
 const vizQuery = require('../controller/queryTemplate');
 const formatResponse = require('../controller/formatResponse');
 const { getRefrigeratorQuery, getFacilityQuery } = require('../controller/exportQueries');

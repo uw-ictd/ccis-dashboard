@@ -2,9 +2,9 @@
  * @jest-environment jsdom
  */
 const drawAllCharts = require('../frontend-src/chartDrawer');
-const visualizations = require('../shared/visualizations');
+const visualizations = require('../config/visualizations');
 
-const viz = 'Refrigerator/freezer utilization';
+const viz = 'CCE utilization';
 const metadata = {
     fullDomain: [
         'MK 074',                'MKF 074',
@@ -57,7 +57,7 @@ const data = [ [ null, [
     } ]
 ] ] ];
 
-const pieSpec = visualizations['Refrigerators/freezers by working status (pie)'];
+const pieSpec = visualizations['CCE by working status (pie)'];
 const pieData = [ [ null, [ [ null, {
     ' ': 4,
     functioning: 400,
@@ -71,9 +71,9 @@ const pieMetadata = {
 
 beforeEach(() => {
     // Clean up after other tests
-    document.body.innerHTML = `<div id="chart-wrapper">
-        <div id="legend-container"></div>
-        <div id="chart-container"></div>
+    document.body.innerHTML = `<div id="test">
+        <div class="legend-container"></div>
+        <div class="chart-container"></div>
     </div>`;
     // JSDOM doesn't implement SVG standards, including getBBox, which is
     // used in drawAllCharts
@@ -85,19 +85,19 @@ beforeEach(() => {
 describe('Unit tests for drawAllCharts', () => {
     test('Tests should be setup correctly', () => {
         expect(document.querySelectorAll('div').length).toBe(3);
-        const container = document.querySelectorAll('#chart-container');
+        const container = document.querySelectorAll('#test .chart-container');
         expect(container.length).toBe(1);
     });
 
     test('Should produce a chart with the right number of rect\'s', () => {
-        drawAllCharts(data, metadata, visualizations[viz]);
-        const bars = document.querySelectorAll('#chart-container svg rect.bar');
+        drawAllCharts(data, metadata, visualizations[viz], 'test');
+        const bars = document.querySelectorAll('#test .chart-container svg rect.bar');
         expect(bars.length).toBe(5*5);
     });
 
     test('Should produce a legend with the right number of rect\'s', () => {
-        drawAllCharts(data, metadata, visualizations[viz]);
-        const squares = document.querySelectorAll('#legend-container svg rect');
+        drawAllCharts(data, metadata, visualizations[viz], 'test');
+        const squares = document.querySelectorAll('#test .legend-container svg rect');
         expect(squares.length).toBe(metadata.fullColorDomain.length);
     });
 
@@ -127,28 +127,28 @@ describe('Unit tests for drawAllCharts', () => {
                 not_installed_removed_from_service: 0
             } ]
         ] ] ];
-        drawAllCharts(data, metadata, visualizations[viz]);
-        const squares = document.querySelectorAll('#legend-container svg rect');
+        drawAllCharts(data, metadata, visualizations[viz], 'test');
+        const squares = document.querySelectorAll('#test .legend-container svg rect');
         expect(squares.length).toBe(metadata.fullColorDomain.length);
     });
 
     test('Pie chart should render arcs', () => {
-        drawAllCharts(pieData, pieMetadata, pieSpec);
-        const arcs = document.querySelectorAll('#chart-container svg path.slice');
+        drawAllCharts(pieData, pieMetadata, pieSpec, 'test');
+        const arcs = document.querySelectorAll('#test .chart-container svg path.slice');
         expect(arcs.length).toBe(3);
     });
 
     test('Bar chart should have tooltips', () => {
-        drawAllCharts(data, metadata, visualizations[viz]);
-        document.querySelectorAll('#chart-container svg rect.bar')
+        drawAllCharts(data, metadata, visualizations[viz], 'test');
+        document.querySelectorAll('#test .chart-container svg rect.bar')
             .forEach(slice => {
                 expect(slice._tippy).toBeTruthy();
             });
     });
 
     test('Pie chart should have tooltips', () => {
-        drawAllCharts(pieData, pieMetadata, pieSpec);
-        document.querySelectorAll('#chart-container svg path.slice')
+        drawAllCharts(pieData, pieMetadata, pieSpec, 'test');
+        document.querySelectorAll('#test .chart-container svg path.slice')
             .forEach(slice => {
                 expect(slice._tippy).toBeTruthy();
             });

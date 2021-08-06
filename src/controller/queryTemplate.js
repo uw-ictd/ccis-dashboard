@@ -2,6 +2,8 @@ const tableName = require('../model/tableName');
 const filterSpecification = require('./filterSpecification');
 const AGE_GROUPS_COLUMN_NAME = '"Age Groups"';
 const MAP_SEPARATOR = '$';
+const LOW_ALARM_COUNT = 1;
+const HIGH_ALARM_COUNT = 3;
 
 function toSQLList(array) {
     return '(' + array.map(str => `'${str}'`).join(', ') + ')';
@@ -9,8 +11,8 @@ function toSQLList(array) {
 
 const labelName = {
     groupBy: 'xlabel',
-    colorBy: 'colorLabel',
-    repeatBy: 'repeatLabel'
+    colorBy: 'colorlabel',
+    repeatBy: 'repeatlabel'
 };
 
 function referToColumn(columnName) {
@@ -39,7 +41,7 @@ function missingDataClause(columnName) {
 }
 
 // Example:
-//   t.model_id as xlabel, r.utilization as colorLabel
+//   t.model_id as xlabel, r.utilization as colorlabel
 function makeSelect(vizSpec) {
     if (vizSpec.style == 'map') {
         return makeMapSelect(vizSpec);
@@ -64,7 +66,7 @@ function makeSelect(vizSpec) {
 //   SUM(CASE WHEN refrigerators_odkx.maintenance_priority = 'low' THEN 1 ELSE 0 END) as "maintenance_priority.low",
 //   SUM(CASE WHEN refrigerators_odkx.maintenance_priority = 'medium' THEN 1 ELSE 0 END) as "maintenance_priority.medium",
 //   SUM(CASE WHEN refrigerators_odkx.maintenance_priority = 'not_applicable' THEN 1 ELSE 0 END) as "maintenance_priority.not_applicable"
-//   h.Location_longitude, h.Location_latitude, h.facility_name, h.id_health_facilities
+//   h.location_longitude, h.location_latitude, h.facility_name, h.id_health_facilities
 function makeMapSelect(vizSpec) {
     if (vizSpec.style === 'map') {
         return Object.entries(vizSpec.facilityPopup).map(([col, options]) => {
@@ -147,9 +149,9 @@ function makeGroupBy(vizSpec) {
 }
 
 // Example:
-//   h.Location_longitude, h.Location_latitude, h.facility_name, h.id_health_facilities
+//   h.location_longitude, h.location_latitude, h.facility_name, h.id_health_facilities
 function makeMapGroupBy(vizSpec) {
-    return [ 'Location_latitude', 'Location_longitude', 'facility_name', 'id_health_facilities']
+    return [ 'location_latitude', 'location_longitude', 'facility_name', 'id_health_facilities']
         .map(referToColumn)
         .join(', ');
 }
@@ -232,6 +234,46 @@ function makeFacilityJoin(vizSpec) {
     }
 }
 
+function makeAlarmJoin(vizSpec) {
+    if (vizSpec.style === 'map' && vizSpec.mapType === 'alarm_counts') {
+        return `JOIN (SELECT id_refrigerators, id_health_facilities, CAST(refrigerator_temperature_data_odkx.reporting_period AS timestamp) as reporting_period,
+            refrigerator_temperature_data_odkx.number_of_high_alarms_30, refrigerator_temperature_data_odkx.number_of_low_alarms_30
+            FROM refrigerators_odkx AS refs, health_facilities2_odkx, refrigerator_temperature_data_odkx
+            WHERE refs.facility_row_id = health_facilities2_odkx.id_health_facilities
+            AND refrigerator_temperature_data_odkx.refrigerator_id = refs.id_refrigerators
+            AND reporting_period = (
+                SELECT MAX(CAST(refrigerator_temperature_data_odkx.reporting_period AS timestamp))
+                FROM refrigerator_temperature_data_odkx, refrigerators_odkx
+                WHERE refrigerator_temperature_data_odkx.refrigerator_id = refrigerators_odkx.id_refrigerators
+                AND refrigerators_odkx.id_refrigerators = refs.id_refrigerators
+            )
+            GROUP BY id_refrigerators, id_health_facilities, reporting_period, refrigerator_temperature_data_odkx.number_of_high_alarms_30,
+            refrigerator_temperature_data_odkx.number_of_low_alarms_30) AS ref_alarms
+        ON ref_alarms.id_refrigerators = refrigerators_odkx.id_refrigerators
+        AND (ref_alarms.number_of_high_alarms_30 > 2 OR ref_alarms.number_of_low_alarms_30 > 0)`;
+    }
+    return '';
+}
+
+function makeTemperatureDataJoin(vizSpec) {
+    return 'LEFT JOIN refrigerator_temperature_data_odkx ON refrigerator_temperature_data_odkx.refrigerator_id = refrigerators_odkx.id_refrigerators';
+}
+
+function makeAlarmCountsFilter(vizSpec) {
+    const defaultFilter = `AND (cast(reporting_period as timestamp) = (
+        SELECT MAX(CAST(refrigerator_temperature_data_odkx.reporting_period AS timestamp))
+        FROM refrigerator_temperature_data_odkx
+        WHERE refrigerator_temperature_data_odkx.refrigerator_id = refrigerators_odkx.id_refrigerators
+    ) OR reporting_period IS NULL)`;
+    if (vizSpec.style === 'map' && vizSpec.mapType === 'alarm_counts') {
+        return defaultFilter + ` AND (
+            cast(number_of_high_alarms_30 as integer) >= ${HIGH_ALARM_COUNT} OR
+            cast(number_of_low_alarms_30 as integer) >= ${LOW_ALARM_COUNT}
+        )`;
+    }
+    return defaultFilter;
+}
+
 function makeQueryStr(vizSpec) {
     return `SELECT ${makeSelect(vizSpec)}
     FROM refrigerator_types_odkx
@@ -240,9 +282,11 @@ function makeQueryStr(vizSpec) {
          ${makeRefClassification(vizSpec)}
          ${makeBucketByAge(vizSpec)}
          ${makeFacilityJoin(vizSpec)}
+         ${makeTemperatureDataJoin(vizSpec)}
          JOIN geographic_regions_odkx ON
             geographic_regions_odkx.id_geographic_regions = health_facilities2_odkx.admin_region_id
       ${makeFilterStr(vizSpec)}
+      ${makeAlarmCountsFilter(vizSpec)}
     GROUP BY ${makeGroupBy(vizSpec)}
     ${makeOrderBy(vizSpec)}`;
 };

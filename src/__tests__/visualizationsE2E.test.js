@@ -34,19 +34,28 @@ describe('Visualization end-to-end tests', function () {
         await logIn(By, until, driver, URL);
     });
 
-    // After logging in, wait for the main page to render, then click `Display`
-    test('Visualization should render', async () => {
-        const displayButton = driver.wait(until.elementLocated(By.id('display')));
-        await displayButton.click();
-        const visualization = driver.wait(until.elementLocated(By.css('#chart-wrapper svg')));
+    // Need to click on other non-export tabs after main page renders.
+    // Check that there is a visualization already rendered when we click on another tab.
+    test('Check for visualization after clicking on non-export tab', async () => {
+        const tab = driver.wait(until.elementLocated(By.id('Facilities-tab')));
+        await tab.click();
+        const visualization = driver.wait(until.elementLocated(By.css('#Facilities .chart-wrapper svg')));
         const vizDisplayed = await visualization.isDisplayed();
         expect(vizDisplayed).toBe(true);
     });
 
+    // Need to choose a non-default viz and make sure that it changes.
     test('Map visualization should render', async () => {
-        await displayViz(By, until, driver, 'Maintenance priority by facility');
+        // Check default rendered
+        const tab = driver.wait(until.elementLocated(By.id('Vaccines-tab')));
+        await tab.click();
+        const defaultVisualization = driver.wait(until.elementLocated(By.css('#Vaccines .chart-wrapper svg')));
+        const defaultVizDisplayed = await defaultVisualization.isDisplayed();
+        expect(defaultVizDisplayed).toBe(true);
+        // Check non-default map should render
+        await displayViz(By, until, driver, 'Maintenance priority by facility', 'Vaccines');
         const visualization = driver.wait(until.elementLocated(
-            By.css('#map-container.mapboxgl-map')
+            By.css('#Vaccines .map-container.mapboxgl-map')
         ));
         const vizDisplayed = await visualization.isDisplayed();
         expect(vizDisplayed).toBe(true);
@@ -61,7 +70,7 @@ describe('Visualization end-to-end tests', function () {
     // Since this has been unable to be reproduced outside of the test, this
     // test is now skipped
     test.skip('Map visualization should go away', async () => {
-        await displayViz(By, until, driver, 'Refrigerators/freezers by working status (pie)');
+        await displayViz(By, until, driver, 'CCE by working status (pie)');
         const visualization = driver.wait(until.elementLocated(By.css('#chart-wrapper svg .slice')));
         const vizDisplayed = await visualization.isDisplayed();
         expect(vizDisplayed).toBe(true);

@@ -44,7 +44,7 @@ describe('Session management tests', () => {
             .post('/api/query')
             .set('Cookie', authenticatedCookie)
             .send({
-                visualization: 'Refrigerator/freezer utilization',
+                visualization: 'CCE utilization',
                 filter: null
             });
         expect(response.statusCode).toBe(200);
@@ -55,7 +55,7 @@ describe('Session management tests', () => {
         const response = await request(server)
             .post('/api/query')
             .send({
-                visualization: 'Refrigerator/freezer utilization',
+                visualization: 'CCE utilization',
                 filter: null
             });
         expect(response.statusCode).toBe(401);
@@ -68,7 +68,7 @@ describe('Session management tests', () => {
             .post('/api/query')
             .set('Cookie', authenticatedCookie)
             .send({
-                visualization: 'Refrigerator/freezer utilization',
+                visualization: 'CCE utilization',
                 filter: null
             });
         expect(response.statusCode).toBe(200);

@@ -1,10 +1,10 @@
 const tableName = require('../model/tableName');
 
 const AGE_GROUPS_LEGEND = [
-    { colorLabel: '0-5 Years' },
-    { colorLabel: '6-10 Years' },
-    { colorLabel: '>10 Years' },
-    { colorLabel: 'Missing data' }
+    { colorlabel: '0-5 Years' },
+    { colorlabel: '6-10 Years' },
+    { colorlabel: '>10 Years' },
+    { colorlabel: 'Missing data' }
 ];
 
 function legendQuery(db, vizSpec) {
@@ -26,8 +26,8 @@ function isAgeGroups(vizSpec) {
 
 function makeLegendQuery(vizSpec) {
     const colName = vizSpec.colorBy;
-    return `SELECT DISTINCT COALESCE(NULLIF(${colName}, ''), 'Missing data') as colorLabel
-         FROM ${tableName[colName]} ORDER BY colorLabel DESC`;
+    return `SELECT DISTINCT COALESCE(NULLIF(${colName}, ''), 'Missing data') as colorlabel
+         FROM ${tableName[colName]} ORDER BY colorlabel DESC`;
 }
 
 module.exports = legendQuery;

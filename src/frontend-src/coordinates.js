@@ -3,11 +3,11 @@ const refrigeratorClasses = require('../model/refrigeratorClasses.json');
 const MAP_SEPARATOR = '$';
 /*
  * data: We expect an array of objects, each representing a single facility and the corresponding data.
- * Each object must have facility_name, Location_latitude, and Location_longitude attributes, along with
+ * Each object must have facility_name, location_latitude, and location_longitude attributes, along with
  * the data to be put in the marker.
  * For example, we might have:
  *       [
- *         {facility_name: 'facility1', Location_latitude: 0, Location_longitude: 31, id_health_facilities: 'id1',
+ *         {facility_name: 'facility1', location_latitude: 0, location_longitude: 31, id_health_facilities: 'id1',
  *           maintenance_priority$high: 1, maintenance_priority$medium: 0, maintenance_priority$low: 1,
  *           maintenance_priority$missing_data: 0, maintenance_priority$not_applicable: 0
  *         },
@@ -30,17 +30,17 @@ module.exports = function(data, mapType) {
 
     /*
      * A map visualization cannot use repeatBy, so data has length 1, and
-     *    data[0][0] is null (since there is no repeatLabel).
+     *    data[0][0] is null (since there is no repeatlabel).
      *
      * facility is an array of length 2; the first element is facility ID
      *    and the second element is an object with a count for each of the
-     *    colorLabel options, e.g.: [ "89072039", { high: 1, medium: 0, low: 2 } ]
+     *    colorlabel options, e.g.: [ "89072039", { high: 1, medium: 0, low: 2 } ]
      */
     return data
         .map(facility => {
             const lngLat = [
-                facility.Location_longitude,
-                facility.Location_latitude
+                facility.location_longitude,
+                facility.location_latitude
             ];
             const title = facility.facility_name;
             let markerInfo;
@@ -50,6 +50,8 @@ module.exports = function(data, mapType) {
                 markerInfo = getMaintenancePriorityInfo(facility);
             } else if (mapType === 'facility_details') {
                 markerInfo = getFacilityDetails(facility);
+            } else if (mapType === 'alarm_counts'){
+                markerInfo = getAlarmCountInfo(facility);
             } else {
                 throw new Error(`mapType ${mapType} not recognized`);
             }
@@ -87,7 +89,7 @@ function getMaintenancePriorityInfo(facility) {
         <br>medium: ${facility[`maintenance_priority${MAP_SEPARATOR}medium`]}
         <br>high: ${facility[`maintenance_priority${MAP_SEPARATOR}high`]}`;
     const iconImage = `url(./images/priority-${getHighestMaintenancePriority(facility)}.png)`;
-    const iconSize = ['40px', '40px'];
+    const iconSize = ['32px', '32px'];
     return { description, iconImage, iconSize };
 }
 
@@ -113,5 +115,23 @@ function getFacilityDetails(facility) {
     ${getRefrigeratorCountsDisplay(facility)}`;
     const iconImage = 'url(./images/purple-circle.svg)';
     const iconSize = ['15px', '15px'];
+    return { description, iconImage, iconSize };
+}
+
+function getAlarmImage(alarms) {
+    if (alarms > 10) {
+        return 'url(./images/high-plusplus.png)'
+    }
+    const formattedNum = alarms.toLocaleString('en-US', {
+        minimumIntegerDigits: 2
+    });
+    return `url(./images/high${formattedNum}.png)`
+
+}
+
+function getAlarmCountInfo(facility) {
+    const description = `<p class='facility-info'>${facility['id_refrigerators']} faulty refrigerator(s)</p>`;
+    const iconImage = getAlarmImage(facility['id_refrigerators']);
+    const iconSize = ['32px', '32px'];
     return { description, iconImage, iconSize };
 }

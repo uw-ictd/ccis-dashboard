@@ -98,8 +98,8 @@ function removePrefix(str) {
  * selection with the given ID. Options representing groups of <option>s are not
  * included.
  */
-function getSelectionIgnoreGroups(id) {
-    const selectedElements = document.querySelectorAll(`#${id} .child:checked`);
+function getSelectionIgnoreGroups(selectorStr) {
+    const selectedElements = document.querySelectorAll(`${selectorStr} .child:checked`);
     return Array.from(selectedElements).map(element => {
         return removePrefix(element.value);
     });

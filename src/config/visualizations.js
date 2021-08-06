@@ -8,7 +8,7 @@ const refrigeratorClasses = require('../model/refrigeratorClasses.json');
  * repeatBy String [optional], either the name of a column or '"Age Groups"'
  * sort 'ASC'|'DESC' [optional], ascending or descending
  * style 'pie'|'bar'|'map', choose a chart type; `map` will automatically send
- *     Location_latitude and Location_longitude
+ *     location_latitude and location_longitude
  * mapType String [optional] is only
  *     supported for `style: 'map'`. 'maintenance_priority' is the only
  *     supported value so far.
@@ -27,7 +27,7 @@ const refrigeratorClasses = require('../model/refrigeratorClasses.json');
  */
 module.exports = {
     // CCEM table 3.3
-    'Working status by refrigerator/freezer model': {
+    'Working status by CCE model': {
         groupBy: 'model_id',
         colorBy: 'functional_status',
         colorMap: {
@@ -38,7 +38,7 @@ module.exports = {
         style: 'bar'
     },
     // Richard says this is also a CCEM chart
-    'Age by refrigerator/freezer model': {
+    'Age by CCE model': {
         groupBy: 'model_id',
         colorBy: '"Age Groups"',
         colorMap: {
@@ -50,7 +50,7 @@ module.exports = {
         style: 'bar'
     },
     // CCEM chart 3.4
-    'Refrigerators/freezers by working status': {
+    'CCE by working status': {
         groupBy: 'functional_status',
         colorBy: 'functional_status',
         colorMap: {
@@ -61,7 +61,7 @@ module.exports = {
         style: 'bar'
     },
     // CCEM chart 3.4
-    'Refrigerators/freezers by working status (pie)': {
+    'CCE by working status (pie)': {
         colorBy: 'functional_status',
         colorMap: {
             'functioning': 'blue',
@@ -71,7 +71,7 @@ module.exports = {
         style: 'pie'
     },
     // CCEM table 3.6b
-    'Refrigerator/freezer utilization': {
+    'CCE utilization': {
         groupBy: 'model_id',
         colorBy: 'utilization',
         sort: 'DESC',
@@ -104,7 +104,7 @@ module.exports = {
         style: 'pie'
     },
     // CCEM table 3.5a
-    'Refrigerator/freezer models by age group': {
+    'CCE models by age group': {
         groupBy: '"Age Groups"',
         colorBy: '"Age Groups"',
         sort: 'DESC',
@@ -117,7 +117,7 @@ module.exports = {
         style: 'bar'
     },
     // CCEM table 3.5a
-    'Refrigerator/freezer models by age group (pie)': {
+    'CCE models by age group (pie)': {
         colorBy: '"Age Groups"',
         sort: 'DESC',
         colorMap: {
@@ -140,7 +140,7 @@ module.exports = {
     },
     // count of refrigerators for each classification
     // Note: Uses view in database, which will need to be updated if new ref types are added
-    'Refrigerators/freezers by type(pie)': {
+    'CCE by type (pie)': {
         colorBy: 'refrigerator_class',
         colorMap: {
             'ILR': 'blue',
@@ -160,6 +160,9 @@ module.exports = {
     'CCE utilization (bar)': {
         groupBy: 'utilization',
         colorBy: 'utilization',
+        colorMap: {
+            'Missing data': 'gray'
+        },
         style: 'bar'
     },
     'CCE maintenance priority (bar)': {
@@ -210,6 +213,9 @@ module.exports = {
     'Facility type by CCE model': {
         groupBy: 'model_id',
         colorBy: 'facility_level',
+        colorMap: {
+            'Missing data': 'gray'
+        },
         style: 'bar'
     },
     // Facility details map
@@ -225,4 +231,12 @@ module.exports = {
             'ownership': 'BY_FACILITY'
         }
     },
+    'Recent alarms map': {
+        groupBy: 'id_health_facilities',
+        mapType: 'alarm_counts',
+        style: 'map',
+        facilityPopup: {
+            'id_refrigerators': 'COUNT'
+        }
+    }
 };

@@ -1,9 +1,9 @@
 const { runSQL, dbOptionsEmpty } = require('../testUtils');
 const db = require('../model/db')(dbOptionsEmpty);
 const vizQuery = require('../controller/queryTemplate');
-const visualizations = require('../shared/visualizations');
+const visualizations = require('../config/visualizations');
 
-const barChart1 = visualizations['Refrigerator/freezer utilization'];
+const barChart1 = visualizations['CCE utilization'];
 const facilityChart = visualizations['Electricity availability'];
 
 const basicFilter = {

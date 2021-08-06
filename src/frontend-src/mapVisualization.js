@@ -1,5 +1,7 @@
 const eachSeries = require('async/eachSeries')
 const makeMarkerInfo = require('./coordinates');
+const mapDisplay = require('../config/mapDisplay').mapVisualization;
+const select = require('./selectors');
 
 function _drawMarker(mapboxgl, map, marker) {
     // create a DOM element for the marker
@@ -28,11 +30,8 @@ function _drawMarker(mapboxgl, map, marker) {
  * data: array of data in map format, see coordinates.js for more info
  * mapType: String, currently only 'maintenance_priority' is supported
  */
-module.exports = async function({ mapboxgl, makeMap }, data, { mapType }) {
-    const map = await makeMap({
-        center: [32, 1], // starting position [lng, lat]
-        zoom: 6 // starting zoom
-    }, 'map-container');
+module.exports = async function({ mapboxgl, makeMap }, data, { mapType }, tabLabel) {
+    const map = await makeMap(mapDisplay, select.mapContainer(tabLabel));
     const drawMarker = _drawMarker.bind({}, mapboxgl, map);
 
     // Add markers 250 at a time

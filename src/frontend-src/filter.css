@@ -1,4 +1,15 @@
+/* Loaded after multiselect/multiselect.css to override the default settings */
+.multiselect-wrapper
+{
+	font-family: 'Open Sans', Sans-Serif;
+}
+
 .multiselect-input-div > input
 {
     box-sizing: border-box;
+}
+
+.multiselect-count
+{
+    background-color: var(--main-theme-xlight);
 }

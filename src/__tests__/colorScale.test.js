@@ -2,15 +2,16 @@ const makeColorScale = require('../frontend-src/colorScale');
 
 // Hex codes from d3.schemeSet1
 const hexCodes = {
-    red:    '#e41a1c',
-    blue:   '#377eb8',
-    green:  '#4daf4a',
-    purple: '#984ea3',
-    orange: '#ff7f00',
-    yellow: '#ffff33',
-    brown:  '#a65628',
-    pink:   '#f781bf',
-    gray:   '#999999'
+    red:    '#e15759',
+    blue:   '#4e79a7',
+    lightblue: '#76b7b2',
+    green:  '#59a14f',
+    purple: '#af7aa1',
+    orange: '#f28e2c',
+    yellow: '#edc949',
+    brown:  '#9c755f',
+    pink:   '#ff9da7',
+    gray:   '#bab0ab'
 };
 
 

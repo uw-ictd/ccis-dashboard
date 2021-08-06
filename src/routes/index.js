@@ -1,12 +1,14 @@
 const express = require('express');
 const mergeFilterOptions = require('../util/mergeFilterOptions');
-const visualizations = require('../shared/visualizations');
+const visualizations = require('../config/visualizations');
+const tabVisualizations = require('../config/tabVisualizations');
 const getDistinctFilterOptions = require('../controller/filterOptions');
 const exportOptions = require('../shared/exportOptions');
 const knownRefrigeratorClasses = require('../model/refrigeratorClasses.json');
 const knownFacilityClasses = require('../model/facilityClasses.json');
 const { getAuth, loginAuth } = require('../util/auth');
 const passport = require('passport');
+require('../util/configValidation')(tabVisualizations, visualizations);
 
 function makeRouter(db) {
     const router = express.Router();
@@ -23,7 +25,8 @@ function makeRouter(db) {
             facilityClasses,
             refrigeratorClasses,
             maintenancePriorities: filterOptions.maintenancePriorities,
-            exportOptions: exportOptions.dropdownNames
+            exportOptions: exportOptions.dropdownNames,
+            tabVisualizations
         });
     });
 

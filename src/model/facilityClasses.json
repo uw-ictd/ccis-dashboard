@@ -1,11 +1,8 @@
 {
     "Health Center": [
         "hcii",
-        "hc_ii",
-        "hc_iii",
-        "hciv",
-        "hc_iv",
         "hciii",
+        "hciv",
         "clinic",
         "specialized_clinic",
         "drug_shop"

@@ -31,7 +31,7 @@ describe('Map end-to-end tests', function () {
 
     // After logging in, wait for the main page to render
     test('Map should render', async () => {
-        const map = driver.wait(until.elementLocated(By.css('#map canvas')));
+        const map = driver.wait(until.elementLocated(By.css('#Export .map canvas')));
         expect(map.isDisplayed()).resolves.toBe(true);
         const { height, width } = await map.getRect();
         expect(height).toBeGreaterThan(0);

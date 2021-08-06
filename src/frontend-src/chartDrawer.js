@@ -2,6 +2,7 @@ const d3 = require('d3');
 const tippy = require('tippy.js').default;
 const { createSingleton } = require('tippy.js');
 const makeColorScale = require('./colorScale');
+const select = require('./selectors');
 
 /*
  * data: in the format d3.stack expects, which is an Array representation of a
@@ -38,8 +39,8 @@ const makeColorScale = require('./colorScale');
  * groupBy:  String to show to user as axis label
  * repeatBy: undefined|String to show to user in titles of small multiple charts
  */
-function drawAllCharts(data, { fullDomain, fullColorDomain }, { groupBy, repeatBy, style, colorMap }) {
-    const parentElement = d3.select('#chart-container');
+function drawAllCharts(data, { fullDomain, fullColorDomain }, { groupBy, repeatBy, style, colorMap }, tabName) {
+    const parentElement = d3.select(select.chartContainerStr(tabName));
     if (!data) return warnNoData(parentElement);
 
     // Make color scale
@@ -47,9 +48,10 @@ function drawAllCharts(data, { fullDomain, fullColorDomain }, { groupBy, repeatB
 
     if (fullColorDomain) {
         // Make color legend for charts
-        drawColorLegend(d3.select('#legend-container'),
-        fullColorDomain.map(x => x ? x : 'undefined'),
-        colorScale);
+        drawColorLegend(d3.select(select.legendContainerStr(tabName)),
+            fullColorDomain.map(x => x ? x : 'undefined'),
+            colorScale
+        );
     }
 
     const params = {
@@ -64,7 +66,7 @@ function drawAllCharts(data, { fullDomain, fullColorDomain }, { groupBy, repeatB
     };
 
     if (style === 'bar') {
-        const allStacks = data.map(([repeatLabel, subChartData]) => {
+        const allStacks = data.map(([repeatlabel, subChartData]) => {
             // return value is a 2d array that prepares data points to be stacked
             // according to their color
             return d3.stack()
@@ -79,20 +81,20 @@ function drawAllCharts(data, { fullDomain, fullColorDomain }, { groupBy, repeatB
             d3.max(series[series.length - 1], d => d[1]));
         params.fullRange = [0, max];
 
-        data.forEach(([repeatLabel, ], index) => {
+        data.forEach(([repeatlabel, ], index) => {
             drawBarChart(allStacks[index], {
-                title: repeatBy ? `${repeatBy}: ${repeatLabel}` : '',
+                title: repeatBy ? `${repeatBy}: ${repeatlabel}` : '',
                 ...params
             });
         });
     } else if (style === 'pie') {
         if (groupBy) throw new Error('Pie charts do not implement groupBy');
-        data.forEach(([repeatLabel, subChartData]) => {
+        data.forEach(([repeatlabel, subChartData]) => {
             if (subChartData.length > 1) {
                 throw new Error('Pie charts do not implement groupBy');
             }
             drawPieChart(subChartData[0][1], {
-                title: repeatBy ? `${repeatBy}: ${repeatLabel}` : '',
+                title: repeatBy ? `${repeatBy}: ${repeatlabel}` : '',
                 ...params
             });
         });
@@ -101,8 +103,10 @@ function drawAllCharts(data, { fullDomain, fullColorDomain }, { groupBy, repeatB
     }
 
     // Add tooltips to rects & slices
-    createSingleton(tippy('#chart-container svg rect.bar'));
-    createSingleton(tippy('#chart-container svg path.slice'));
+    const rectBarStr = select.chartContainerStr(tabName) + ' svg rect.bar';
+    const pathSliceStr = select.chartContainerStr(tabName) + ' svg path.slice';
+    createSingleton(tippy(rectBarStr));
+    createSingleton(tippy(pathSliceStr));
 }
 
 /*
@@ -200,7 +204,12 @@ function drawBarChart(series, { parentElement, axisWidth, axisHeight, title,
             .attr('fill', d => colorScale(d.key))
         .selectAll('.bar')
         // Next we move down to the second level of the array
-        .data(d => d)
+        .data(d => {
+            // Save the key (i.e. colorLabel) of the parent in each of the
+            // children
+            const parentInfo = { key: d.key };
+            return d.map(innerData => Object.assign({}, innerData, parentInfo));
+        })
         .enter()
         .append('rect')
             .attr('class', 'bar')
@@ -212,7 +221,7 @@ function drawBarChart(series, { parentElement, axisWidth, axisHeight, title,
             .attr('height', (d, i) => yScale(d[0]) - yScale(d[1]))
             // For tooltips
             .attr('tabindex', '0')
-            .attr('data-tippy-content', (d, i) => d[1] - d[0]);
+            .attr('data-tippy-content', d => `${d.key}: ${d[1]-d[0]}`);
     fitCanvasToContents(canvas);
 }
 

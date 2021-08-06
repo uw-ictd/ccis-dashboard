@@ -1,0 +1,77 @@
+<!-- begin tab <%=tabName%>-->
+<div id="<%=tabName%>" class="left-main-wrapper">
+    <!-- begin left filter -->
+    <div class="left-wrapper">
+        <div class="filter">
+            <table>
+                <tr>
+                    <td><span class="smalltitle">Filter</span></td>
+                </tr>
+                <tr>
+                    <td>Facilty type:</td>
+                    <td>
+                        <%- include('groupedDropdown', { id: tabName + '-facility-selector', classes: facilityClasses }); %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>CCE type:</td>
+                    <td>
+                        <%- include('groupedDropdown', { id: tabName + '-refrigerator-selector', classes: refrigeratorClasses }); %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>CCE maintenance priority:</td>
+                    <td>
+                        <%- include('ungroupedDropdown', { id: tabName + '-maintenance-selector', options: maintenancePriorities }); %>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!-- Visualization selection and button -->
+        <% if (tab.visualizations) { %>
+        <div class="display-div display-export">
+            <div>
+                Select a visualization:
+                <select class="visualization-selector">
+                    <% tab.visualizations.forEach(y => { %>
+                    <option value="<%=y%>"><%=y%></option>
+                    <% }); %>
+                </select>
+            </div>
+            <button class="display" type="button" onclick="drawVisualization('<%=tabName%>')">Display</button>
+        </div>
+        <% } %>
+        <!-- Export div -->
+        <% if (tab.includeExport) { %>
+        <div id="export-div" class="display-export">
+            <!-- Export selection and button -->
+            <div>
+                Select the data you would like to export:
+                <select id="export-selector">
+                    <% Object.entries(exportOptions).forEach(([ key, name ]) => { %>
+                    <option value="<%=key%>"><%=name%></option>
+                    <% }); %>
+                </select>
+            </div>
+            <button id="export" type="button" onclick="exportTables()">Export</button>
+        </div>
+        <% } %>
+        <div class="map"></div>
+    </div>
+    <!-- end left filter -->
+
+    <!-- begin right main wrapper -->
+    <div class="main-wrapper">
+        <div class="viz-title"></div>
+        <div class="viz-wrapper">
+            <div class="map-container"></div>
+            <div class="chart-wrapper">
+                <div class="chart-container"></div>
+                <div class="legend-container"></div>
+            </div>
+        </div>
+    </div>
+    <!-- end right main wrapper -->
+
+</div>
+<!-- end tab <%=tabName%>-->
