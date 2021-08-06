@@ -10,7 +10,8 @@ const dbOptionsEmpty = {
     password: 'UnsafeLocalTestPassword!',
     database: 'localhost',
     host: 'localhost',
-    port: 5439
+    port: 5439,
+    ssl: false
 };
 
 const dbOptionsSeeded = {
@@ -18,7 +19,8 @@ const dbOptionsSeeded = {
     password: 'EnsureFirewallConfigured',
     database: 'coldchain',
     host: 'localhost',
-    port: 5438
+    port: 5438,
+    ssl: false
 };
 
 async function displayViz(By, until, driver, vizName, tabLabel) {

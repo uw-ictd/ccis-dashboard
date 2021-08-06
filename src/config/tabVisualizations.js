@@ -11,65 +11,62 @@ module.exports = {
         tabLabel: 'Facilities',
         visualizations: [
             'Facility details map',
-            'Working status by CCE model',
-            'Age by CCE model',
-            'CCE by working status',
-            'CCE by working status (pie)'
+            'CCE model by facility power availability',
+            'CCE facility power availability by model',
+            'CCE model by facility type',
+            'Facility type by CCE model'
         ],
-        defaultViz: 'Working status by CCE model'
+        defaultViz: 'Facility details map'
     },
     'CCE': {
         tabLabel: 'CCE',
         visualizations: [
+            'Working status by CCE model',
+            'Age by CCE model',
+            'CCE by working status',
+            'CCE by working status (pie)',
             'CCE utilization',
             'Electricity availability',
             'Electricity availability (pie)',
-            'CCE models by age group'
-        ],
-        defaultViz: 'CCE models by age group'
-    },
-    'Vaccines': {
-        tabLabel: 'Vaccines',
-        visualizations: [
+            'CCE models by age group',
             'CCE models by age group (pie)',
+            'Maintence priority by model',
             'Maintenance priority by facility',
             'CCE by type (pie)',
             'CCE model (bar)',
             'CCE utilization (bar)',
-            'CCE maintenance priority (bar)'
+            'CCE maintenance priority (bar)',
+            'CCE model by facility power availability',
+            'CCE facility power availability by model',
+            'CCE model by facility type',
+            'Facility type by CCE model'
+        ],
+        defaultViz: 'Age by CCE model'
+    },
+    'Vaccines': {
+        tabLabel: 'Vaccines',
+        visualizations: [
+            'CCE utilization (bar)',
         ],
         defaultViz: 'CCE utilization (bar)'
     },
     'System-Use': {
         tabLabel: 'System Use',
         visualizations: [
-            'Maintence priority by model',
-            'CCE facility power availability by model',
-            'CCE model by facility power availability',
-            'CCE model by facility type',
-            'Facility type by CCE model'
+            'CCE facility power availability by model'
         ],
         defaultViz: 'CCE facility power availability by model'
     },
     'Temp-Alarms': {
         tabLabel: 'Temp Alarms',
         visualizations: [
-            'Recent alarms map',
-            'CCE models by age group (pie)',
-            'Maintenance priority by facility',
-            'CCE by type (pie)',
-            'CCE model (bar)',
-            'CCE utilization (bar)',
-            'CCE maintenance priority (bar)'
+            'Recent alarms map'
         ],
         defaultViz: 'Recent alarms map'
     },
     'Maintenance': {
         tabLabel: 'Maintenance',
         visualizations: [
-            'CCE utilization',
-            'Electricity availability',
-            'Electricity availability (pie)',
             'CCE models by age group'
         ],
         defaultViz: 'CCE models by age group'

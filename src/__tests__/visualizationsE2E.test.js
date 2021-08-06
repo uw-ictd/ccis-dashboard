@@ -37,9 +37,9 @@ describe('Visualization end-to-end tests', function () {
     // Need to click on other non-export tabs after main page renders.
     // Check that there is a visualization already rendered when we click on another tab.
     test('Check for visualization after clicking on non-export tab', async () => {
-        const tab = driver.wait(until.elementLocated(By.id('Facilities-tab')));
+        const tab = driver.wait(until.elementLocated(By.id('CCE-tab')));
         await tab.click();
-        const visualization = driver.wait(until.elementLocated(By.css('#Facilities .chart-wrapper svg')));
+        const visualization = driver.wait(until.elementLocated(By.css('#CCE .chart-wrapper svg')));
         const vizDisplayed = await visualization.isDisplayed();
         expect(vizDisplayed).toBe(true);
     });
@@ -47,15 +47,15 @@ describe('Visualization end-to-end tests', function () {
     // Need to choose a non-default viz and make sure that it changes.
     test('Map visualization should render', async () => {
         // Check default rendered
-        const tab = driver.wait(until.elementLocated(By.id('Vaccines-tab')));
+        const tab = driver.wait(until.elementLocated(By.id('CCE-tab')));
         await tab.click();
-        const defaultVisualization = driver.wait(until.elementLocated(By.css('#Vaccines .chart-wrapper svg')));
+        const defaultVisualization = driver.wait(until.elementLocated(By.css('#CCE .chart-wrapper svg')));
         const defaultVizDisplayed = await defaultVisualization.isDisplayed();
         expect(defaultVizDisplayed).toBe(true);
         // Check non-default map should render
-        await displayViz(By, until, driver, 'Maintenance priority by facility', 'Vaccines');
+        await displayViz(By, until, driver, 'Maintenance priority by facility', 'CCE');
         const visualization = driver.wait(until.elementLocated(
-            By.css('#Vaccines .map-container.mapboxgl-map')
+            By.css('#CCE .map-container.mapboxgl-map')
         ));
         const vizDisplayed = await visualization.isDisplayed();
         expect(vizDisplayed).toBe(true);

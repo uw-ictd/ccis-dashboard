@@ -52,7 +52,7 @@ function DBConnection(config) {
     this.pool.on('error', err => {
         // the pool will emit an error on behalf of any idle clients
         // it contains if a backend error or network partition happens
-        console.error(err);
+        console.error('Error from connection pool:', err);
     });
 
     this.query = query.bind(this);
