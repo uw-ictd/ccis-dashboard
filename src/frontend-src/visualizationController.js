@@ -10,7 +10,7 @@ const select = require('./selectors');
 
 function drawVisualization(mapboxDependency, regionSelector, tabName) {
     const vizName = getVisualizationName(tabName);
-    return post('/api/query', {
+    return post('./api/query', {
         visualization: vizName,
         filter: getFilterParams(regionSelector, tabName)
     }).then(async (body) => {
