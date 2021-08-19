@@ -1,7 +1,18 @@
 const Joi = require('joi');
 const visualizations = require('../config/visualizations');
 
-const oneVisualization = Joi.any(); // TODO
+// TODO make this more strict: some options require other options
+const oneVisualization = Joi.object({
+    type: Joi.string().valid('refrigerator', 'facility').required(),
+    style: Joi.string().valid('bar', 'pie', 'map').required(),
+    groupBy: Joi.string().optional(),
+    colorBy: Joi.string().optional(),
+    repeatBy: Joi.string().optional(),
+    colorMap: Joi.object().pattern(/.*/, Joi.string()).optional(),
+    mapType: Joi.string().optional(),
+    facilityPopup: Joi.object().optional(),
+    sort: Joi.string().valid('ASC', 'DESC').optional()
+});
 
 const oneTab = Joi.object({
     tabLabel: Joi.string(),
@@ -17,9 +28,42 @@ const oneTab = Joi.object({
     defaultViz: Joi.string()
 });
 
+const oneFilter = Joi.object({
+    title: Joi.any().when('useInDropdowns', {
+        is: Joi.boolean().valid(true).required(),
+        then: Joi.string()
+    }),
+    table: Joi.string(),
+    column: Joi.string(),
+    grouped: Joi.boolean().optional(),
+    classes: Joi.any().when('grouped', {
+        is: Joi.boolean().valid(true).required(),
+        then: Joi.object().required()
+    }),
+    useInDropdowns: Joi.boolean().optional(),
+    multiColumn: Joi.boolean().optional(),
+    columns: Joi.any().when('multiColumn', {
+        is: Joi.boolean().valid(true).required(),
+        then: Joi.array().required()
+    })
+});
+
+const oneSubQueryDefn = Joi.object({
+    name: Joi.string(),
+    query: Joi.string(),
+    provides: Joi.array().items(Joi.string()),
+    joinOn: Joi.object({
+        table: Joi.string(),
+        foreignColumn: Joi.string(),
+        localColumn: Joi.string()
+    })
+});
+
 module.exports = {
     // Allow arbitrary visualization/key names, but validate the values against
     // the oneVisualization schema
     visualizations: Joi.object().pattern(/.*/, oneVisualization),
-    tabVisualizations: Joi.object().pattern(/.*/, oneTab)
+    tabVisualizations: Joi.object().pattern(/.*/, oneTab),
+    filterSpecification: Joi.object().pattern(/.*/, oneFilter),
+    computedColumns: Joi.array().items(oneSubQueryDefn)
 };

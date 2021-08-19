@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 const visualizations = require('../config/visualizations');
-const mapVisualization = require('../frontend-src/mapVisualization');
+const {mapVisualization} = require('../frontend-src/mapVisualization');
 
 const mapboxMock = {
     makeMap: function () {},

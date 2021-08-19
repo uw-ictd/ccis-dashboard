@@ -11,6 +11,7 @@ module.exports = {
     facility_name: 'health_facilities2_odkx',
     facility_level: 'health_facilities2_odkx',
     facility_row_id: 'refrigerators_odkx',
-    refrigerator_class: `vw_ref_type_class`,
-    ownership: 'health_facilities2_odkx'
+    refrigerator_class: 'vw_ref_type_class',
+    ownership: 'health_facilities2_odkx',
+    lastupdateuser_health_facilities: 'health_facilities2_odkx'
 };

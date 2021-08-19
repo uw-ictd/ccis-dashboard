@@ -4,7 +4,8 @@
 //const boundaries = level2Uganda.features.concat(level3Uganda.features);
 
 // Call this in `map.on('load', ...)`
-function RegionSelector(map, shapefiles) {
+// regionNamesContainer must be a ul element to display region names within
+function RegionSelector({mapboxgl}, map, shapefiles, regionNamesContainer) {
     this._SELECT_OPACITY = 0.7;
     this._DESELECT_OPACITY = 0.1;
     this._SEPARATOR = '|';
@@ -17,6 +18,7 @@ function RegionSelector(map, shapefiles) {
     this._showMapAtNode = showMapAtNode;
     this._select = select;
     this._deselect = deselect;
+    this._displayRegionNames = displayRegionNames;
     this._isLowestLevel = isLowestLevel;
     this._getRegionID = getRegionID.bind(this);
     this._getParentRegionID = getParentRegionID.bind(this);
@@ -30,6 +32,8 @@ function RegionSelector(map, shapefiles) {
     this._hierarchy = this._makeHierarchy(shapefiles);
 
     this.getSelectedRegions = getSelectedRegions;
+    this._showRegionSelectionInstr = showRegionSelectionInstr;
+    this._regionNamesContainer = regionNamesContainer;
 
     // This default double-click handler needs to be registered before the
     // individual event handlers for each layer
@@ -54,6 +58,7 @@ function RegionSelector(map, shapefiles) {
         map.on('dblclick', layerID, this._showMapAtNode.bind(this, layerID));
     }).bind(this));
     this._showMapAtNode(this._TOP);
+    this._showRegionSelectionInstr(mapboxgl);
 }
 
 function showMapAtNode(regionLayerID) {
@@ -71,6 +76,23 @@ function showMapAtNode(regionLayerID) {
     });
     this._currentLayers = children;
     this._currentParent = regionLayerID;
+}
+
+function showRegionSelectionInstr(mapboxgl) {
+    let customAtt;
+    if (this._shapefiles.levels.length == 2) {
+        customAtt = "Click to select/deselect an area; double click a region to select" +
+        "only its districts; double click again to return to region selection.";
+    } else if (this._shapefiles.levels.length == 1) {
+        customAtt = "Click to select/deselect an area";
+    } else {
+        customAtt = "Click to select/deselect an area; double click to select an area's" +
+        " lower level; double click at lowest level to return to top level.";
+    }
+    this._map.addControl(new mapboxgl.AttributionControl({
+        compact: true,
+        customAttribution: customAtt
+    }), 'top-left')
 }
 
 // The returned object maps a `layerID` to an array of child `layerID`s
@@ -117,11 +139,37 @@ function getParentRegionID(childRegionID) {
 function select(layerID) {
     this._selections[layerID] = true;
     this._map.setPaintProperty(layerID, 'fill-opacity', this._SELECT_OPACITY);
+    this._displayRegionNames();
 }
 
 function deselect(layerID) {
     this._selections[layerID] = false;
     this._map.setPaintProperty(layerID, 'fill-opacity', this._DESELECT_OPACITY);
+    this._displayRegionNames();
+}
+
+function displayRegionNames() {
+    const selectedRegions = Object.entries(this._selections)
+        .filter(([_, value]) => value);
+    this._regionNamesContainer.innerHTML = selectedRegions.map(([key, _], index) => {
+            const arr = key.split(this._SEPARATOR);
+            let punctuation;
+            if (index == (selectedRegions.length -1)) {
+                punctuation = '.';
+            } else {
+                punctuation = ', ';
+            }
+            return `<li>${arr[arr.length - 1]}${punctuation}</li>`
+        })
+        .join('');
+    this._regionNamesContainer.innerHTML = `<span>Selected: </span>` + this._regionNamesContainer.innerHTML;
+
+    // Checks if no regions are selected and displays "None"
+    if (this._regionNamesContainer.children.length == 1) {
+        const nullRegion = document.createElement('li');
+        nullRegion.appendChild(document.createTextNode("None."));
+        this._regionNamesContainer.appendChild(nullRegion);
+    }
 }
 
 function toggleSelection(layerID) {

@@ -4,11 +4,11 @@ const vizQuery = require('../controller/queryTemplate');
 const visualizations = require('../config/visualizations');
 
 const barChart1 = visualizations['CCE utilization'];
-const facilityChart = visualizations['Electricity availability'];
+const facilityChart = visualizations['Catchment population'];
 
 const basicFilter = {
     // seedMainTables has 'public_hcii' and 'public_hciv'
-    facilityTypes: [ '', 'public_hcii', 'public_hciv', 'private clinic' ],
+    facilityTypes: [ '', 'hcii', 'hciv', 'private clinic' ],
     // seedMainTables has 'Unknown Freezer', 'VLS 054 SDD Greenline'
     refrigeratorTypes: [ 'Unknown Freezer', 'VLS 054 SDD Greenline' ],
     // seedMainTables has 'low' and ' '
@@ -76,7 +76,7 @@ describe('QueryTemplate makeQueryStr tests', () => {
             ...barChart1,
             filter: {
                 ...basicFilter,
-                facilityTypes: [ 'public_hcii' ]
+                facilityTypes: [ 'hcii' ]
             }
         });
         expect(result.length).toBe(1);
@@ -93,7 +93,7 @@ describe('QueryTemplate makeQueryStr tests', () => {
         expect(result[0].count).toBe(1);
     });
 
-    test.skip('Facility chart counts facilities', async () => {
+    test('Facility chart counts facilities', async () => {
         await runSQL(transaction, 'oneFacilityManyRefrigerators.sql');
         const refrigerators = await transaction.query('SELECT COUNT(*) as count FROM refrigerators_odkx;');
         expect(refrigerators.length).toBe(1);
@@ -128,6 +128,20 @@ describe('QueryTemplate makeQueryStr tests', () => {
             filter: {
                 ...basicFilter,
                 maintenancePriorities: [ '' ],
+            }
+        });
+        expect(result.length).toBe(1);
+        expect(result[0].count).toBe(1);
+    });
+
+    test('vizQuery ignores NULL regions when not included', async () => {
+        // Dataset has 2 refrigerators: one has NULL for all of the key fields
+        // in geographic_regions (both regionLevel# and regionName) 
+        await runSQL(transaction, 'refrigeratorNullGeography.sql');
+        const result = await vizQuery(transaction, {
+            ...barChart1,
+            filter: {
+                ...basicFilter,
             }
         });
         expect(result.length).toBe(1);

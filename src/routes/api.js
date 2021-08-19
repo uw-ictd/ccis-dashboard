@@ -13,8 +13,20 @@ module.exports = function makeQueryRouter(db) {
     const router = express.Router();
     router.use('/', postAuth);
 
+    function filterIsNonEmpty(filter) {
+        if (!filter) {
+            return true;
+        }
+        return Object.entries(filter).every(([key, value]) => value.length > 0);
+    }
+
     router.post('/query', checkSchema(schemas.queryProps, 'body'), async (req, res) => {
         try {
+            if (!filterIsNonEmpty(req.body.filter)) {
+                const response = {data: [], metadata: {fullColorDomain: [], fullDomain: []}};
+                res.status(200).send(response);
+                return;
+            }
             const visualizationSpec = {
                 filter: req.body.filter,
                 ...visualizations[req.body.visualization]

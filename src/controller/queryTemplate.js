@@ -1,6 +1,10 @@
 const tableName = require('../model/tableName');
-const filterSpecification = require('./filterSpecification');
-const AGE_GROUPS_COLUMN_NAME = '"Age Groups"';
+const computedColumns = require('../config/computedColumns');
+const filterSpecification = require('../config/filterSpecification');
+const findQueryForColumn = require('../util/searchComputedColumns');
+const validate = require('../util/configValidation');
+validate('computedColumns', computedColumns);
+
 const MAP_SEPARATOR = '$';
 const LOW_ALARM_COUNT = 1;
 const HIGH_ALARM_COUNT = 3;
@@ -16,10 +20,14 @@ const labelName = {
 };
 
 function referToColumn(columnName) {
-    if (columnName === AGE_GROUPS_COLUMN_NAME) {
-        return AGE_GROUPS_COLUMN_NAME;
+    // If the column is in the base database, use that. Otherwise, look it up in
+    // computedColumns
+    if (tableName[columnName]) {
+        return tableName[columnName] + '.' + columnName;
+    } else {
+        const { name } = findQueryForColumn(computedColumns, columnName);
+        return `${name}.${columnName}`;
     }
-    return tableName[columnName] + '.' + columnName;
 }
 
 // Adds the following clause if fieldValue is the empty string (which is how we
@@ -28,9 +36,7 @@ function referToColumn(columnName) {
 //   OR fieldName IS NULL
 function handleNull(precedingClause, fieldName, fieldValue, mapType) {
     if (fieldValue === '' ||
-        (fieldValue.length && fieldValue.indexOf('') > -1)
-        || (mapType && mapType === 'facility_details' &&
-            fieldName === 'health_facilities2_odkx.facility_level')) {
+        (Array.isArray(fieldValue) && fieldValue.indexOf('') > -1)) {
         return `(${precedingClause} OR ${fieldName} IS NULL)`;
     }
     return precedingClause;
@@ -111,47 +117,58 @@ function makeMultiColumnMatch({ table, columns }, regionArray) {
 function makeFilterStr(vizSpec) {
     const filter = vizSpec.filter;
     if (!filter) return '';
-    return 'WHERE ' + Object.keys(filterSpecification).filter(varName =>
-            !(vizSpec.style === 'map' && vizSpec.mapType === 'facility_details' &&
-            (varName === 'refrigeratorTypes' || varName === 'maintenancePriorities')))
-        .map(varName => {
-            const thisFilterSpec = filterSpecification[varName];
+    return 'WHERE ' + Object.entries(filterSpecification)
+        .filter(([filterName, { table }]) =>
+            !(vizSpec.type === 'facility' &&
+              (table === 'refrigerator_types_odkx' || table === 'refrigerators_odkx')))
+        .filter(([filterName, _]) => Boolean(filter[filterName]))
+        .map(([filterName, thisFilterSpec]) => {
             if (thisFilterSpec.multiColumn) {
                 // filter.regions looks like:
                 //   [ [ 'Uganda' ], [ 'Uganda', 'Kampala' ] ]
-                const subclauses = filter[varName].map(
+                const subclauses = filter[filterName].map(
                     makeMultiColumnMatch.bind({}, thisFilterSpec)
                 );
-                return `(${subclauses.join('\nOR ')})`;
+                return `(${subclauses.join('\n            OR ')})`;
             } else {
                 const { table, column } = thisFilterSpec;
-                const clause = `${table}.${column} IN ${toSQLList(filter[varName])}`;
-                return handleNull(clause, `${table}.${column}`, filter[varName], vizSpec.mapType);
+                const clause = `${table}.${column} IN ${toSQLList(filter[filterName])}`;
+                return handleNull(clause, `${table}.${column}`, filter[filterName], vizSpec.mapType);
             }
-    }).join('\nAND ');
+    }).join('\n        AND ');
 }
 
 // Example:
 //   t.model_id, r.utilization
 function makeGroupBy(vizSpec) {
-    if (vizSpec.style === 'map') {
-        return makeMapGroupBy(vizSpec) + Object.keys(vizSpec.facilityPopup)
-            .filter((col) => vizSpec.facilityPopup[col] === 'BY_FACILITY')
-            .map(col => `, ${referToColumn(col)}`)
-            .join('');
-    }
-    return [ 'groupBy', 'colorBy', 'repeatBy' ]
+    const basicGroupBy = [ 'groupBy', 'colorBy', 'repeatBy' ]
         .map(param => vizSpec[param])
         // Ignore those that weren't included in vizSpec
         .filter(columnName => Boolean(columnName))
         .map(referToColumn)
+        .join(', ');
+    const facilityGroupBy = makeMapGroupBy(vizSpec);
+    const popupGroupBy = makePopupGroupBy(vizSpec);
+    return [ basicGroupBy, facilityGroupBy, popupGroupBy ]
+        .filter(str => Boolean(str))
         .join(', ');
 }
 
 // Example:
 //   h.location_longitude, h.location_latitude, h.facility_name, h.id_health_facilities
 function makeMapGroupBy(vizSpec) {
-    return [ 'location_latitude', 'location_longitude', 'facility_name', 'id_health_facilities']
+    if (vizSpec.style === 'map') {
+        return [ 'location_latitude', 'location_longitude', 'facility_name', 'id_health_facilities']
+            .map(referToColumn)
+            .join(', ');
+    }
+    return '';
+}
+
+function makePopupGroupBy(vizSpec) {
+    if (!vizSpec.facilityPopup) return '';
+    return Object.keys(vizSpec.facilityPopup)
+        .filter((col) => vizSpec.facilityPopup[col] === 'BY_FACILITY')
         .map(referToColumn)
         .join(', ');
 }
@@ -168,123 +185,86 @@ function makeOrderBy(vizSpec) {
 
 // if using refrigerator class, will join refrigerators classes on the model id's
 function makeRefClassJoin(vizSpec) {
-    if (vizSpec.colorBy === 'refrigerator_class' ||
-        vizSpec.groupBy === 'refrigerator_class' ||
-        vizSpec.repeatBy === 'refrigerator_class' ||
-        (vizSpec.facilityPopup && 'refrigerator_class' in vizSpec.facilityPopup)) {
-            return "vw_ref_type_class.model_id = refrigerator_types_odkx.model_id";
+    if (usesColumn(vizSpec, 'refrigerator_class')) {
+        return 'vw_ref_type_class.model_id = refrigerator_types_odkx.model_id';
     }
-    return "";
-};
+    return '';
+}
 
 // includes view for refrigerator class if needed
 function makeRefClassification(vizSpec) {
-    if (vizSpec.colorBy === 'refrigerator_class' ||
-        vizSpec.groupBy === 'refrigerator_class' ||
-        vizSpec.repeatBy === 'refrigerator_class' ||
-        (vizSpec.facilityPopup && 'refrigerator_class' in vizSpec.facilityPopup)) {
-            return `JOIN vw_ref_type_class ON ${makeRefClassJoin(vizSpec)}`;
+    if (usesColumn(vizSpec, 'refrigerator_class')) {
+        return `JOIN vw_ref_type_class ON ${makeRefClassJoin(vizSpec)}`;
     }
-    return "";
-};
+    return '';
+}
 
+function usesColumn(vizSpec, columnName) {
+    return (vizSpec.colorBy === columnName ||
+        vizSpec.groupBy === columnName ||
+        vizSpec.repeatBy === columnName ||
+        (vizSpec.facilityPopup && columnName in vizSpec.facilityPopup));
+}
 
-// age brackets within CASE statement are hardcoded as a constant in routes/index.js for legend display
-function makeBucketByAge(vizSpec) {
-    if (vizSpec.colorBy === AGE_GROUPS_COLUMN_NAME ||
-        vizSpec.groupBy === AGE_GROUPS_COLUMN_NAME ||
-        vizSpec.repeatBy === AGE_GROUPS_COLUMN_NAME) {
-        return `JOIN (SELECT year_installed,
-                 id_refrigerators,
-                 CASE
-                     WHEN AGE BETWEEN 0 and  5 THEN '0-5 Years'
-                     WHEN AGE BETWEEN 6 AND 10 THEN '6-10 Years'
-                     WHEN AGE > 10 THEN '>10 Years'
-                     ELSE 'Missing data'
-                 END AS ${AGE_GROUPS_COLUMN_NAME}
-          FROM (
-          SELECT year_installed,
-                 id_refrigerators,
-                 CAST(case
-                 WHEN year_installed = '0' or year_installed = ''
-                   THEN -1
-                 ELSE  (date_part('year', now()) - CAST(year_installed as integer))
-                  END as integer) as AGE
-          FROM refrigerators_odkx
-        ) as computedAge ) as BucketedAge ON ${makeAgeGroupJoin(vizSpec)}`;
+function joinComputedColumns(vizSpec) {
+    return computedColumns
+        // Get definitions for all subqueries needed for this visualization
+        .filter(({ provides }) =>
+            provides.some(columnName => usesColumn(vizSpec, columnName))
+        )
+        // Produce a join for each
+        .map(({ query, name, joinOn }) => {
+            const { table, foreignColumn, localColumn } = joinOn;
+            return `JOIN (${query}) as ${name} ON ${table}.${foreignColumn} = ${name}.${localColumn}`;
+        })
+        .join('');
+}
+
+function makeRefrigeratorJoin(vizSpec) {
+    if (vizSpec.type === 'facility' && vizSpec.style !== 'map') return '';
+    let joinType;
+    if (vizSpec.type === 'facility' && vizSpec.style === 'map') {
+        joinType = 'LEFT JOIN';
+    } else {
+        joinType = 'JOIN'
+    }
+    return `${joinType} refrigerators_odkx ON health_facilities2_odkx.id_health_facilities = refrigerators_odkx.facility_row_id
+        ${joinType} refrigerator_types_odkx ON refrigerator_types_odkx.id_refrigerator_types = refrigerators_odkx.model_row_id`;
+}
+
+function makeTemperatureDataJoin(vizSpec) {
+    if (vizSpec.style === 'map' && vizSpec.mapType === 'alarm_counts') {
+        return 'LEFT JOIN refrigerator_temperature_data_odkx ON refrigerator_temperature_data_odkx.refrigerator_id = refrigerators_odkx.id_refrigerators';
     } else {
         return '';
     }
 }
 
-function makeAgeGroupJoin(vizSpec) {
-    if (vizSpec.colorBy === AGE_GROUPS_COLUMN_NAME ||
-        vizSpec.groupBy === AGE_GROUPS_COLUMN_NAME ||
-        vizSpec.repeatBy === AGE_GROUPS_COLUMN_NAME) {
-        return 'refrigerators_odkx.id_refrigerators = BucketedAge.id_refrigerators';
-    }
-    return '';
-}
-
-function makeFacilityJoin(vizSpec) {
-    if (vizSpec.style === 'map' && vizSpec.mapType === 'facility_details') {
-        return 'RIGHT JOIN health_facilities2_odkx ON health_facilities2_odkx.id_health_facilities = refrigerators_odkx.facility_row_id';
-    } else {
-        return 'JOIN health_facilities2_odkx ON health_facilities2_odkx.id_health_facilities = refrigerators_odkx.facility_row_id';
-    }
-}
-
-function makeAlarmJoin(vizSpec) {
-    if (vizSpec.style === 'map' && vizSpec.mapType === 'alarm_counts') {
-        return `JOIN (SELECT id_refrigerators, id_health_facilities, CAST(refrigerator_temperature_data_odkx.reporting_period AS timestamp) as reporting_period,
-            refrigerator_temperature_data_odkx.number_of_high_alarms_30, refrigerator_temperature_data_odkx.number_of_low_alarms_30
-            FROM refrigerators_odkx AS refs, health_facilities2_odkx, refrigerator_temperature_data_odkx
-            WHERE refs.facility_row_id = health_facilities2_odkx.id_health_facilities
-            AND refrigerator_temperature_data_odkx.refrigerator_id = refs.id_refrigerators
-            AND reporting_period = (
-                SELECT MAX(CAST(refrigerator_temperature_data_odkx.reporting_period AS timestamp))
-                FROM refrigerator_temperature_data_odkx, refrigerators_odkx
-                WHERE refrigerator_temperature_data_odkx.refrigerator_id = refrigerators_odkx.id_refrigerators
-                AND refrigerators_odkx.id_refrigerators = refs.id_refrigerators
-            )
-            GROUP BY id_refrigerators, id_health_facilities, reporting_period, refrigerator_temperature_data_odkx.number_of_high_alarms_30,
-            refrigerator_temperature_data_odkx.number_of_low_alarms_30) AS ref_alarms
-        ON ref_alarms.id_refrigerators = refrigerators_odkx.id_refrigerators
-        AND (ref_alarms.number_of_high_alarms_30 > 2 OR ref_alarms.number_of_low_alarms_30 > 0)`;
-    }
-    return '';
-}
-
-function makeTemperatureDataJoin(vizSpec) {
-    return 'LEFT JOIN refrigerator_temperature_data_odkx ON refrigerator_temperature_data_odkx.refrigerator_id = refrigerators_odkx.id_refrigerators';
-}
-
 function makeAlarmCountsFilter(vizSpec) {
-    const defaultFilter = `AND (cast(reporting_period as timestamp) = (
-        SELECT MAX(CAST(refrigerator_temperature_data_odkx.reporting_period AS timestamp))
-        FROM refrigerator_temperature_data_odkx
-        WHERE refrigerator_temperature_data_odkx.refrigerator_id = refrigerators_odkx.id_refrigerators
-    ) OR reporting_period IS NULL)`;
     if (vizSpec.style === 'map' && vizSpec.mapType === 'alarm_counts') {
+        const defaultFilter = `AND (cast(reporting_period as timestamp) = (
+            SELECT MAX(CAST(refrigerator_temperature_data_odkx.reporting_period AS timestamp))
+            FROM refrigerator_temperature_data_odkx
+            WHERE refrigerator_temperature_data_odkx.refrigerator_id = refrigerators_odkx.id_refrigerators
+        ) OR reporting_period IS NULL)`;
         return defaultFilter + ` AND (
             cast(number_of_high_alarms_30 as integer) >= ${HIGH_ALARM_COUNT} OR
             cast(number_of_low_alarms_30 as integer) >= ${LOW_ALARM_COUNT}
         )`;
+    } else {
+        return '';
     }
-    return defaultFilter;
 }
 
 function makeQueryStr(vizSpec) {
     return `SELECT ${makeSelect(vizSpec)}
-    FROM refrigerator_types_odkx
-         JOIN refrigerators_odkx ON
-            refrigerator_types_odkx.id_refrigerator_types = refrigerators_odkx.model_row_id
-         ${makeRefClassification(vizSpec)}
-         ${makeBucketByAge(vizSpec)}
-         ${makeFacilityJoin(vizSpec)}
-         ${makeTemperatureDataJoin(vizSpec)}
+    FROM health_facilities2_odkx
          JOIN geographic_regions_odkx ON
             geographic_regions_odkx.id_geographic_regions = health_facilities2_odkx.admin_region_id
+         ${makeRefrigeratorJoin(vizSpec)}
+         ${makeRefClassification(vizSpec)}
+         ${makeTemperatureDataJoin(vizSpec)}
+         ${joinComputedColumns(vizSpec)}
       ${makeFilterStr(vizSpec)}
       ${makeAlarmCountsFilter(vizSpec)}
     GROUP BY ${makeGroupBy(vizSpec)}

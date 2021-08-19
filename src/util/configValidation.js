@@ -8,8 +8,7 @@ function validateOrQuit(schema, value) {
     }
 }
 
-module.exports = function(tabVisualizations, visualizations) {
-    validateOrQuit(schemas.tabVisualizations, tabVisualizations);
-    validateOrQuit(schemas.visualizations, visualizations);
-    console.log('tabVisualizations.js and visualizations.js passed validation');
+module.exports = function(schemaName, obj) {
+    validateOrQuit(schemas[schemaName], obj);
+    console.log(schemaName, 'passed validation');
 };

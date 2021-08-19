@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 const EventEmitter = require('events');
 const RegionSelector = require('../frontend-src/RegionSelector')
 
@@ -14,6 +18,7 @@ class MapMock extends EventEmitter {
         this.setPaintProperty = () => {};
         this.addSource = () => {};
         this.addLayer = () => {};
+        this.addControl = () => {};
         this.on = function(eventName, layerID, callback) {
             if (typeof layerID === 'function') {
                 callback = layerID;
@@ -79,10 +84,69 @@ const shapesMock = {
     levels: levelMock
 };
 
+const mapboxMock = {
+    makeMap: function () {},
+    mapboxgl: {
+        AttributionControl: function() {}
+    }
+};
+
 describe('Region selection tests', () => {
+    // As the same document is used for multiple tests, the tests implicitly
+    // test if the document is cleared everytime a new regionSelector is created.
+    document.body.innerHTML =`
+            <ul id='region-list'></ul>
+            `;
+    const regionNamesContainer = document.getElementById('region-list');
+
+    test('Test should be setup correctly', () => {
+        expect(document.querySelectorAll('ul').length).toBe(1);
+    });
+
+    test('After generating map, all region names are displayed', () => {
+        const map = new MapMock();
+        const regionSelector = new RegionSelector(mapboxMock, map, shapesMock, regionNamesContainer);
+        const regions = document.querySelectorAll("li");
+        expect(regions.length).toBe(2);
+    });
+
+
+    test('After deselecting a region, the list of displayed regions updates', async () => {
+        const map = new MapMock();
+        const regionSelector = new RegionSelector(mapboxMock, map, shapesMock, regionNamesContainer);
+        map.click(['top', 'Country', 'Another region'].join(regionSelector._SEPARATOR));
+        await nextTick();
+        const regions = document.querySelectorAll("li");
+        expect(regions.length).toBe(1);
+    });
+
+    test('After selecting a region, the list of displayed regions updates', async () => {
+        const map = new MapMock();
+        const regionSelector = new RegionSelector(mapboxMock, map, shapesMock, regionNamesContainer);
+        map.click(['top', 'Country', 'Region'].join(regionSelector._SEPARATOR));
+        await nextTick();
+        map.click(['top', 'Country', 'Region'].join(regionSelector._SEPARATOR));
+        await nextTick();
+        const regions = document.querySelectorAll("li");
+        expect(regions.length).toBe(2);
+    });
+
+    test('After changing levels, the list of displayed regions updates', async () => {
+        const map = new MapMock();
+        const regionSelector = new RegionSelector(mapboxMock, map, shapesMock, regionNamesContainer);
+        map.dblclick(['top', 'Country', 'Region'].join(regionSelector._SEPARATOR));
+        await nextTick();
+        // Checks id of new li elements rather than length of li elements as the length
+        // remains 2 in level4
+        const city1 = document.getElementById("top|Country|Region|City");
+        const city2 = document.getElementById("top|Country|Region|Brass City");
+        expect(city1 !== null);
+        expect(city2 !== null);
+    });
+
     test('After deselecting regions, getSelectedRegions is correct', async () => {
         const map = new MapMock();
-        const regionSelector = new RegionSelector(map, shapesMock);
+        const regionSelector = new RegionSelector(mapboxMock, map, shapesMock, regionNamesContainer);
         // Start at level 3, deselect 'Region'
         map.click(['top', 'Country', 'Region'].join(regionSelector._SEPARATOR));
         await nextTick();
@@ -93,7 +157,7 @@ describe('Region selection tests', () => {
 
     test('After deselecting and selecting regions, getSelectedRegions is correct', async () => {
         const map = new MapMock();
-        const regionSelector = new RegionSelector(map, shapesMock);
+        const regionSelector = new RegionSelector(mapboxMock, map, shapesMock, regionNamesContainer);
         map.click(['top', 'Country', 'Region'].join(regionSelector._SEPARATOR));
         map.click(['top', 'Country', 'Another region'].join(regionSelector._SEPARATOR));
         map.click(['top', 'Country', 'Another region'].join(regionSelector._SEPARATOR));
@@ -105,7 +169,7 @@ describe('Region selection tests', () => {
 
     test('When all the children are selected, the parent is too', () => {
         const map = new MapMock();
-        const regionSelector = new RegionSelector(map, shapesMock);
+        const regionSelector = new RegionSelector(mapboxMock, map, shapesMock, regionNamesContainer);
         expect(regionSelector.getSelectedRegions().sort()).toEqual([
             [ 'top' ],
             [ 'top', 'Country' ],
@@ -116,7 +180,7 @@ describe('Region selection tests', () => {
 
     test('RegionSelector can change levels and select new regions', async () => {
         const map = new MapMock();
-        const regionSelector = new RegionSelector(map, shapesMock);
+        const regionSelector = new RegionSelector(mapboxMock, map, shapesMock, regionNamesContainer);
         map.dblclick(['top', 'Country', 'Region'].join(regionSelector._SEPARATOR));
         await nextTick();
         // Now at Level 4

@@ -2,8 +2,9 @@ const eachSeries = require('async/eachSeries')
 const makeMarkerInfo = require('./coordinates');
 const mapDisplay = require('../config/mapDisplay').mapVisualization;
 const select = require('./selectors');
+const maps = {};
 
-function _drawMarker(mapboxgl, map, marker) {
+function _drawMarker(mapboxgl, tabLabel, map, marker) {
     // create a DOM element for the marker
     const el = document.createElement('div');
     el.className = 'marker';
@@ -12,7 +13,7 @@ function _drawMarker(mapboxgl, map, marker) {
     el.style.width = marker.iconSize[0];
     el.style.height = marker.iconSize[1];
     // add marker to map
-    new mapboxgl.Marker({element: el})
+    const markerObj = new mapboxgl.Marker({element: el})
         .setLngLat(marker.coordinates)
         .setPopup(new mapboxgl.Popup({
             offset: 10,
@@ -21,6 +22,21 @@ function _drawMarker(mapboxgl, map, marker) {
         }).setHTML(`<h3> ${marker.title}
             </h3><p> ${marker.description} </p>`))
         .addTo(map);
+    maps[tabLabel].markers.push(markerObj);
+}
+
+/*
+ * If a map already exists for this tab, this will clear all
+ * markers. Otherwise, creates a map from the makeMap function.
+*/
+async function setUpMap( makeMap,tabLabel) {
+    if (!maps[tabLabel]) {
+        maps[tabLabel] = {map: await makeMap(mapDisplay, select.mapContainer(tabLabel)), 
+                          markers: []};
+    } else {
+        maps[tabLabel].markers.forEach(marker => marker.remove());
+    }
+    return maps[tabLabel].map;
 }
 
 /*
@@ -30,9 +46,9 @@ function _drawMarker(mapboxgl, map, marker) {
  * data: array of data in map format, see coordinates.js for more info
  * mapType: String, currently only 'maintenance_priority' is supported
  */
-module.exports = async function({ mapboxgl, makeMap }, data, { mapType }, tabLabel) {
-    const map = await makeMap(mapDisplay, select.mapContainer(tabLabel));
-    const drawMarker = _drawMarker.bind({}, mapboxgl, map);
+async function mapVisualization({ mapboxgl, makeMap }, data, { mapType }, tabLabel) {
+    const map = await setUpMap(makeMap, tabLabel);
+    const drawMarker = _drawMarker.bind({}, mapboxgl, tabLabel, map);
 
     // Add markers 250 at a time
     const BATCH_SIZE = 250;
@@ -50,3 +66,9 @@ module.exports = async function({ mapboxgl, makeMap }, data, { mapType }, tabLab
     });
     return map;
 };
+
+function removeMap(tabLabel) {
+    delete maps[tabLabel];
+}
+
+module.exports = {mapVisualization, removeMap}

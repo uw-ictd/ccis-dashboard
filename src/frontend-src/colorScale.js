@@ -1,23 +1,8 @@
 const d3 = require('d3');
-
-// These are our internal names for the colors from d3.schemeSet1
-// colorMap in visualizations.js should use these color names
-const colorNameToIndex= {
-    blue:      0,
-    orange:    1,
-    red:       2,
-    lightblue: 3,
-    green:     4,
-    yellow:    5,
-    purple:    6,
-    pink:      7,
-    brown:     8,
-    gray:      9
-};
-const scheme = d3.schemeTableau10;
+const { colorNameToIndex, colorScheme } = require('../config/colorScheme');
 
 module.exports = function(fullColorDomain, colorMap) {
-    if (!colorMap) return d3.scaleOrdinal(fullColorDomain, scheme);
+    if (!colorMap) return d3.scaleOrdinal(fullColorDomain, colorScheme);
 
     const valuesWithoutColors = fullColorDomain.filter(value => {
         return !Boolean(colorMap[value]);
@@ -46,6 +31,6 @@ module.exports = function(fullColorDomain, colorMap) {
             const index = valuesWithoutColors.indexOf(value);
             color = unusedColors[index % unusedColors.length]
         }
-        return scheme[colorNameToIndex[color]];
+        return colorScheme[colorNameToIndex[color]];
     }
 };

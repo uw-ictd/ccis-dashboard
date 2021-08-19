@@ -3,6 +3,7 @@ const tippy = require('tippy.js').default;
 const { createSingleton } = require('tippy.js');
 const makeColorScale = require('./colorScale');
 const select = require('./selectors');
+const fitCanvasToContents = require('./fitCanvasToContents');
 
 /*
  * data: in the format d3.stack expects, which is an Array representation of a
@@ -41,7 +42,6 @@ const select = require('./selectors');
  */
 function drawAllCharts(data, { fullDomain, fullColorDomain }, { groupBy, repeatBy, style, colorMap }, tabName) {
     const parentElement = d3.select(select.chartContainerStr(tabName));
-    if (!data) return warnNoData(parentElement);
 
     // Make color scale
     const colorScale = makeColorScale(fullColorDomain, colorMap);
@@ -295,21 +295,5 @@ function makeTitle(canvas, width, title) {
     }
 }
 
-function fitCanvasToContents(svg) {
-    const bBox = svg.node().getBBox();
-    svg.attr('viewBox', `${bBox.x-1} ${bBox.y-1} ${bBox.width+2} ${bBox.height+2}`);
-}
-
-function warnNoData(parentElement) {
-    const canvas = parentElement.append('svg');
-    canvas.attr('width', 300)
-        .attr('height', 150)
-        .append('text')
-            .attr('fill', 'currentColor')
-            .style('text-anchor', 'middle')
-            .attr('font-size', 30)
-            .text('No data match your chosen filters');
-    fitCanvasToContents(canvas);
-}
 
 module.exports = drawAllCharts;

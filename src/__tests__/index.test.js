@@ -25,7 +25,7 @@ describe('Login tests', () => {
         const response = await agent.get('/')
             .redirects(5)
             .expect(200);
-        expect(response.text).toContain('<h5 class="card-title text-center">Sign In</h5>');
+        expect(response.text).toContain('<h5 class="card-title text-center">CCIS Dashboard Sign In</h5>');
     });
 
     test('Response should be unsuccessful login', async () => {
@@ -70,7 +70,7 @@ describe('/api/query integration tests', () => {
             .send({
                 visualization: 'CCE utilization',
                 filter: {
-                    facilityTypes: [ 'public_hcii' ],
+                    facilityTypes: [ 'hcii' ],
                     refrigeratorTypes: [ 'VLS 054 SDD Greenline' ],
                     maintenancePriorities: [ 'low', 'high', 'not_applicable', '' ],
                     regions: [
@@ -89,6 +89,29 @@ describe('/api/query integration tests', () => {
         expect(data[0].length).toBe(2);
         expect(metadata).toHaveProperty('fullDomain');
         expect(metadata).toHaveProperty('fullColorDomain');
+    });
+
+    test('Server responds when part of filter is empty', async () => {
+        const response = await agent.post('/api/query')
+            .send({
+                visualization: 'Refrigerator/freezer utilization',
+                filter: {
+                    facilityTypes: [],
+                    refrigeratorTypes: [ 'MKF 074' ],
+                    maintenancePriorities: [ 'low', 'high', 'not_applicable', '' ],
+                    regions: [
+                        [ 'KAMPALA', 'KAMPALA DISTRICT' ],
+                        [ 'LANGO', 'APAC DISTRICT'],
+                        [ 'WEST NILE', 'ARUA DISTRICT' ]
+                    ]
+                }
+            });
+        expect(response.statusCode).toBe(200);
+        const responseBody = JSON.parse(response.text);
+        expect(responseBody).toHaveProperty('data');
+        expect(responseBody).toHaveProperty('metadata');
+        const { data, metadata } = responseBody;
+        expect(data.length).toBe(0);
     });
 
     test('Server should reply with error when no visualization specified', async () => {

@@ -1,6 +1,9 @@
 const refrigeratorClasses = require('../model/refrigeratorClasses.json');
+const { colorNameToIndex, colorScheme } = require('../config/colorScheme');
 
 const MAP_SEPARATOR = '$';
+const CIRCLE_DIAMETER = '15px';
+
 /*
  * data: We expect an array of objects, each representing a single facility and the corresponding data.
  * Each object must have facility_name, location_latitude, and location_longitude attributes, along with
@@ -36,35 +39,34 @@ module.exports = function(data, mapType) {
      *    and the second element is an object with a count for each of the
      *    colorlabel options, e.g.: [ "89072039", { high: 1, medium: 0, low: 2 } ]
      */
-    return data
-        .map(facility => {
-            const lngLat = [
-                facility.location_longitude,
-                facility.location_latitude
-            ];
-            const title = facility.facility_name;
-            let markerInfo;
+    return data.map(facility => {
+        const lngLat = [
+            facility.location_longitude,
+            facility.location_latitude
+        ];
+        const title = facility.facility_name;
 
-            if (mapType === 'maintenance_priority') {
-                if (!facility[`${mapType}${MAP_SEPARATOR}low`] && !facility[`${mapType}${MAP_SEPARATOR}medium`] && !facility[`${mapType}${MAP_SEPARATOR}high`]){ return null};
-                markerInfo = getMaintenancePriorityInfo(facility);
-            } else if (mapType === 'facility_details') {
-                markerInfo = getFacilityDetails(facility);
-            } else if (mapType === 'alarm_counts'){
-                markerInfo = getAlarmCountInfo(facility);
-            } else {
-                throw new Error(`mapType ${mapType} not recognized`);
-            }
+        let markerInfo;
+        if (mapType === 'maintenance_priority') {
+            if (!facility[`${mapType}${MAP_SEPARATOR}low`] && !facility[`${mapType}${MAP_SEPARATOR}medium`] && !facility[`${mapType}${MAP_SEPARATOR}high`]){ return null};
+            markerInfo = getMaintenancePriorityInfo(facility);
+        } else if (mapType === 'facility_details') {
+            markerInfo = getFacilityDetails(facility);
+        } else if (mapType === 'alarm_counts'){
+            markerInfo = getAlarmCountInfo(facility);
+        } else {
+            throw new Error(`mapType ${mapType} not recognized`);
+        }
 
-            // create a point to plot
-            return {
-                title,
-                'description': markerInfo.description,
-                'iconImage':   markerInfo.iconImage,
-                'coordinates': lngLat,  // [lng, lat]
-                'iconSize': markerInfo.iconSize // [width, height]
-            }
-        });
+        // create a point to plot
+        return {
+            title,
+            'description': markerInfo.description,
+            'iconImage':   markerInfo.iconImage,
+            'coordinates': lngLat,  // [lng, lat]
+            'iconSize': markerInfo.iconSize // [width, height]
+        }
+    });
 }
 
 /*
@@ -88,8 +90,13 @@ function getMaintenancePriorityInfo(facility) {
     const description = `low: ${facility[`maintenance_priority${MAP_SEPARATOR}low`]}
         <br>medium: ${facility[`maintenance_priority${MAP_SEPARATOR}medium`]}
         <br>high: ${facility[`maintenance_priority${MAP_SEPARATOR}high`]}`;
-    const iconImage = `url(./images/priority-${getHighestMaintenancePriority(facility)}.png)`;
-    const iconSize = ['32px', '32px'];
+    let color;
+    const priority = getHighestMaintenancePriority(facility);
+    if (priority === 'high') color = 'red';
+    if (priority === 'medium') color = 'orange';
+    if (priority === 'low') color = 'yellow';
+    const iconImage = coloredCircle(color, 0.8);
+    const iconSize = [ CIRCLE_DIAMETER, CIRCLE_DIAMETER ];
     return { description, iconImage, iconSize };
 }
 
@@ -104,7 +111,7 @@ function getRefrigeratorCountsDisplay(facility) {
     return `<ul class =\'ref-counts\'>${list}</ul>`;
 }
 
-/* 
+/*
  * input: facility information to display
  * output: object with parameters 'description', 'iconImage', and 'iconSize'
  */
@@ -113,8 +120,8 @@ function getFacilityDetails(facility) {
     <br>Level : ${facility['facility_level']}<br>
     Refrigerator Counts: </p>
     ${getRefrigeratorCountsDisplay(facility)}`;
-    const iconImage = 'url(./images/purple-circle.svg)';
-    const iconSize = ['15px', '15px'];
+    const iconImage = coloredCircle('purple', '0.5');
+    const iconSize = [ CIRCLE_DIAMETER, CIRCLE_DIAMETER ];
     return { description, iconImage, iconSize };
 }
 
@@ -134,4 +141,14 @@ function getAlarmCountInfo(facility) {
     const iconImage = getAlarmImage(facility['id_refrigerators']);
     const iconSize = ['32px', '32px'];
     return { description, iconImage, iconSize };
+}
+
+function coloredCircle(color, opacity) {
+    if (!colorScheme[colorNameToIndex[color]]) throw new Error(`Color ${color} not recognized`);
+    if (!opacity) opacity = '0.5';
+    const svgStr = '<svg width="30px" height="30px" xmlns="http://www.w3.org/2000/svg">' +
+        `<circle style="fill:${colorScheme[colorNameToIndex[color]]};fill-opacity:${0.5}" cx="15" cy="15" r="15"/>` +
+        '</svg>';
+    const encoded = encodeURIComponent(svgStr);
+    return `url('data:image/svg+xml;utf8,${encoded}')`;
 }

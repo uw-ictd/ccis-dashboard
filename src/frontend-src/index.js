@@ -9,25 +9,27 @@ const makeMap = mapboxDependency.makeMap;
 const mapDisplay = require('../config/mapDisplay').regionSelector;
 const { getIndicators } = require('./indicatorsController');
 const select = require('./selectors');
+const setupFilters = require('./filter');
 
 function tabToRegionSelector(tabName) {
     const shapefiles = import('../config/shapefiles');
     const map = makeMap(mapDisplay, select.mapSelector(tabName));
-    const regionSelector = Promise.all([map, shapefiles])
-        .then(([map, shapefiles]) => new RegionSelector(map, shapefiles));
+    const regionNamesContainer = select.regionNamesContainer(tabName);
+    const regionSelector = Promise.all([mapboxDependency, map, shapefiles, regionNamesContainer])
+        .then(([mapboxDependency, map, shapefiles, regionNamesContainer]) => new RegionSelector(mapboxDependency, map, shapefiles, regionNamesContainer));
     return [tabName, regionSelector];
 }
 
 document.addEventListener('DOMContentLoaded', function() {
     getIndicators();
     window.exportTables = require('./exportController');
-    require('./filter');
+    setupFilters(window._dropdownFilters);
 
     // Create a region selector for each tab
     const regionSelectorPromises = Object.fromEntries(Object.keys(tabVisualizations).map(tabToRegionSelector));
 
     window.drawVisualization = async function(tabName) {
-        drawVisualization(mapboxDependency, await regionSelectorPromises[tabName], tabName);
+        drawVisualization(mapboxDependency, window._dropdownFilters, await regionSelectorPromises[tabName], tabName);
     };
     window.tabSelector = function (tabName) {
         tabSelector(tabVisualizations, tabName);

@@ -11,6 +11,7 @@ module.exports = {
         tabLabel: 'Facilities',
         visualizations: [
             'Facility details map',
+            'Catchment population',
             'CCE model by facility power availability',
             'CCE facility power availability by model',
             'CCE model by facility type',
@@ -53,9 +54,11 @@ module.exports = {
     'System-Use': {
         tabLabel: 'System Use',
         visualizations: [
-            'CCE facility power availability by model'
+            'Refrigerator last update month',
+            'Facility last update month',
+            'Facility updates by user'
         ],
-        defaultViz: 'CCE facility power availability by model'
+        defaultViz: 'Refrigerator last update month'
     },
     'Temp-Alarms': {
         tabLabel: 'Temp Alarms',

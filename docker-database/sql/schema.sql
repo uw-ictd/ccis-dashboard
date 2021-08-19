@@ -238,10 +238,16 @@ create table refrigerator_temperature_data_odkx
 	days_temp_below_2_30 varchar,
 	number_of_high_alarms_30 varchar,
 	number_of_low_alarms_30 varchar,
-	refrigerator_id varchar,
+	refrigerator_id varchar(255),
 	reporting_period varchar,
-	id_refrigerator_temperature_data varchar
+	id_refrigerator_temperature_data varchar(255)
 );
+
+create index refrigerator_temperature_data_odkx_index
+	on refrigerator_temperature_data_odkx (id_refrigerator_temperature_data);
+
+create index refrigerator_temperature_data_odkx_refrigerator_index
+	on refrigerator_temperature_data_odkx (refrigerator_id);
 
 create table refrigerator_types_odkx
 (

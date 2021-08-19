@@ -1,33 +1,21 @@
 const tableName = require('../model/tableName');
-
-const AGE_GROUPS_LEGEND = [
-    { colorlabel: '0-5 Years' },
-    { colorlabel: '6-10 Years' },
-    { colorlabel: '>10 Years' },
-    { colorlabel: 'Missing data' }
-];
+const findQueryForColumn = require('../util/searchComputedColumns');
+const computedColumns = require('../config/computedColumns');
 
 function legendQuery(db, vizSpec) {
-    if (vizSpec.style === 'map') {
-        return [];
-    } else if (isAgeGroups(vizSpec)) {
-        // age brackets hardcoded into the legend are from makeBucketByAge() CASE statement in controller/QueryTemplate.js
-        return AGE_GROUPS_LEGEND;
-    }
-    else {
-        return db.query(makeLegendQuery(vizSpec));
-    }
-}
-
-function isAgeGroups(vizSpec) {
-    const colName = vizSpec.colorBy;
-    return colName === '"Age Groups"';
+    if (vizSpec.style === 'map') return [];
+    return db.query(makeLegendQuery(vizSpec));
 }
 
 function makeLegendQuery(vizSpec) {
     const colName = vizSpec.colorBy;
+    let table = tableName[colName];
+    if (!table) {
+        const subQueryDefn = findQueryForColumn(computedColumns, colName);
+        table = `(${subQueryDefn.query}) as ${subQueryDefn.name}`;
+    }
     return `SELECT DISTINCT COALESCE(NULLIF(${colName}, ''), 'Missing data') as colorlabel
-         FROM ${tableName[colName]} ORDER BY colorlabel DESC`;
+         FROM ${table} ORDER BY colorlabel DESC`;
 }
 
 module.exports = legendQuery;

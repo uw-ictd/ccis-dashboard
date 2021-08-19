@@ -58,15 +58,19 @@ function noneChecked(id, values) {
     return allChecked(id, values, true);
 }
 
+function addPrefixToStr(prefix, str) {
+    if (str === null) str = '';
+    return prefix + SEPARATOR + str;
+}
+
 function addPrefix(classes, prefix) {
     if (prefix.indexOf(SEPARATOR) >= 0) {
         throw new Error(`The '${SEPARATOR}' character is not allowed in prefix (${prefix})`);
     }
-    const ret = {};
-    Object.keys(classes).forEach(key => {
-        ret[prefix + SEPARATOR + key] = classes[key].map(x => prefix + SEPARATOR + x);
-    });
-    return ret;
+    const addPref = addPrefixToStr.bind({}, prefix);
+    return Object.fromEntries(Object.entries(classes)
+        .map(([key, group]) => [addPref(key), group.map(addPref)])
+    );
 }
 
 /*
@@ -100,9 +104,8 @@ function removePrefix(str) {
  */
 function getSelectionIgnoreGroups(selectorStr) {
     const selectedElements = document.querySelectorAll(`${selectorStr} .child:checked`);
-    return Array.from(selectedElements).map(element => {
-        return removePrefix(element.value);
-    });
+    return Array.from(selectedElements)
+        .map(element => removePrefix(element.value));
 }
 
 module.exports = {

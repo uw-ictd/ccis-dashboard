@@ -1,0 +1,11 @@
+<tr>
+    <td><%=title%></td>
+    <td>
+    <% const id = `${tabName}-${key}-selector`; %>
+    <% if (locals.grouped) { %>
+        <%- include('groupedDropdown', { id, classes }); %>
+    <% } else { %>
+        <%- include('ungroupedDropdown', { id, options }); %>
+    <% } %>
+    </td>
+</tr>

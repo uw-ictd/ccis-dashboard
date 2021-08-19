@@ -1,33 +1,15 @@
 const express = require('express');
-const mergeFilterOptions = require('../util/mergeFilterOptions');
-const visualizations = require('../config/visualizations');
-const tabVisualizations = require('../config/tabVisualizations');
-const getDistinctFilterOptions = require('../controller/filterOptions');
-const exportOptions = require('../shared/exportOptions');
-const knownRefrigeratorClasses = require('../model/refrigeratorClasses.json');
-const knownFacilityClasses = require('../model/facilityClasses.json');
 const { getAuth, loginAuth } = require('../util/auth');
 const passport = require('passport');
-require('../util/configValidation')(tabVisualizations, visualizations);
+const getIndexData = require('../controller/getIndexData');
 
 function makeRouter(db) {
     const router = express.Router();
     router.get('/', getAuth, async (req, res) => {
-        // getDistinctFilterOptions runs 3 simple database queries. To optimize
+        // buildDropdownData runs some simple database queries. To optimize
         // page loading, these results could potentially be cached
-        const filterOptions = await getDistinctFilterOptions(db);
-        const facilityClasses = mergeFilterOptions(knownFacilityClasses,
-            filterOptions.facilityClasses);
-        const refrigeratorClasses = mergeFilterOptions(knownRefrigeratorClasses,
-            filterOptions.refrigeratorClasses);
-        res.render('index', {
-            visualizations,
-            facilityClasses,
-            refrigeratorClasses,
-            maintenancePriorities: filterOptions.maintenancePriorities,
-            exportOptions: exportOptions.dropdownNames,
-            tabVisualizations
-        });
+        const indexData = await getIndexData(db);
+        res.render('index', indexData);
     });
 
     router.get('/login', loginAuth, (req, res) => {

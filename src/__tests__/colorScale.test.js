@@ -1,6 +1,6 @@
 const makeColorScale = require('../frontend-src/colorScale');
 
-// Hex codes from d3.schemeSet1
+// Hex codes from d3.schemeTableau10
 const hexCodes = {
     red:    '#e15759',
     blue:   '#4e79a7',
@@ -13,7 +13,6 @@ const hexCodes = {
     pink:   '#ff9da7',
     gray:   '#bab0ab'
 };
-
 
 describe('colorScale tests', () => {
     test('makeColorScale returns a function', () => {

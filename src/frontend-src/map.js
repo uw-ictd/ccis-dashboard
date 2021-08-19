@@ -10,7 +10,8 @@ function makeMap(mapOptions, container) {
         ...mapOptions,
         container,
         style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
-        doubleClickZoom: false // We use double-click to change levels and zoom
+        doubleClickZoom: false, // We use double-click to change levels and zoom
+        attributionControl: false
     });
 
     return new Promise(function (resolve, reject) {

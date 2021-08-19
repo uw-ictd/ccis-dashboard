@@ -7,13 +7,9 @@ const exportOptions = require('../shared/exportOptions');
 const schemas = {
     queryProps: Joi.object().keys({
         visualization: Joi.string().required(),
-        filter: Joi.object({
-            facilityTypes: Joi.array().items(Joi.string().allow('')),
-            refrigeratorTypes: Joi.array().items(Joi.string().allow('')),
-            maintenancePriorities: Joi.array().items(Joi.string().allow('')),
-            // The ODK-X database only has 5 region name columns
-            regions: Joi.array().items(Joi.array().items(Joi.string()).max(5))
-        }).allow(null).required()
+        filter: Joi.object()
+            .pattern(/.*/, Joi.array())
+            .allow(null).required()
     }),
 
     rawTableProps: Joi.object().keys({
