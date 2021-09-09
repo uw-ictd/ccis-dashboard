@@ -1,0 +1,25 @@
+<div>
+    <button class="line-list-download">Download list as CSV</button>
+    <span class="line-list-total"><%=rows.length%> items</span>
+</div>
+<div class="list-container">
+    <table class="line-list" id="<%=id%>">
+        <!-- class="list" is necessary for list.js -->
+        <thead>
+            <tr>
+                <% columns.forEach(col => { %>
+                <th class="sort" data-sort="<%=getDataName(tabName, col)%>"><%=col%></th>
+                <% }); %>
+            </tr>
+        </thead>
+        <tbody class="list">
+            <% rows.forEach(row => { %>
+            <tr>
+                <% columns.forEach(col => { %>
+                <td class="<%=getDataName(tabName, col)%>"><%=row[col]%></th>
+                <% }); %>
+            </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</div>

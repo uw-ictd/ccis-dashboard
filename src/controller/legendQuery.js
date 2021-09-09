@@ -3,7 +3,7 @@ const findQueryForColumn = require('../util/searchComputedColumns');
 const computedColumns = require('../config/computedColumns');
 
 function legendQuery(db, vizSpec) {
-    if (vizSpec.style === 'map') return [];
+    if (!vizSpec.colorBy) return [];
     return db.query(makeLegendQuery(vizSpec));
 }
 

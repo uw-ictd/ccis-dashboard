@@ -13,15 +13,15 @@ module.exports = {
         'refrigerator_temperature_data_odkx'
     ],
     dropdownNames: {
-        refrigerator_big_table: 'Refrigerator Table',
-        facility_big_table: 'Facility Table',
-        health_facilities2_odkx: 'ODK-X: Health facilities',
-        refrigerators_odkx: 'ODK-X: Refrigerators',
-        refrigerator_types_odkx: 'ODK-X: Refrigerator types',
-        geographic_regions_odkx: 'ODK-X: Geographic regions',
-        maintenance_logs_odkx: 'ODK-X: Maintenance logs',
-        refrigerator_moves_odkx: 'ODK-X: Refrigerator moves',
-        refrigerator_temperature_data_odkx: 'ODK-X: Temperature data',
+        refrigerator_big_table: 'Refrigerator Table (CCIS format)',
+        facility_big_table: 'Facility Table (CCIS format)',
+        health_facilities2_odkx: 'Health facilities (ODK-X format)',
+        refrigerators_odkx: 'Refrigerators (ODK-X format)',
+        refrigerator_types_odkx: 'Refrigerator types (ODK-X format)',
+        geographic_regions_odkx: 'Geographic regions (ODK-X format)',
+        maintenance_logs_odkx: 'Maintenance logs (ODK-X format)',
+        refrigerator_moves_odkx: 'Refrigerator moves (ODK-X format)',
+        refrigerator_temperature_data_odkx: 'Temperature data (ODK-X format)',
         all_odkx_tables: 'All ODK-X tables'
     }
 };

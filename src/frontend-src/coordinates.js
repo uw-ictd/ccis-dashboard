@@ -29,8 +29,7 @@ const CIRCLE_DIAMETER = '15px';
  *
  * Throws an error if facilities is missing or mapType is not implemented
  */
-module.exports = function(data, mapType) {
-
+module.exports = function(data, visualization, colorScale) {
     /*
      * A map visualization cannot use repeatBy, so data has length 1, and
      *    data[0][0] is null (since there is no repeatlabel).
@@ -47,15 +46,21 @@ module.exports = function(data, mapType) {
         const title = facility.facility_name;
 
         let markerInfo;
-        if (mapType === 'maintenance_priority') {
-            if (!facility[`${mapType}${MAP_SEPARATOR}low`] && !facility[`${mapType}${MAP_SEPARATOR}medium`] && !facility[`${mapType}${MAP_SEPARATOR}high`]){ return null};
+        if (visualization.mapType === 'maintenance_priority') {
+            if (!facility[`${visualization.mapType}${MAP_SEPARATOR}low`] &&
+                !facility[`${visualization.mapType}${MAP_SEPARATOR}medium`] &&
+                !facility[`${visualization.mapType}${MAP_SEPARATOR}high`]) {
+                return null;
+            }
             markerInfo = getMaintenancePriorityInfo(facility);
-        } else if (mapType === 'facility_details') {
+        } else if (visualization.mapType === 'facility_details') {
             markerInfo = getFacilityDetails(facility);
-        } else if (mapType === 'alarm_counts'){
+        } else if (visualization.mapType === 'alarm_counts') {
             markerInfo = getAlarmCountInfo(facility);
+        } else if (visualization.mapType === 'colored_facilities') {
+            markerInfo = getFacilityColorInfo(facility, visualization, colorScale);
         } else {
-            throw new Error(`mapType ${mapType} not recognized`);
+            throw new Error(`mapType ${visualization.mapType} not recognized`);
         }
 
         // create a point to plot
@@ -65,9 +70,9 @@ module.exports = function(data, mapType) {
             'iconImage':   markerInfo.iconImage,
             'coordinates': lngLat,  // [lng, lat]
             'iconSize': markerInfo.iconSize // [width, height]
-        }
+        };
     });
-}
+};
 
 /*
  * priorities: Object mapping the strings 'maintenance_priority$high', 'maintenance_priority$medium',
@@ -116,7 +121,7 @@ function getRefrigeratorCountsDisplay(facility) {
  * output: object with parameters 'description', 'iconImage', and 'iconSize'
  */
 function getFacilityDetails(facility) {
-    const description = `<p class='facility-info'> Ownership : ${facility['ownership']}
+    const description = `<p class='popup-info'> Ownership : ${facility['ownership']}
     <br>Level : ${facility['facility_level']}<br>
     Refrigerator Counts: </p>
     ${getRefrigeratorCountsDisplay(facility)}`;
@@ -127,27 +132,46 @@ function getFacilityDetails(facility) {
 
 function getAlarmImage(alarms) {
     if (alarms > 10) {
-        return 'url(./images/high-plusplus.png)'
+        return 'url(./images/high-plusplus.png)';
     }
     const formattedNum = alarms.toLocaleString('en-US', {
         minimumIntegerDigits: 2
     });
-    return `url(./images/high${formattedNum}.png)`
+    return `url(./images/high${formattedNum}.png)`;
 
 }
 
 function getAlarmCountInfo(facility) {
-    const description = `<p class='facility-info'>${facility['id_refrigerators']} faulty refrigerator(s)</p>`;
-    const iconImage = getAlarmImage(facility['id_refrigerators']);
+    const description = `<p class='facility-info'>${facility['faulty_refrigerator_id']} faulty refrigerator(s)</p>`;
+    const iconImage = getAlarmImage(facility['faulty_refrigerator_id']);
     const iconSize = ['32px', '32px'];
     return { description, iconImage, iconSize };
 }
 
-function coloredCircle(color, opacity) {
-    if (!colorScheme[colorNameToIndex[color]]) throw new Error(`Color ${color} not recognized`);
+function getFacilityColorInfo(facility, visualization, colorScale) {
+    const description = `<p class='facility-info'>` +
+        Object.keys(visualization.facilityPopup)
+        .map(item => `${item}: ${facility[item]}`)
+        .join(`<br>`) +
+        `</p>`;
+    // 'facility_status' is the generic name for the metric to determine the facility color
+    // It has to appear as a variable in the SQL query in computedColumns.js
+    // Refer to 'FacilityUpdateStatus' in computedColumns.js as an example
+    if (!facility[visualization.colorBy]) throw new Error(`No color specified for value ${visualization.colorBy}`);
+    const iconImage = coloredCircleHex(colorScale(facility[visualization.colorBy]), 0.5);
+    const iconSize = [ CIRCLE_DIAMETER, CIRCLE_DIAMETER ];
+    return { description, iconImage, iconSize };
+}
+
+function coloredCircle(colorName, opacity) {
+    if (!colorScheme[colorNameToIndex[colorName]]) throw new Error(`Color ${color} not recognized`);
+    return coloredCircleHex(colorScheme[colorNameToIndex[colorName]], opacity);
+}
+
+function coloredCircleHex(hexCode, opacity) {
     if (!opacity) opacity = '0.5';
     const svgStr = '<svg width="30px" height="30px" xmlns="http://www.w3.org/2000/svg">' +
-        `<circle style="fill:${colorScheme[colorNameToIndex[color]]};fill-opacity:${0.5}" cx="15" cy="15" r="15"/>` +
+        `<circle style="fill:${hexCode};fill-opacity:${opacity}" cx="15" cy="15" r="15"/>` +
         '</svg>';
     const encoded = encodeURIComponent(svgStr);
     return `url('data:image/svg+xml;utf8,${encoded}')`;

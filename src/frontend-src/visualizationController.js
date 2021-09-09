@@ -3,11 +3,11 @@ const visualizations = require('../config/visualizations');
 const { getSelection } = require('./basicMultiselect');
 const { getSelectionIgnoreGroups } = require('./groupedMultiselect');
 const { post } = require('./httpTools');
-const { mapVisualization, removeMap } = require('../frontend-src/mapVisualization');
+const { mapVisualization, heatmapVisualization, removeMap } = require('../frontend-src/mapVisualization');
+const drawLineList = require('./lineList');
 const d3 = require('d3');
 const select = require('./selectors');
 const writeTextInsteadOfChart = require('./resultText');
-
 
 function drawVisualization(mapboxDependency, dropdownFilters, regionSelector, tabName) {
     const vizName = getVisualizationName(tabName);
@@ -20,29 +20,37 @@ function drawVisualization(mapboxDependency, dropdownFilters, regionSelector, ta
         visualization: vizName,
         filter: getFilterParams(dropdownFilters, regionSelector, tabName)
     }).then(async (body) => {
-        if (visualization.style != 'map' || select.mapContainer(tabName).style.display == 'none') {
+        if ((visualization.style != 'map' && visualization.style != 'heatmap') ||
+            select.mapContainer(tabName).style.display == 'none') {
             removeText(tabName);
             tearDownVisualizations(tabName);
+        }
+        if (!body.data.length) {
+            writeTextInsteadOfChart('No data match your chosen filters', tabName);
+            select.vizTitleElt(tabName).innerText = vizName;
+            return;
         }
         if (visualization.style === 'map') {
             // Make the containing div element visible
             select.mapContainer(tabName).style.display = 'block';
-            await mapVisualization(mapboxDependency, body.data, visualization, tabName);
-        } else  {;
-            if (!body.data.length) {
-                writeTextInsteadOfChart('No data match your chosen filters', tabName);
-                select.vizTitleElt(tabName).innerText = vizName;
-                return;
-            }
+            await mapVisualization(mapboxDependency, body.data, body.metadata, visualization, tabName);
+        } else if (visualization.style === 'heatmap') {
+            // Make the containing div element visible
+            select.mapContainer(tabName).style.display = 'block';
+            await heatmapVisualization(mapboxDependency, body.data, visualization, tabName);
+        } else if (visualization.style === 'list') {
+            select.listWrapper(tabName).style.display = 'flex';
+            drawLineList(body.data, visualization, tabName, vizName);
+        } else {
             // Make the containing div element visible
             select.chartWrapper(tabName).style.display = 'flex';
             await drawAllCharts(body.data, body.metadata, visualization, tabName);
         }
-        select.vizTitleElt(tabName).innerText = vizName;
     }).catch(async (error) => {
         console.log(error);
         await removeText(tabName);
         writeTextInsteadOfChart('Error attempting to retrieve data', tabName);
+    }).finally(() => {
         select.vizTitleElt(tabName).innerText = vizName;
     });
 }

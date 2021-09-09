@@ -10,7 +10,7 @@ const refrigeratorClasses = require('../model/refrigeratorClasses.json');
  * repeatBy String [optional], either the name of a column in the database or
  *   one provided by computedColumns.js
  * sort 'ASC'|'DESC' [optional], ascending or descending
- * style 'pie'|'bar'|'map', choose a chart type; `map` will automatically send
+ * style 'pie'|'bar'|'map' | 'heatmap', choose a chart type; `map` will automatically send
  *     location_latitude and location_longitude
  * mapType String [optional] is only
  *     supported for `style: 'map'`. 'maintenance_priority' is the only
@@ -27,6 +27,20 @@ const refrigeratorClasses = require('../model/refrigeratorClasses.json');
  *     1. Count facilities instead of CCE (in bar/pie charts)
  *     2. Include facilities without any CCE
  *     3. Disable the filter options that use the refrigerators or refrigerator_types tables
+ * regionLevel 'District (Level 3)' | 'Region (Level 2)' should be used iff style is 'heatmap'
+ *     determines the level of shading for the heatmap
+ * fill_specs Object [optional] can be used if style is 'heatmap'
+ *     min_opacity: double, 0-1 - minimum opacity of fill color
+ *     max_opacity: double, 0-1 - maximum opacity of fill color
+ *     fill_color: string - color to fill heatmap areas with,
+ *     fill_outline_color: string - color to outline filled areas with
+ * columns Array of Strings Required when using `style: 'list'`. Takes a list of column names to display
+ *     in the table. NOTE: table names must match the database exactly (Postgres makes all column names
+ *     lowercase).
+ * disableLegend boolean [optional], determines whether to hide the legend
+ * legendNonzeroOnly boolean [optional], hides legend options that are 0
+ * legendOrder Array [optional], list to specify order of legend items. Items not included will
+ *      be appended to the end with arbitrary order.
  */
 module.exports = {
     // CCEM table 3.3
@@ -52,7 +66,8 @@ module.exports = {
             '>10 Years': 'red',
             'Missing data': 'gray'
         },
-        style: 'bar'
+        style: 'bar',
+        legendOrder: ['0-5 Years', '6-10 Years', '>10 Years', 'Missing data']
     },
     // CCEM chart 3.4
     'CCE by working status': {
@@ -138,7 +153,8 @@ module.exports = {
             '>10 Years': 'red',
             'Missing data': 'gray'
         },
-        style: 'pie'
+        style: 'pie',
+        legendOrder: ['0-5 Years', '6-10 Years', '>10 Years', 'Missing data']
     },
     // Maintenance priority map
     'Maintenance priority by facility': {
@@ -221,13 +237,15 @@ module.exports = {
         type: 'refrigerator',
         groupBy: 'grid_power_availability',
         colorBy: 'model_id',
-        style: 'bar'
+        style: 'bar',
+        legendNonzeroOnly: true
     },
     'CCE model by facility type': {
         type: 'refrigerator',
         groupBy: 'facility_level',
         colorBy: 'model_id',
-        style: 'bar'
+        style: 'bar',
+        legendNonzeroOnly: true
     },
     'Facility type by CCE model': {
         type: 'refrigerator',
@@ -236,7 +254,8 @@ module.exports = {
         colorMap: {
             'Missing data': 'gray'
         },
-        style: 'bar'
+        style: 'bar',
+        legendNonzeroOnly: true
     },
     // Facility details map
     'Facility details map': {
@@ -254,7 +273,7 @@ module.exports = {
         mapType: 'alarm_counts',
         style: 'map',
         facilityPopup: {
-            'id_refrigerators': 'COUNT'
+            'faulty_refrigerator_id': 'COUNT'
         }
     },
     'Catchment population': {
@@ -280,5 +299,182 @@ module.exports = {
         groupBy: 'lastupdateuser_health_facilities',
         colorBy: 'lastupdateuser_health_facilities',
         style: 'bar'
+    },
+    'Refrigerator updates by user': {
+        type: 'refrigerator',
+        groupBy: 'lastupdateuser_refrigerators',
+        colorBy: 'lastupdateuser_refrigerators',
+        style: 'bar'
+    },
+    'Percentage of facilities with source: grid (district)': {
+        type: 'facility',
+        style: 'heatmap',
+        colorBy: 'electricity_source_grid',
+        regionLevel: 'District (Level 3)',
+        fill_specs: {  // Example usage of fill specs using default specs
+            min_opacity: 0.1,
+            max_opacity: 0.95,
+            fill_color: '#9D41AB',
+            fill_outline_color: '#680D75'
+        }
+    },
+    'Percentage of facilities with source: grid (region)': {
+        type: 'facility',
+        style: 'heatmap',
+        colorBy: 'electricity_source_grid',
+        regionLevel: 'Region (Level 2)',
+        fill_specs: {  // Example usage of fill specs using default specs
+            min_opacity: 0.1,
+            max_opacity: 0.95,
+            fill_color: '#9D41AB',
+            fill_outline_color: '#680D75'
+        }
+    },
+    'Percentage of facilities with 4+ hours of grid power (district)': {
+        type: 'facility',
+        style: 'heatmap',
+        colorBy: 'grid_power_at_least_4',
+        regionLevel: 'District (Level 3)',
+        fill_specs: {
+            fill_color: '#59a14f'
+        }
+    },
+    'Percentage of facilities with 4+ hours of grid power (region)': {
+        type: 'facility',
+        style: 'heatmap',
+        colorBy: 'grid_power_at_least_4',
+        regionLevel: 'Region (Level 2)',
+        fill_specs: {
+            fill_color: '#59a14f'
+        }
+    },
+    'All facilities list': {
+        type: 'facility',
+        style: 'list',
+        columns: [
+            'facility_name',
+            'facility_level',
+            'regionlevel2',
+            'regionlevel3',
+            'electricity_source',
+            'fuel_availability',
+            'grid_power_availability',
+            'ownership',
+            'authority',
+            'lastupdateuser_health_facilities',
+            'contact_name',
+            'contact_phone_number',
+            'contact_title',
+            'vaccine_supply_interval',
+            'vaccine_supply_mode',
+            'distance_to_supply',
+            'immunization_services_offered'
+        ]
+    },
+    'All CCE list': {
+        type: 'refrigerator',
+        style: 'list',
+        columns: [
+            'facility_name',
+            'facility_level',
+            'regionlevel2',
+            'regionlevel3',
+            'model_id',
+            'year_installed',
+            'power_source',
+            'utilization',
+            'functional_status',
+            'maintenance_priority',
+            'reason_not_working'
+        ]
+    },
+    'Non-functional CCE list': {
+        type: 'refrigerator',
+        style: 'list',
+        columns: [
+            'facility_name',
+            'regionlevel3',
+            'model_id',
+            'year_installed',
+            'functional_status_filtered',
+            'maintenance_priority_filtered',
+            'reason_not_working'
+        ]
+    },
+    'Refrigeration volume vs requirements map (demo)': {
+        type: 'facility',
+        mapType: 'colored_facilities',
+        style: 'map',
+        colorBy: 'refrigeration_volume_ratio',
+        colorMap: {
+            '>30% shortage': 'red',
+            'Within 30% of estimate': 'yellow',
+            '>30% above estimate': 'green'
+        },
+        facilityPopup: {
+            'refrigeration_volume_ratio': 'BY_FACILITY',
+            'refrigeration_volume': 'BY_FACILITY',
+            'catchment_population': 'BY_FACILITY',
+            'ownership': 'BY_FACILITY',
+            'authority': 'BY_FACILITY'
+        }
+    },
+    'Freezer volume vs requirements map (demo)': {
+        type: 'facility',
+        mapType: 'colored_facilities',
+        style: 'map',
+        colorBy: 'freezer_volume_ratio',
+        colorMap: {
+            '>30% shortage': 'red',
+            'Within 30% of estimate': 'yellow',
+            '>30% above estimate': 'green'
+        },
+        facilityPopup: {
+            'freezer_volume_ratio': 'BY_FACILITY',
+            'freezer_volume': 'BY_FACILITY',
+            'catchment_population': 'BY_FACILITY',
+            'ownership': 'BY_FACILITY',
+            'authority': 'BY_FACILITY'
+        }
+    },
+    'Facilities with volume shortage (demo)': {
+        type: 'facility',
+        style: 'list',
+        columns: [
+            'facility_name',
+            'regionlevel3',
+            'catchment_population',
+            'refrigeration_volume_filtered',
+            'freezer_volume_filtered',
+            'ownership',
+            'authority'
+        ]
+    },
+    'Percentage of facilities updated within 3 months': {
+        type: 'facility',
+        style: 'heatmap',
+        colorBy: 'updated_facilities',
+        regionLevel: 'Region (Level 2)',
+        fill_specs: {
+            fill_color: '#59a14f'
+        }
+    },
+    'Update status by facility': {
+        type: 'facility',
+        mapType: 'colored_facilities',
+        style: 'map',
+        colorBy: 'facility_update_status',
+        colorMap: {
+            'Never': 'red',
+            'Stale': 'yellow',
+            'Recent': 'green'
+        },
+        facilityPopup: {
+            'facility_update_status': 'BY_FACILITY',
+            'facility_savepoint': 'BY_FACILITY',
+            'lastupdateuser_health_facilities': 'BY_FACILITY',
+            'ownership': 'BY_FACILITY',
+            'authority': 'BY_FACILITY'
+        }
     }
 };

@@ -70,23 +70,37 @@ The dashboard will be available at localhost:8000 \
 You can log in to the dashboard using any user from the connected ODK-X server.\
 To exit, type `Ctrl+C` in the terminal
 
-## Testing
+## Testing (not for Windows)
 The dashboard has a suite of tests in the `__tests__` folder. Some of these run
 in the Firefox browser, and some of them use a local test database configured
 with Docker. To run the tests, you'll need to install these dependencies.
 1. Confirm that you have a `.env` file in the top level of the project.
-2. [Install docker](https://docs.docker.com/get-docker/) (this is used by the `pretest` step to run a local Microsoft SQL server)
+2. [Install docker](https://docs.docker.com/get-docker/) (this is used by the `pretest` step to run a local PostgreSQL server)
 3. [Install docker-compose](https://docs.docker.com/compose/install/) if not installed by step 1
 4. Install firefox
 5. From the directory of this repository, run `npm install`
-6. Run `npm test`
+6. Run `npm test`. Run `npm run linux-test` if permission issues occur.
 
 To run a single test file:
-1. Run `sudo docker-compose up`, or just `docker-compose up` depending on your user permissions. This starts a local Microsoft SQL server. Note: you must only have one local SQL server running at a time. This step is only necessary for some test files; if your tests pass without it, it is not necessary.
+1. Run `sudo docker-compose up`, or just `docker-compose up` depending on your user permissions. This starts a local PostgreSQL server. Note: you must only have one local SQL server running at a time. This step is only necessary for some test files; if your tests pass without it, it is not necessary.
 2. Run `npx jest __tests__/<name of test file>` (the `npx` command is part of npm, and jest is the test environment we use)
 
-Notes for Windows:
-* If you run into an issue with your BIOS, check out this [SO post](https://stackoverflow.com/questions/39684974/docker-for-windows-error-hardware-assisted-virtualization-and-data-execution-p/39989990#39989990)
+## Testing on Windows
+There are a few changes to run the tests on Windows:
+1. Confirm that you have a `.env` file in the top level of the project.
+2. [Install docker](https://docs.docker.com/get-docker/) (this is used by the `pretest` step to run a local PostgreSQL server)
+3. [Install docker-compose](https://docs.docker.com/compose/install/) if not installed by step 1
+4. [Install firefox developer edition](https://www.mozilla.org/en-US/firefox/developer/)
+5. [Download the latest geckodriver release](https://github.com/mozilla/geckodriver/releases) and extract the folder. Add the folder to your PATH through [these steps.](https://www.architectryan.com/2018/03/17/add-to-the-path-on-windows-10/)
+  Open a new PowerShell window and run "geckodriver" to confirm it has been installed.
+6. From the directory of this repository in a PowerShell window, run `npm install`
+7. Run `npm test` in the same PowerShell window.
+
+Steps to run a single test file remain the same.
+
+Notes:
+* If you run into an issue with your BIOS on Windows, check out this [SO post](https://stackoverflow.com/questions/39684974/docker-for-windows-error-hardware-assisted-virtualization-and-data-execution-p/39989990#39989990)
+* Some tests may inconsistently pass due to timeout errors. Run the tests individually for clarity.
 
 ## Style Guidelines
 Current code uses the following style

@@ -4,6 +4,7 @@ const { createSingleton } = require('tippy.js');
 const makeColorScale = require('./colorScale');
 const select = require('./selectors');
 const fitCanvasToContents = require('./fitCanvasToContents');
+const drawColorLegend = require('./colorLegend');
 
 /*
  * data: in the format d3.stack expects, which is an Array representation of a
@@ -40,24 +41,17 @@ const fitCanvasToContents = require('./fitCanvasToContents');
  * groupBy:  String to show to user as axis label
  * repeatBy: undefined|String to show to user in titles of small multiple charts
  */
-function drawAllCharts(data, { fullDomain, fullColorDomain }, { groupBy, repeatBy, style, colorMap }, tabName) {
+function drawAllCharts(data, { fullDomain, fullColorDomain }, { groupBy, repeatBy, style, colorMap, colorBy, disableLegend, legendNonzeroOnly, legendOrder }, tabName) {
     const parentElement = d3.select(select.chartContainerStr(tabName));
+    const colorDomain = !disableLegend && legendNonzeroOnly ? getNonZeroOptions(data) : fullColorDomain;
 
     // Make color scale
-    const colorScale = makeColorScale(fullColorDomain, colorMap);
-
-    if (fullColorDomain) {
-        // Make color legend for charts
-        drawColorLegend(d3.select(select.legendContainerStr(tabName)),
-            fullColorDomain.map(x => x ? x : 'undefined'),
-            colorScale
-        );
-    }
+    const colorScale = makeColorScale(colorDomain, colorMap);
 
     const params = {
         parentElement,
         fullDomain,
-        fullColorDomain,
+        colorDomain,
         colorScale,
         groupBy,
         style,
@@ -70,7 +64,7 @@ function drawAllCharts(data, { fullDomain, fullColorDomain }, { groupBy, repeatB
             // return value is a 2d array that prepares data points to be stacked
             // according to their color
             return d3.stack()
-                .keys(fullColorDomain)
+                .keys(colorDomain)
                 .value(([, value], category) => value[category])
                 (subChartData);
         });
@@ -102,11 +96,33 @@ function drawAllCharts(data, { fullDomain, fullColorDomain }, { groupBy, repeatB
         throw new Error(`Style '${style}' not recognized`);
     }
 
+    if (colorDomain) {
+        // Make color legend for charts
+        drawColorLegend(d3.select(select.legendContainerStr(tabName)),
+            colorDomain.map(x => x ? x : 'undefined'),
+            colorScale,
+            {style, groupBy, colorBy, disableLegend, legendOrder}
+        );
+    }
+
     // Add tooltips to rects & slices
     const rectBarStr = select.chartContainerStr(tabName) + ' svg rect.bar';
     const pathSliceStr = select.chartContainerStr(tabName) + ' svg path.slice';
     createSingleton(tippy(rectBarStr));
     createSingleton(tippy(pathSliceStr));
+}
+
+/*
+* data: in the format d3 expects, as described above
+* returns an array containing each of the nonzero options for 
+* the groupBy
+*/
+function getNonZeroOptions(data) {
+    const nonZero = new Set(
+        data.flatMap(([repeatlabel, subChartData]) => subChartData)
+            .flatMap(temp => Object.keys(temp[1]).filter((option) => temp[1][option] > 0)));
+
+    return [...nonZero];
 }
 
 /*
@@ -140,7 +156,7 @@ function drawAllCharts(data, { fullDomain, fullColorDomain }, { groupBy, repeatB
  * parentElement:   D3 selection
  * fullDomain:      Array
  * fullRange:       Array of Numbers, length 2
- * fullColorDomain: Array
+ * colorDomain: Array
  * colorScale:      D3 scale
  * groupBy:         String
  * axisWidth:       Number
@@ -148,7 +164,7 @@ function drawAllCharts(data, { fullDomain, fullColorDomain }, { groupBy, repeatB
  * title:           String
  */
 function drawBarChart(series, { parentElement, axisWidth, axisHeight, title,
-    fullDomain, fullRange, fullColorDomain, colorScale, groupBy }) {
+    fullDomain, fullRange, colorDomain, colorScale, groupBy }) {
     const canvas = parentElement.append('svg');
     makeTitle(canvas, axisWidth, title);
 
@@ -233,6 +249,7 @@ function drawPieChart(data, { parentElement, title, colorScale }) {
         // each datum has the form [key, value]
         .value(d => d[1])
         (Object.entries(data))
+    
     canvas.selectAll('g')
         .data(arcs)
         .enter()
@@ -252,38 +269,7 @@ function drawPieChart(data, { parentElement, title, colorScale }) {
     fitCanvasToContents(canvas);
 }
 
-/*
- * parentElement: A d3 selection of a single element; an <svg> will be placed
- *     inside it
- * colorDomainStrings: Array of Strings; the first one will be at the bottom
- *     of the legend
- * colorScale: function that maps elements of colorDomainStrings to d3 colors
- */
-function drawColorLegend(parentElement, colorDomainStrings, colorScale) {
-    const SQ_WIDTH = 15; // Width of the colored square. In pixels, of course
-    const PADDING = 4;
-    const FONT_SIZE = 11;
-    const index = i => colorDomainStrings.length - 1 - i;
-    // fullColorDomain[0] goes at the bottom because the bars are stacked from
-    // the bottom up
-    const canvas = parentElement.append('svg');
-    const rows = canvas
-        .selectAll('g')
-        .data(colorDomainStrings)
-        .enter()
-        .append('g');
-    rows.append('rect')
-        .attr('y', (d, i) => (SQ_WIDTH + PADDING) * index(i))
-        .attr('fill', (d, i) => colorScale(d))
-        .attr('width', SQ_WIDTH)
-        .attr('height', SQ_WIDTH);
-    rows.append('text')
-        .attr('y', (d, i) => (SQ_WIDTH + PADDING) * index(i) + SQ_WIDTH - PADDING/2)
-        .attr('x', SQ_WIDTH + PADDING)
-        .attr('font-size', FONT_SIZE)
-        .text((d, i) => d);
-    fitCanvasToContents(canvas);
-}
+
 
 function makeTitle(canvas, width, title) {
     if (title) {

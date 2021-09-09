@@ -13,6 +13,9 @@ body, select, button, input
 body
 {
     margin: 0;
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
 }
 
 /* top-wrapper */
@@ -29,11 +32,24 @@ body
     justify-content: space-between;
     align-items: center;
     margin: 1em 2em 1em 2em ;
+    gap: 3em;
+}
+
+#title-version-wrapper
+{
+    display: flex;
+    align-items: baseline;
+    gap: 1.5em;
 }
 
 #title
 {
     font-size: 3em;
+    color: hsl(0, 0%, 40%);
+}
+
+#version-number
+{
     color: hsl(0, 0%, 40%);
 }
 
@@ -95,12 +111,21 @@ body
     background-color: var(--main-theme);
 }
 
-/* left-main-wrapper */
+/* bottom-wrapper */
 
-.left-main-wrapper
+#bottom-outer-wrapper
+{
+    flex-basis: 0;
+    flex-grow: 1;
+    height: 0;
+}
+
+.bottom-wrapper
 {
     display: flex;
     flex-wrap: wrap;
+    flex-direction: row;
+    height: 100%;
     justify-content: flex-start;
     margin: 0 2em 0 2em
 }
@@ -119,11 +144,13 @@ body
     width: auto;
     float: left;
     margin-right: 2em;
+    display: flex;
+    flex-direction: column;
 }
 
 .filter > table
 {
-    border: solid gray 1px;
+    border: solid #ccc 1px;
     padding: 0.5ex;
     margin-bottom: 0.5ex;
 }
@@ -156,7 +183,7 @@ body
 .map
 {
     width: 100%;
-    height: 38vh;
+    flex-grow: 0.98; /* For some reason flex-grow: 1 causes a 1px scroll */
 }
 
 /* right-wrapper (main-wrapper) */
@@ -164,8 +191,11 @@ body
 .main-wrapper
 {
     display: flex;
-    margin-top: 1em;
     flex-direction: column;
+    flex-basis: 0;
+    flex-grow: 1;
+    height: 100%;
+    width: 0;
 }
 
 .viz-title {
@@ -177,16 +207,25 @@ body
     justify-content: center;
 }
 
+.viz-wrapper {
+    flex-basis: 0;
+    flex-grow: 1;
+    height: 0;
+}
+
 .map-container
 {
-    height: 60vh;
-    width: 55vw;
+    height: 100%;
     display: none;
 }
 
 .region-list
 {
     list-style-type: none;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    padding: 0;
+    width: 31em;
 }
 
 .region-list li
@@ -194,7 +233,7 @@ body
     display: inline;
 }
 
-.region-list, .region-list li
+.region-list li
 {
     margin: 0;
     padding: 0;
@@ -206,29 +245,32 @@ body
     font-weight: bold;
 }
 
-.region-list
-{
-    width: 30em;
-}
-
 .chart-wrapper
 {
     display: flex;
     flex-flow: row wrap;
+    height: 100%;
     display: none;
 }
 
 .chart-container
 {
     margin-left: 30px;
-    width: 40vw;
-    height: 60vh;
+    height: 100%;
+    flex-grow: 6;
+}
+
+.chart-container svg
+{
+    max-height: 100%;
+    padding: 5px;
+    box-sizing: border-box; /* Include padding as part of the height */
 }
 
 .legend-container
 {
     margin-right: 30px;
-    width: 12vw;
+    width: 15vw;
 }
 
 /* Map styling */
@@ -266,7 +308,7 @@ ul {
     padding: 5px;
 }
 
-.facility-info {
+.popup-info {
     margin-top: 0px;
     margin-bottom: 0px;
     padding-top: 0px;

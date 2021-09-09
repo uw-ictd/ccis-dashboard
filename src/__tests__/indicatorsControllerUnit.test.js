@@ -19,12 +19,12 @@ describe('Indicators unit tests', function () {
                 "need_maintanance": 10
             }
         ];
-const spanStart = '<span class="indicator-value">'
+        const spanStart = '<span class="indicator-value">'
         _injectIndicators(testBody);
         const contents = document.getElementById('key-indicators-container').innerHTML;
         expect(contents).toContain(`Facilities: ${spanStart}4`);
         expect(contents).toContain(`CCE: ${spanStart}25`);
         expect(contents).toContain(`CCE Requiring Maintenance: ${spanStart}10`);
-        expect(contents).toContain(`Most Recent Update: ${spanStart}Fri Jan 08 2021`);
+        expect(contents).toContain(`Most Recent Update: ${spanStart}Fri, 8 Jan 2021`);
     });
 });

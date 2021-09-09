@@ -3,11 +3,10 @@ const computedColumns = require('../config/computedColumns');
 const filterSpecification = require('../config/filterSpecification');
 const findQueryForColumn = require('../util/searchComputedColumns');
 const validate = require('../util/configValidation');
+const shapefiles = require('../config/shapefiles');
 validate('computedColumns', computedColumns);
 
 const MAP_SEPARATOR = '$';
-const LOW_ALARM_COUNT = 1;
-const HIGH_ALARM_COUNT = 3;
 
 function toSQLList(array) {
     return '(' + array.map(str => `'${str}'`).join(', ') + ')';
@@ -46,11 +45,26 @@ function missingDataClause(columnName) {
     return `COALESCE(NULLIF(${referToColumn(columnName)}, ''), 'Missing data')`;
 }
 
+function makeHeatMapSelect(vizSpec) {
+    if (vizSpec.style === 'heatmap' && vizSpec.type === 'facility') {
+        return [shapefiles.dbLevelNames[shapefiles.levelNames.indexOf(vizSpec.regionLevel)], 'id_health_facilities']
+            .map(param => referToColumn(param))
+            .join(',');
+    } else if (vizSpec.style === 'heatmap' && vizSpec.type === 'refrigerator') {
+        return [shapefiles.dbLevelNames[shapefiles.levelNames.indexOf(vizSpec.regionLevel)], 'id_refrigerators']
+            .map(param => referToColumn(param))
+            .join(',');
+    }
+}
+
 // Example:
 //   t.model_id as xlabel, r.utilization as colorlabel
 function makeSelect(vizSpec) {
-    if (vizSpec.style == 'map') {
+    if (vizSpec.style === 'map') {
         return makeMapSelect(vizSpec);
+    }
+    if (vizSpec.style === 'list') {
+        return makeListSelect(vizSpec);
     }
     return [ 'groupBy', 'colorBy', 'repeatBy' ]
         .map(param => [ param, vizSpec[param] ])
@@ -60,8 +74,19 @@ function makeSelect(vizSpec) {
             // Replace empty string with 'Missing data'
             return `${missingDataClause(columnName)} as ${labelName[param]}`;
         })
+        .concat(makeHeatMapSelect(vizSpec))
+        .filter(param => Boolean(param))
         .join(', ')
-        + ", COUNT(*) as count";
+        + ', COUNT(*) as count';
+}
+
+function makeListSelect(vizSpec) {
+    if (vizSpec.style === 'list') {
+        return vizSpec.columns
+            .map(columnName => `${missingDataClause(columnName)} as ${columnName}`)
+            .join(', ');
+    }
+    return '';
 }
 
 // Based on the defined options in the spec, adds column aggregates
@@ -149,9 +174,12 @@ function makeGroupBy(vizSpec) {
         .join(', ');
     const facilityGroupBy = makeMapGroupBy(vizSpec);
     const popupGroupBy = makePopupGroupBy(vizSpec);
-    return [ basicGroupBy, facilityGroupBy, popupGroupBy ]
+    const heatMapGroupBy = makeHeatMapSelect(vizSpec);
+    const result = [ basicGroupBy, facilityGroupBy, popupGroupBy, heatMapGroupBy ]
         .filter(str => Boolean(str))
         .join(', ');
+    if (!result) return '';
+    return 'GROUP BY ' + result;
 }
 
 // Example:
@@ -203,6 +231,7 @@ function usesColumn(vizSpec, columnName) {
     return (vizSpec.colorBy === columnName ||
         vizSpec.groupBy === columnName ||
         vizSpec.repeatBy === columnName ||
+        (vizSpec.columns && vizSpec.columns.indexOf(columnName) > -1) ||
         (vizSpec.facilityPopup && columnName in vizSpec.facilityPopup));
 }
 
@@ -217,7 +246,7 @@ function joinComputedColumns(vizSpec) {
             const { table, foreignColumn, localColumn } = joinOn;
             return `JOIN (${query}) as ${name} ON ${table}.${foreignColumn} = ${name}.${localColumn}`;
         })
-        .join('');
+        .join('        \n ');
 }
 
 function makeRefrigeratorJoin(vizSpec) {
@@ -226,34 +255,10 @@ function makeRefrigeratorJoin(vizSpec) {
     if (vizSpec.type === 'facility' && vizSpec.style === 'map') {
         joinType = 'LEFT JOIN';
     } else {
-        joinType = 'JOIN'
+        joinType = 'JOIN';
     }
     return `${joinType} refrigerators_odkx ON health_facilities2_odkx.id_health_facilities = refrigerators_odkx.facility_row_id
         ${joinType} refrigerator_types_odkx ON refrigerator_types_odkx.id_refrigerator_types = refrigerators_odkx.model_row_id`;
-}
-
-function makeTemperatureDataJoin(vizSpec) {
-    if (vizSpec.style === 'map' && vizSpec.mapType === 'alarm_counts') {
-        return 'LEFT JOIN refrigerator_temperature_data_odkx ON refrigerator_temperature_data_odkx.refrigerator_id = refrigerators_odkx.id_refrigerators';
-    } else {
-        return '';
-    }
-}
-
-function makeAlarmCountsFilter(vizSpec) {
-    if (vizSpec.style === 'map' && vizSpec.mapType === 'alarm_counts') {
-        const defaultFilter = `AND (cast(reporting_period as timestamp) = (
-            SELECT MAX(CAST(refrigerator_temperature_data_odkx.reporting_period AS timestamp))
-            FROM refrigerator_temperature_data_odkx
-            WHERE refrigerator_temperature_data_odkx.refrigerator_id = refrigerators_odkx.id_refrigerators
-        ) OR reporting_period IS NULL)`;
-        return defaultFilter + ` AND (
-            cast(number_of_high_alarms_30 as integer) >= ${HIGH_ALARM_COUNT} OR
-            cast(number_of_low_alarms_30 as integer) >= ${LOW_ALARM_COUNT}
-        )`;
-    } else {
-        return '';
-    }
 }
 
 function makeQueryStr(vizSpec) {
@@ -263,13 +268,11 @@ function makeQueryStr(vizSpec) {
             geographic_regions_odkx.id_geographic_regions = health_facilities2_odkx.admin_region_id
          ${makeRefrigeratorJoin(vizSpec)}
          ${makeRefClassification(vizSpec)}
-         ${makeTemperatureDataJoin(vizSpec)}
          ${joinComputedColumns(vizSpec)}
       ${makeFilterStr(vizSpec)}
-      ${makeAlarmCountsFilter(vizSpec)}
-    GROUP BY ${makeGroupBy(vizSpec)}
+    ${makeGroupBy(vizSpec)}
     ${makeOrderBy(vizSpec)}`;
-};
+}
 
 function vizQuery(db, vizSpec) {
     return db.query(makeQueryStr(vizSpec));

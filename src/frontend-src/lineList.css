@@ -1,0 +1,98 @@
+.list-wrapper
+{
+    height: 100%;
+    display: none;
+    flex-direction: column;
+}
+
+.line-list-download
+{
+    font-size: 2ex;
+    margin: 10px;
+    margin-top: -1em; /* The title above it has a 1em margin */
+}
+
+.line-list-total
+{
+    color: hsl(0, 0%, 40%);
+    margin-left: 2em;
+}
+
+.list-container
+{
+    overflow-y: auto;
+    overflow-x: auto;
+    height: 100%;
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
+table.line-list
+{
+    border-collapse: collapse;
+}
+
+.line-list td, th
+{
+    padding: 7px;
+    border: solid 1px #ddd;
+}
+
+.line-list .sort
+{
+    text-decoration: none;
+    height: 30px;
+    background-color: #eee;
+}
+
+.line-list .sort:hover
+{
+    cursor: pointer;
+    text-decoration: none;
+    background-color: #ddd;
+}
+
+.line-list .sort:focus
+{
+    outline: none;
+}
+
+.line-list .sort:after
+{
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    content: "";
+    position: relative;
+    top: -10px;
+    right: -5px;
+}
+
+.line-list .sort.asc:after
+{
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid black;
+    content: "";
+    position: relative;
+    top: 4px;
+    right: -5px;
+}
+
+.line-list .sort.desc:after
+{
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid black;
+    content: "";
+    position: relative;
+    top: -4px;
+    right: -5px;
+}

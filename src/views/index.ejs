@@ -5,7 +5,10 @@
     <!-- begin top bar -->
     <div id="top-wrapper">
         <div id="top-bar">
-            <div id="title">CCIS Dashboard</div>
+            <div id="title-version-wrapper">
+                <div id="title">CCIS Dashboard</div>
+                <div id="version-number">v<%=version%></div>
+            </div>
             <div id="key-indicators-container"></div>
         </div>
         <nav id="top-tabs">
@@ -16,9 +19,11 @@
     </div>
     <!--end top bar -->
 
-    <% Object.entries(tabVisualizations).forEach(([ tabName, tab ]) => { %>
-        <%- include('partials/tab', { tabName, tab }) %>
-    <% }); %>
+    <div id="bottom-outer-wrapper">
+        <% Object.entries(tabVisualizations).forEach(([ tabName, tab ]) => { %>
+            <%- include('partials/tab', { tabName, tab }) %>
+        <% }); %>
+    </div>
 </body>
 
 <script>

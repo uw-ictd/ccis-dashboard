@@ -1,6 +1,8 @@
-const eachSeries = require('async/eachSeries')
+const eachSeries = require('async/eachSeries');
 const makeMarkerInfo = require('./coordinates');
+const makeColorScale = require('./colorScale');
 const mapDisplay = require('../config/mapDisplay').mapVisualization;
+const makeHeatmap = require('./heatmapVisualization');
 const select = require('./selectors');
 const maps = {};
 
@@ -29,12 +31,19 @@ function _drawMarker(mapboxgl, tabLabel, map, marker) {
  * If a map already exists for this tab, this will clear all
  * markers. Otherwise, creates a map from the makeMap function.
 */
-async function setUpMap( makeMap,tabLabel) {
+async function setUpMap(makeMap,tabLabel) {
     if (!maps[tabLabel]) {
         maps[tabLabel] = {map: await makeMap(mapDisplay, select.mapContainer(tabLabel)), 
-                          markers: []};
+                          markers: [],
+                          sources: {}};
     } else {
         maps[tabLabel].markers.forEach(marker => marker.remove());
+        Object.keys(maps[tabLabel].sources).forEach(source => {
+            maps[tabLabel].map.off('click', source, maps[tabLabel].sources[source]);  // remove event listener for popup
+            maps[tabLabel].map.removeLayer(source);  // Remove geoJSON layer
+            maps[tabLabel].map.removeSource(source);  // Remove geoJSON source
+        });
+        maps[tabLabel].sources = {};
     }
     return maps[tabLabel].map;
 }
@@ -46,7 +55,7 @@ async function setUpMap( makeMap,tabLabel) {
  * data: array of data in map format, see coordinates.js for more info
  * mapType: String, currently only 'maintenance_priority' is supported
  */
-async function mapVisualization({ mapboxgl, makeMap }, data, { mapType }, tabLabel) {
+async function mapVisualization({ mapboxgl, makeMap }, data, { fullColorDomain }, visualization, tabLabel) {
     const map = await setUpMap(makeMap, tabLabel);
     const drawMarker = _drawMarker.bind({}, mapboxgl, tabLabel, map);
 
@@ -57,18 +66,26 @@ async function mapVisualization({ mapboxgl, makeMap }, data, { mapType }, tabLab
         markerBatches.push(data.slice(i, i + BATCH_SIZE));
     }
 
+    const colorScale = makeColorScale(fullColorDomain, visualization.colorMap);
+
     // Note: we return the map object before these asynchronous operations
     // complete
     eachSeries(markerBatches, (batch, next) => {
-        const markers = makeMarkerInfo(batch, mapType);
+        const markers = makeMarkerInfo(batch, visualization, colorScale);
         markers.filter(x => x !== null).forEach(drawMarker);
         setTimeout(next, 0);
     });
     return map;
-};
+}
+
+async function heatmapVisualization({ mapboxgl, makeMap }, data, visualization, tabLabel) {
+    const map = await setUpMap(makeMap, tabLabel);
+    maps[tabLabel].sources = makeHeatmap(mapboxgl, map, data, visualization);
+    return map;
+}
 
 function removeMap(tabLabel) {
     delete maps[tabLabel];
 }
 
-module.exports = {mapVisualization, removeMap}
+module.exports = { mapVisualization, heatmapVisualization, removeMap };

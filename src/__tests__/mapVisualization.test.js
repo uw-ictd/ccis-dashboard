@@ -73,10 +73,15 @@ describe('Map visualization tests', () => {
                 maintenance_priority$medium: 0,
                 maintenance_priority$missing_data: 0,
                 maintenance_priority$not_applicable: 0},
-        ]
+        ];
+
+        const metadata = {
+            fullDomain: [],
+            fullColorDomain: []
+        };
 
         const mapSpec = visualizations['Maintenance priority by facility'];
-        await mapVisualization(mapboxMock, data, mapSpec, 'test');
+        await mapVisualization(mapboxMock, data, metadata, mapSpec, 'test');
         const markers = document.querySelectorAll('.marker');
         expect(addToSpy).toHaveBeenCalledTimes(3);
     });

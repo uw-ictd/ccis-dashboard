@@ -18,8 +18,10 @@ module.exports = {
     resultTextContainer: tabName => select(`#${tabName} .result-text-container`),
     mapContainer: tabName => select(`#${tabName} .map-container`),
     chartWrapper: tabName => select(`#${tabName} .chart-wrapper`),
+    listWrapper: tabName => select(`#${tabName} .list-wrapper`),
     vizTitleElt: tabName => select(`#${tabName} .viz-title`),
     vizSelector: tabName => select(`#${tabName} .visualization-selector`),
     displayButton: tabName => select(`#${tabName} .display`),
+    lineListButton: tabName => select(`#${tabName} .line-list-download`),
     regionNamesContainer: tabName => select(`#${tabName} .region-list`)
 };

@@ -8,6 +8,7 @@ const level3Uganda = require('./Uganda_Districts_2020.json');
 // in the database
 module.exports = {
     levelNames: [ 'Region (Level 2)', 'District (Level 3)' ],
+    dbLevelNames: [ 'regionlevel2', 'regionlevel3' ],
     levels: [ level2Uganda, level3Uganda ],
     // The map will only show boundaries between these two levels
     // Each must be an element of levelNames

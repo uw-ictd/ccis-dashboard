@@ -1,13 +1,16 @@
 {
   "name": "ccis-dashboard",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Cold Chain Information Dashboard",
   "private": true,
   "scripts": {
     "start": "node src/server.js",
-    "pretest": "sudo docker-compose build && sudo docker-compose up -d && npm run build",
+    "pretest": "docker-compose build && docker-compose up -d && npm run build",
     "test": "npx jest --silent || true",
-    "posttest": "sudo docker-compose down",
+    "posttest": "docker-compose down",
+    "prelinux-test": "sudo docker-compose build && sudo docker-compose up -d && npm run build",
+    "linux-test": "npx jest --silent || true",
+    "postlinux-test": "sudo docker-compose down",
     "build": "webpack --config webpack.prod.js",
     "dev-build": "webpack --config webpack.dev.js",
     "_comment": "The dependency-graph script requires that you have graphviz installed (https://graphviz.org)",
@@ -18,7 +21,11 @@
   "jest": {
     "testRunner": "jest-circus/runner",
     "moduleNameMapper": {
-      "\\.(css|less)$": "<rootDir>/src/__mocks__/styleMock.js"
+      "\\.(css|less)$": "<rootDir>/src/jest/styleMock.js"
+    },
+    "transform": {
+      "^.+\\.js$": "babel-jest",
+      "\\.(ejs|ejx)$": "<rootDir>/src/jest/ejs-compiled-loader.transformer.js"
     }
   },
   "repository": {
@@ -37,11 +44,13 @@
     "dotenv": "^10.0.0",
     "dotenv-webpack": "^7.0.3",
     "ejs": "^3.1.6",
+    "ejs-compiled-loader": "^3.1.0",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "https": "^1.0.0",
     "joi": "^17.4.1",
     "json-2-csv": "^3.14.1",
+    "list.js": "^2.3.1",
     "lodash": "^4.17.21",
     "mapbox-gl": "^2.3.1",
     "passport": "^0.4.1",
@@ -57,7 +66,7 @@
   },
   "devDependencies": {
     "dependency-cruiser": "^10.0.5",
-    "geckodriver": "^2.0.1",
+    "geckodriver": "^2.0.3",
     "jest": "^27.0.6",
     "selenium-webdriver": "^4.0.0-beta.3",
     "supertest": "^6.1.3"

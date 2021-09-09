@@ -23,6 +23,21 @@ const dbOptionsSeeded = {
     ssl: false
 };
 
+/*
+ * Given an the name of a table, it will check to
+ * make sure a file exists for the table and contains
+ * more than 1 row of contents. It then deletes the file
+*/
+async function checkFileDownloadedWithData(driver, filePath, table) {
+    await driver.wait(() => fs.stat(path.join(filePath, table + '.csv')).catch(() => {}), 30000);
+    await fs.readFile(path.join(filePath, table + '.csv'), (data) => {
+        // check to make sure the file has data beyond the header row
+        expect(data.indexOf(`\n`,0)).toBeGreaterThan(-1);
+        expect(data.indexOf(`\n`,0)).toBeLessThan(data.length);
+    });
+    await fs.rm(path.join(filePath, table + '.csv'));
+}
+
 async function displayViz(By, until, driver, vizName, tabLabel) {
     const dropdownElt = driver.wait(until.elementLocated(
         By.css(`#${tabLabel} .visualization-selector > option[value='${vizName}']`)
@@ -62,6 +77,7 @@ function mapSeries(arr, fn) {
 module.exports = {
     TEST_USER,
     TEST_PASSWORD,
+    checkFileDownloadedWithData,
     dbOptionsEmpty,
     dbOptionsSeeded,
     displayViz,

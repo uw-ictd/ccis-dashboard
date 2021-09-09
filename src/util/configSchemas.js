@@ -4,14 +4,20 @@ const visualizations = require('../config/visualizations');
 // TODO make this more strict: some options require other options
 const oneVisualization = Joi.object({
     type: Joi.string().valid('refrigerator', 'facility').required(),
-    style: Joi.string().valid('bar', 'pie', 'map').required(),
+    style: Joi.string().valid('bar', 'pie', 'map', 'list' ,'heatmap').required(),
     groupBy: Joi.string().optional(),
     colorBy: Joi.string().optional(),
     repeatBy: Joi.string().optional(),
     colorMap: Joi.object().pattern(/.*/, Joi.string()).optional(),
     mapType: Joi.string().optional(),
     facilityPopup: Joi.object().optional(),
-    sort: Joi.string().valid('ASC', 'DESC').optional()
+    columns: Joi.array().items(Joi.string()).optional(),
+    sort: Joi.string().valid('ASC', 'DESC').optional(),
+    disableLegend: Joi.bool().optional(),
+    legendNonzeroOnly: Joi.bool().optional(),
+    legendOrder: Joi.array().optional(),
+    regionLevel: Joi.string().valid('Region (Level 2)', 'District (Level 3)').optional(),
+    fill_specs: Joi.object().optional()
 });
 
 const oneTab = Joi.object({

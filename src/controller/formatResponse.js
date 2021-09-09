@@ -3,10 +3,13 @@ const { uniq, uniqWith, fromPairs } = require('lodash');
 const visualizations = require('../config/visualizations.js');
 
 function formatResponse(vizSpec, dataTSQL, legendDataTSQL) {
-    if (vizSpec.style === 'map') {
-        return {data: dataTSQL};
-    }
     const metadata = makeMetadata(vizSpec, dataTSQL, legendDataTSQL);
+    if (vizSpec.style === 'map' || vizSpec.style === 'list' || vizSpec.style === 'heatmap') {
+        return {
+            data: dataTSQL,
+            metadata
+        };
+    }
     return {
         data: formatForD3Stack(dataTSQL, metadata.fullColorDomain),
         metadata

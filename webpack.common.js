@@ -12,6 +12,18 @@ module.exports = {
             {
                 test: /\.css$/i,
                 use: ['style-loader', 'css-loader']
+            },
+            {
+                test: /\.ejs$/,
+                use: {
+                    loader: 'ejs-compiled-loader',
+                    options: {
+                        htmlmin: true,
+                        htmlminOptions: {
+                            removeComments: true
+                        }
+                    }
+                }
             }
         ]
     },

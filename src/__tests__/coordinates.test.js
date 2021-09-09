@@ -45,13 +45,13 @@ const populatedData = [{
     maintenance_priority$missing_data: 0,
     maintenance_priority$not_applicable: 0,
 }
-]
+];
 
 const ANY_STRING = expect.stringContaining('');
 
 describe('makeMarkerInfo tests', () => {
     test('makeMarkerInfo returns values of the right type', () => {
-        const markers = makeMarkerInfo(populatedData, 'maintenance_priority');
+        const markers = makeMarkerInfo(populatedData, {mapType: 'maintenance_priority'});
         expect(markers).toMatchObject([
             {
                 title: populatedData[0].facility_name,
@@ -75,17 +75,17 @@ describe('makeMarkerInfo tests', () => {
     });
 
     test('makeMarkerInfo has correct icon images', () => {
-        const markers = makeMarkerInfo(populatedData, 'maintenance_priority');
+        const markers = makeMarkerInfo(populatedData, {mapType: 'maintenance_priority'});
         const icon1 = markers[0].iconImage;
         const icon2 = markers[1].iconImage;
         const icon3 = markers[2].iconImage;
         expect(icon1).not.toStrictEqual(icon2);
         expect(icon1).not.toStrictEqual(icon3);
         expect(icon2).not.toStrictEqual(icon3);
-    })
+    });
 
     test('makeMarkerInfo returns null for facilities with no marker to display', () => {
-        const markers = makeMarkerInfo(zeroData,'maintenance_priority');
+        const markers = makeMarkerInfo(zeroData,{mapType: 'maintenance_priority'});
         expect(markers).toMatchObject([ null ]);
     });
 });

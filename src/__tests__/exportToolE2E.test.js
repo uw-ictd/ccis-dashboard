@@ -1,4 +1,4 @@
-const { logIn, dbOptionsSeeded } = require('../testUtils');
+const { logIn, dbOptionsSeeded, checkFileDownloadedWithData } = require('../testUtils');
 const { Builder, By, until } = require('selenium-webdriver');
 const firefox = require('selenium-webdriver/firefox');
 const fs = require('fs/promises');
@@ -86,15 +86,15 @@ describe('Export tests', function () {
 
         const exportButton = await driver.wait(until.elementLocated(By.css('[id=export]')));
         exportButton.click();
-        await checkFileDownloadedWithData('health_facilities2_odkx');
-        await checkFileDownloadedWithData('refrigerators_odkx');
-        await checkFileDownloadedWithData('refrigerator_types_odkx');
-        await checkFileDownloadedWithData('geographic_regions_odkx');
-        await checkFileDownloadedWithData('maintenance_logs_odkx');
+        await checkFileDownloadedWithData(driver, filePath, 'health_facilities2_odkx');
+        await checkFileDownloadedWithData(driver, filePath, 'refrigerators_odkx');
+        await checkFileDownloadedWithData(driver, filePath, 'refrigerator_types_odkx');
+        await checkFileDownloadedWithData(driver, filePath, 'geographic_regions_odkx');
+        await checkFileDownloadedWithData(driver, filePath, 'maintenance_logs_odkx');
         // Tests for refrigerator_moves_odkx and refrigerator_temperature_data_odkx
         // skipped because the tables are empty
-        //await checkFileDownloadedWithData('refrigerator_moves_odkx');
-        //await checkFileDownloadedWithData('refrigerator_temperature_data_odkx);
+        //await checkFileDownloadedWithData(driver, filePath, 'refrigerator_moves_odkx');
+        //await checkFileDownloadedWithData(driver, filePath, 'refrigerator_temperature_data_odkx);
     }, 60000);
 });
 
@@ -111,22 +111,5 @@ async function selectAndExportTable(table) {
     const exportButton = await driver.wait(until.elementLocated(By.css('[id=export]')));
     exportButton.click();
     // check if file exists in download folder
-    await checkFileDownloadedWithData(table);
+    await checkFileDownloadedWithData(driver, filePath, table);
 }
-
-/*
- * Given an the name of a table, it will check to
- * make sure a file exists for the table and contains
- * more than 1 row of contents. It then deletes the file
-*/
-async function checkFileDownloadedWithData(table) {
-    await driver.wait(() => fs.stat(path.join(filePath, table + '.csv')).catch(() => {}), 30000);
-
-    await fs.readFile(path.join(filePath, table + '.csv'), (data) => {
-        // check to make sure the file has data beyond the header row
-        expect(data.indexOf(`\n`,0)).toBeGreaterThan(-1);
-        expect(data.indexOf(`\n`,0)).toBeLessThan(data.length);
-    });
-    await fs.rm(path.join(filePath, table + '.csv'));
-}
-
