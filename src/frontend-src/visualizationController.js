@@ -12,7 +12,7 @@ const writeTextInsteadOfChart = require('./resultText');
 function drawVisualization(mapboxDependency, dropdownFilters, regionSelector, tabName) {
     const vizName = getVisualizationName(tabName);
     const visualization = visualizations[vizName];
-    if (visualization.style != 'map' || select.mapContainer(tabName).style.display == 'none') {
+    if ((visualization.style != 'map' && visualization.style != 'heatmap') || select.mapContainer(tabName).style.display == 'none') {
         tearDownVisualizations(tabName);
         writeTextInsteadOfChart('Visualization is loading...', tabName);
     }
@@ -20,16 +20,19 @@ function drawVisualization(mapboxDependency, dropdownFilters, regionSelector, ta
         visualization: vizName,
         filter: getFilterParams(dropdownFilters, regionSelector, tabName)
     }).then(async (body) => {
+        // Clean up, unless  we're drawing a map when there was a map before
         if ((visualization.style != 'map' && visualization.style != 'heatmap') ||
             select.mapContainer(tabName).style.display == 'none') {
             removeText(tabName);
             tearDownVisualizations(tabName);
         }
+        // Alert for empty result
         if (!body.data.length) {
             writeTextInsteadOfChart('No data match your chosen filters', tabName);
             select.vizTitleElt(tabName).innerText = vizName;
             return;
         }
+        // Draw the proper visualization type
         if (visualization.style === 'map') {
             // Make the containing div element visible
             select.mapContainer(tabName).style.display = 'block';
@@ -85,6 +88,7 @@ function tearDownVisualizations(tabName) {
     d3.selectAll(chartWrapperSvgStr).remove(); // clear previous charts/legend
     select.mapContainer(tabName).style.display = 'none';
     select.chartWrapper(tabName).style.display = 'none';
+    select.listWrapper(tabName).style.display = 'none';
     removeText(tabName);
     removeMap(tabName);
 }

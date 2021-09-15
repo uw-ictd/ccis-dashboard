@@ -1,3 +1,17 @@
+/*
+ * Since this is a javascript file, you can import other data and write custom
+ * logic like this for building SQL queries, if you want. This one is used for
+ * the RefrigeratorClasses computed column
+ */
+const refrigeratorClasses = require('../model/refrigeratorClasses.json');
+function makeRefrigeratorClassCases(refrigeratorClasses) {
+    return Object.entries(refrigeratorClasses)
+        .flatMap(([type, models]) => {
+            return models.map(model => `WHEN model_id = '${model}' THEN '${type}'`)
+        })
+        .join('\n            ');
+}
+
 module.exports = [
     {
         // name must be unique and not the same as any table names
@@ -254,6 +268,22 @@ module.exports = [
             table: 'health_facilities2_odkx',
             localColumn: 'id_health_facilities',
             foreignColumn: 'id_health_facilities'
+        }
+    },
+    {
+        name: 'RefrigeratorClass',
+        query: `
+            SELECT id_refrigerator_types, CAST
+            (CASE
+            ${makeRefrigeratorClassCases(refrigeratorClasses)}
+            WHEN model_id IS NOT NULL THEN 'No group'
+            END AS varchar) AS refrigerator_class
+            FROM refrigerator_types_odkx`,
+        provides: [ 'refrigerator_class' ],
+        joinOn: {
+            table: 'refrigerator_types_odkx',
+            localColumn: 'id_refrigerator_types',
+            foreignColumn: 'id_refrigerator_types'
         }
     }
 ];

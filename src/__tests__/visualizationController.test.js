@@ -52,6 +52,7 @@ beforeEach(() => {
         </select>
         <div class="map-container"></div>
         <div class="chart-wrapper"></div>
+        <div class="list-wrapper"></div>
         <div class="result-text-container"></div>
     </div>
     <div id="CCE">

@@ -41,7 +41,7 @@ const drawColorLegend = require('./colorLegend');
  * groupBy:  String to show to user as axis label
  * repeatBy: undefined|String to show to user in titles of small multiple charts
  */
-function drawAllCharts(data, { fullDomain, fullColorDomain }, { groupBy, repeatBy, style, colorMap, colorBy, disableLegend, legendNonzeroOnly, legendOrder }, tabName) {
+function drawAllCharts(data, { fullDomain, fullColorDomain }, { groupBy, repeatBy, type, style, colorMap, colorBy, disableLegend, legendNonzeroOnly, legendOrder }, tabName) {
     const parentElement = d3.select(select.chartContainerStr(tabName));
     const colorDomain = !disableLegend && legendNonzeroOnly ? getNonZeroOptions(data) : fullColorDomain;
 
@@ -54,6 +54,7 @@ function drawAllCharts(data, { fullDomain, fullColorDomain }, { groupBy, repeatB
         colorDomain,
         colorScale,
         groupBy,
+        type,
         style,
         axisWidth: repeatBy ? 200 : 600,
         axisHeight: repeatBy ? 150 : 400
@@ -114,7 +115,7 @@ function drawAllCharts(data, { fullDomain, fullColorDomain }, { groupBy, repeatB
 
 /*
 * data: in the format d3 expects, as described above
-* returns an array containing each of the nonzero options for 
+* returns an array containing each of the nonzero options for
 * the groupBy
 */
 function getNonZeroOptions(data) {
@@ -164,7 +165,7 @@ function getNonZeroOptions(data) {
  * title:           String
  */
 function drawBarChart(series, { parentElement, axisWidth, axisHeight, title,
-    fullDomain, fullRange, colorDomain, colorScale, groupBy }) {
+    fullDomain, fullRange, colorDomain, colorScale, groupBy, type }) {
     const canvas = parentElement.append('svg');
     makeTitle(canvas, axisWidth, title);
 
@@ -200,6 +201,15 @@ function drawBarChart(series, { parentElement, axisWidth, axisHeight, title,
         .domain(fullRange)
         .range([axisHeight, 0]);
 
+    let yLabel;
+    if (type === 'refrigerator') {
+        yLabel = 'Number of CCE';
+    } else if (type === 'facility') {
+        yLabel = 'Number of Facilities';
+    } else {
+        throw new Error(`Visualization type ${type} not recognized`);
+    }
+
     // Make y-axis and add to canvas
     const yAxis = d3.axisLeft()
         .scale(yScale);
@@ -210,7 +220,7 @@ function drawBarChart(series, { parentElement, axisWidth, axisHeight, title,
         .attr('dy', '2ex')
         .attr('fill', 'currentColor')
         .style('text-anchor', 'middle')
-        .text('Number of Refrigerators');
+        .text(yLabel);
 
     // Render bars
     canvas.selectAll('.barStack')
@@ -249,7 +259,7 @@ function drawPieChart(data, { parentElement, title, colorScale }) {
         // each datum has the form [key, value]
         .value(d => d[1])
         (Object.entries(data))
-    
+
     canvas.selectAll('g')
         .data(arcs)
         .enter()

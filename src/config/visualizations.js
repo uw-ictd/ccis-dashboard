@@ -111,9 +111,19 @@ module.exports = {
         colorMap: {
             'more_than_16': 'green',
             '8_to_16': 'yellow',
-            '4_to_8': 'red',
+            '4_to_8': 'orange',
+            'fewer_than_4': 'red',
+            'none': 'brown',
             'Missing data': 'gray'
         },
+        legendOrder: [
+            'none',
+            'fewer_than_4',
+            '4_to_8',
+            '8_to_16',
+            'more_than_16',
+            'Missing data'
+        ],
         style: 'bar'
     },
     // CCEM table 1.8
@@ -123,9 +133,19 @@ module.exports = {
         colorMap: {
             'more_than_16': 'green',
             '8_to_16': 'yellow',
-            '4_to_8': 'red',
+            '4_to_8': 'orange',
+            'fewer_than_4': 'red',
+            'none': 'brown',
             'Missing data': 'gray'
         },
+        legendOrder: [
+            'none',
+            'fewer_than_4',
+            '4_to_8',
+            '8_to_16',
+            'more_than_16',
+            'Missing data'
+        ],
         style: 'pie'
     },
     // CCEM table 3.5a
@@ -172,11 +192,11 @@ module.exports = {
         colorBy: 'refrigerator_class',
         colorMap: {
             'ILR': 'blue',
-            'Absorption' : 'red',
-            'Freezer' : 'green',
-            'Solar' : 'yellow',
-            'Other' : 'purple',
-            'Missing data' : 'gray'
+            'Absorption': 'red',
+            'Freezer': 'green',
+            'Solar': 'yellow',
+            'Other': 'purple',
+            'No group': 'gray'
         },
         style: 'pie'
     },
@@ -228,9 +248,19 @@ module.exports = {
         colorMap: {
             'more_than_16': 'green',
             '8_to_16': 'yellow',
-            '4_to_8': 'red',
+            '4_to_8': 'orange',
+            'fewer_than_4': 'red',
+            'none': 'brown',
             'Missing data': 'gray'
         },
+        legendOrder: [
+            'none',
+            'fewer_than_4',
+            '4_to_8',
+            '8_to_16',
+            'more_than_16',
+            'Missing data'
+        ],
         style: 'bar'
     },
     'CCE model by facility power availability': {
@@ -306,7 +336,7 @@ module.exports = {
         colorBy: 'lastupdateuser_refrigerators',
         style: 'bar'
     },
-    'Percentage of facilities with source: grid (district)': {
+    'Percentage of facilities with power source: grid (district)': {
         type: 'facility',
         style: 'heatmap',
         colorBy: 'electricity_source_grid',
@@ -318,7 +348,7 @@ module.exports = {
             fill_outline_color: '#680D75'
         }
     },
-    'Percentage of facilities with source: grid (region)': {
+    'Percentage of facilities with power source: grid (region)': {
         type: 'facility',
         style: 'heatmap',
         colorBy: 'electricity_source_grid',
@@ -415,6 +445,8 @@ module.exports = {
             'refrigeration_volume_ratio': 'BY_FACILITY',
             'refrigeration_volume': 'BY_FACILITY',
             'catchment_population': 'BY_FACILITY',
+            'regionlevel2': 'BY_FACILITY',
+            'regionlevel3': 'BY_FACILITY',
             'ownership': 'BY_FACILITY',
             'authority': 'BY_FACILITY'
         }
@@ -433,6 +465,8 @@ module.exports = {
             'freezer_volume_ratio': 'BY_FACILITY',
             'freezer_volume': 'BY_FACILITY',
             'catchment_population': 'BY_FACILITY',
+            'regionlevel2': 'BY_FACILITY',
+            'regionlevel3': 'BY_FACILITY',
             'ownership': 'BY_FACILITY',
             'authority': 'BY_FACILITY'
         }
@@ -473,6 +507,8 @@ module.exports = {
             'facility_update_status': 'BY_FACILITY',
             'facility_savepoint': 'BY_FACILITY',
             'lastupdateuser_health_facilities': 'BY_FACILITY',
+            'regionlevel2': 'BY_FACILITY',
+            'regionlevel3': 'BY_FACILITY',
             'ownership': 'BY_FACILITY',
             'authority': 'BY_FACILITY'
         }

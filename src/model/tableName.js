@@ -64,6 +64,5 @@ module.exports = {
     regionlevel2: 'geographic_regions_odkx',
     regionlevel3: 'geographic_regions_odkx',
     regionlevel4: 'geographic_regions_odkx',
-    regionlevel5: 'geographic_regions_odkx',
-    refrigerator_class: 'vw_ref_type_class'
+    regionlevel5: 'geographic_regions_odkx'
 };

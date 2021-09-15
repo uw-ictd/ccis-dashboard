@@ -6,10 +6,10 @@
   "scripts": {
     "start": "node src/server.js",
     "pretest": "docker-compose build && docker-compose up -d && npm run build",
-    "test": "npx jest --silent || true",
+    "test": "npx jest --silent --maxConcurrency=5 || true",
     "posttest": "docker-compose down",
     "prelinux-test": "sudo docker-compose build && sudo docker-compose up -d && npm run build",
-    "linux-test": "npx jest --silent || true",
+    "linux-test": "npx jest --silent --maxConcurrency=5 || true",
     "postlinux-test": "sudo docker-compose down",
     "build": "webpack --config webpack.prod.js",
     "dev-build": "webpack --config webpack.dev.js",

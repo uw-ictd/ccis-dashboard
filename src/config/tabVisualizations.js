@@ -16,8 +16,8 @@ module.exports = {
             'CCE facility power availability by model',
             'CCE model by facility type',
             'Facility type by CCE model',
-            'Percentage of facilities with source: grid (district)',
-            'Percentage of facilities with source: grid (region)',
+            'Percentage of facilities with power source: grid (district)',
+            'Percentage of facilities with power source: grid (region)',
             'Percentage of facilities with 4+ hours of grid power (district)',
             'Percentage of facilities with 4+ hours of grid power (region)',
             'All facilities list'
