@@ -17,7 +17,8 @@ const oneVisualization = Joi.object({
     legendNonzeroOnly: Joi.bool().optional(),
     legendOrder: Joi.array().optional(),
     regionLevel: Joi.string().valid('Region (Level 2)', 'District (Level 3)').optional(),
-    fill_specs: Joi.object().optional()
+    fill_specs: Joi.object().optional(),
+    sum: Joi.string().optional()
 });
 
 const oneTab = Joi.object({

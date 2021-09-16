@@ -74,7 +74,13 @@ module.exports = {
     'Temp-Alarms': {
         tabLabel: 'Temp Alarms',
         visualizations: [
-            'Recent alarms map'
+            'Recent alarms map',
+            'High alarms by model',
+            'Low alarms by model',
+            'High alarms by manufacturer',
+            'Low alarms by manufacturer',
+            'High alarms by facility level',
+            'Low alarms by facility level'
         ],
         defaultViz: 'Recent alarms map'
     },

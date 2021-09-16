@@ -41,6 +41,8 @@ const refrigeratorClasses = require('../model/refrigeratorClasses.json');
  * legendNonzeroOnly boolean [optional], hides legend options that are 0
  * legendOrder Array [optional], list to specify order of legend items. Items not included will
  *      be appended to the end with arbitrary order.
+ * sum String [optional] column name to sum over instead of the usual COUNT(*). Column will be cast to
+ *      integer. If using `sum`, legendNonzeroOnly is recommended
  */
 module.exports = {
     // CCEM table 3.3
@@ -512,5 +514,53 @@ module.exports = {
             'ownership': 'BY_FACILITY',
             'authority': 'BY_FACILITY'
         }
-    }
+    },
+    'High alarms by model': {
+        type: 'refrigerator',
+        style: 'bar',
+        groupBy: 'model_id',
+        colorBy: 'model_id',
+        legendNonzeroOnly: true,
+        sum: 'number_of_high_alarms_30'
+    },
+    'Low alarms by model': {
+        type: 'refrigerator',
+        style: 'bar',
+        groupBy: 'model_id',
+        colorBy: 'model_id',
+        legendNonzeroOnly: true,
+        sum: 'number_of_low_alarms_30'
+    },
+    'High alarms by manufacturer': {
+        type: 'refrigerator',
+        style: 'bar',
+        groupBy: 'manufacturer',
+        colorBy: 'manufacturer',
+        legendNonzeroOnly: true,
+        sum: 'number_of_high_alarms_30'
+    },
+    'Low alarms by manufacturer': {
+        type: 'refrigerator',
+        style: 'bar',
+        groupBy: 'manufacturer',
+        colorBy: 'manufacturer',
+        legendNonzeroOnly: true,
+        sum: 'number_of_low_alarms_30'
+    },
+    'High alarms by facility level': {
+        type: 'refrigerator',
+        style: 'bar',
+        groupBy: 'facility_level',
+        colorBy: 'facility_level',
+        legendNonzeroOnly: true,
+        sum: 'number_of_high_alarms_30'
+    },
+    'Low alarms by facility level': {
+        type: 'refrigerator',
+        style: 'bar',
+        groupBy: 'facility_level',
+        colorBy: 'facility_level',
+        legendNonzeroOnly: true,
+        sum: 'number_of_low_alarms_30'
+    },
 };

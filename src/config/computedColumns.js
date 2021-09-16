@@ -118,7 +118,7 @@ module.exports = [
         }
     },
     {
-        name: 'TempAlarm',
+        name: 'FaultyRefrigerators',
         query: `SELECT refrigerator_id as faulty_refrigerator_id
             FROM refrigerator_temperature_data_odkx rtd
             WHERE (cast(reporting_period as timestamp) = (
@@ -268,6 +268,18 @@ module.exports = [
             table: 'health_facilities2_odkx',
             localColumn: 'id_health_facilities',
             foreignColumn: 'id_health_facilities'
+        }
+    },
+    {
+        name: 'TempAlarmsLastMonth',
+        query: `SELECT refrigerator_id, days_temp_below_2_30, days_temp_above_8_30, number_of_high_alarms_30, number_of_low_alarms_30
+            FROM refrigerator_temperature_data_odkx
+            WHERE reporting_period::timestamp::date >= current_date - interval '1 month'`,
+        provides: [ 'number_of_high_alarms_30',  'number_of_low_alarms_30', 'days_temp_below_2_30', 'days_temp_above_8_30'],
+        joinOn: {
+            table: 'refrigerators_odkx',
+            localColumn: 'refrigerator_id',
+            foreignColumn: 'id_refrigerators'
         }
     },
     {

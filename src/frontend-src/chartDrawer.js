@@ -41,7 +41,7 @@ const drawColorLegend = require('./colorLegend');
  * groupBy:  String to show to user as axis label
  * repeatBy: undefined|String to show to user in titles of small multiple charts
  */
-function drawAllCharts(data, { fullDomain, fullColorDomain }, { groupBy, repeatBy, type, style, colorMap, colorBy, disableLegend, legendNonzeroOnly, legendOrder }, tabName) {
+function drawAllCharts(data, { fullDomain, fullColorDomain }, { groupBy, repeatBy, type, style, sum, colorMap, colorBy, disableLegend, legendNonzeroOnly, legendOrder }, tabName) {
     const parentElement = d3.select(select.chartContainerStr(tabName));
     const colorDomain = !disableLegend && legendNonzeroOnly ? getNonZeroOptions(data) : fullColorDomain;
 
@@ -56,6 +56,7 @@ function drawAllCharts(data, { fullDomain, fullColorDomain }, { groupBy, repeatB
         groupBy,
         type,
         style,
+        sum,
         axisWidth: repeatBy ? 200 : 600,
         axisHeight: repeatBy ? 150 : 400
     };
@@ -165,7 +166,7 @@ function getNonZeroOptions(data) {
  * title:           String
  */
 function drawBarChart(series, { parentElement, axisWidth, axisHeight, title,
-    fullDomain, fullRange, colorDomain, colorScale, groupBy, type }) {
+    fullDomain, fullRange, colorDomain, colorScale, groupBy, type, sum }) {
     const canvas = parentElement.append('svg');
     makeTitle(canvas, axisWidth, title);
 
@@ -202,7 +203,9 @@ function drawBarChart(series, { parentElement, axisWidth, axisHeight, title,
         .range([axisHeight, 0]);
 
     let yLabel;
-    if (type === 'refrigerator') {
+    if (sum) {
+        yLabel = `Sum of ${sum}`;
+    } else if (type === 'refrigerator') {
         yLabel = 'Number of CCE';
     } else if (type === 'facility') {
         yLabel = 'Number of Facilities';

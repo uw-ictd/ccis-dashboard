@@ -57,6 +57,18 @@ function makeHeatMapSelect(vizSpec) {
     }
 }
 
+function sumColumn(columnName) {
+    return `SUM(CAST(${referToColumn(columnName)} as INTEGER))`;
+}
+
+function makeAggregate(vizSpec) {
+    if (vizSpec.sum) {
+        return `${sumColumn(vizSpec.sum)} as count`;
+    } else {
+        return 'COUNT(*) as count';
+    }
+}
+
 // Example:
 //   t.model_id as xlabel, r.utilization as colorlabel
 function makeSelect(vizSpec) {
@@ -75,9 +87,9 @@ function makeSelect(vizSpec) {
             return `${missingDataClause(columnName)} as ${labelName[param]}`;
         })
         .concat(makeHeatMapSelect(vizSpec))
+        .concat(makeAggregate(vizSpec))
         .filter(param => Boolean(param))
-        .join(', ')
-        + ', COUNT(*) as count';
+        .join(', ');
 }
 
 function makeListSelect(vizSpec) {
@@ -201,6 +213,13 @@ function makePopupGroupBy(vizSpec) {
         .join(', ');
 }
 
+function makeHaving(vizSpec) {
+    if (vizSpec.sum) {
+        return `HAVING ${sumColumn(vizSpec.sum)} > 0`;
+    }
+    return '';
+}
+
 function makeOrderBy(vizSpec) {
     if (vizSpec.sort === 'ASC') {
         return 'ORDER BY count ASC';
@@ -211,26 +230,11 @@ function makeOrderBy(vizSpec) {
     }
 }
 
-// if using refrigerator class, will join refrigerators classes on the model id's
-function makeRefClassJoin(vizSpec) {
-    if (usesColumn(vizSpec, 'refrigerator_class')) {
-        return 'vw_ref_type_class.model_id = refrigerator_types_odkx.model_id';
-    }
-    return '';
-}
-
-// includes view for refrigerator class if needed
-function makeRefClassification(vizSpec) {
-    if (usesColumn(vizSpec, 'refrigerator_class')) {
-        return `JOIN vw_ref_type_class ON ${makeRefClassJoin(vizSpec)}`;
-    }
-    return '';
-}
-
 function usesColumn(vizSpec, columnName) {
     return (vizSpec.colorBy === columnName ||
         vizSpec.groupBy === columnName ||
         vizSpec.repeatBy === columnName ||
+        vizSpec.sum === columnName ||
         (vizSpec.columns && vizSpec.columns.indexOf(columnName) > -1) ||
         (vizSpec.facilityPopup && columnName in vizSpec.facilityPopup));
 }
@@ -267,10 +271,10 @@ function makeQueryStr(vizSpec) {
          JOIN geographic_regions_odkx ON
             geographic_regions_odkx.id_geographic_regions = health_facilities2_odkx.admin_region_id
          ${makeRefrigeratorJoin(vizSpec)}
-         ${makeRefClassification(vizSpec)}
          ${joinComputedColumns(vizSpec)}
       ${makeFilterStr(vizSpec)}
     ${makeGroupBy(vizSpec)}
+    ${makeHaving(vizSpec)}
     ${makeOrderBy(vizSpec)}`;
 }
 
