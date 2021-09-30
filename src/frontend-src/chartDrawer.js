@@ -1,7 +1,7 @@
 const d3 = require('d3');
 const tippy = require('tippy.js').default;
 const { createSingleton } = require('tippy.js');
-const makeColorScale = require('./colorScale');
+const { makeColorScale } = require('./colorScale');
 const select = require('./selectors');
 const fitCanvasToContents = require('./fitCanvasToContents');
 const drawColorLegend = require('./colorLegend');

@@ -20,6 +20,8 @@ module.exports = {
             'Percentage of facilities with power source: grid (region)',
             'Percentage of facilities with 4+ hours of grid power (district)',
             'Percentage of facilities with 4+ hours of grid power (region)',
+            'CCE with Electricity availability',
+            'CCE with Electricity availability (pie)',
             'All facilities list'
         ],
         defaultViz: 'Facility details map'
@@ -32,8 +34,6 @@ module.exports = {
             'CCE by working status',
             'CCE by working status (pie)',
             'CCE utilization',
-            'Electricity availability',
-            'Electricity availability (pie)',
             'CCE models by age group',
             'CCE models by age group (pie)',
             'Maintence priority by model',
@@ -45,6 +45,7 @@ module.exports = {
             'CCE model by facility power availability',
             'CCE facility power availability by model',
             'CCE model by facility type',
+            'CCE type by facility type',
             'Facility type by CCE model',
             'All CCE list'
         ],

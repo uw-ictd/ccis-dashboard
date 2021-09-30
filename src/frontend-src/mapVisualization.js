@@ -1,6 +1,6 @@
 const eachSeries = require('async/eachSeries');
 const makeMarkerInfo = require('./coordinates');
-const makeColorScale = require('./colorScale');
+const { makeColorScale } = require('./colorScale');
 const mapDisplay = require('../config/mapDisplay').mapVisualization;
 const makeHeatmap = require('./heatmapVisualization');
 const select = require('./selectors');

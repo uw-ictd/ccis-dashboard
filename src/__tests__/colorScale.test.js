@@ -1,4 +1,4 @@
-const makeColorScale = require('../frontend-src/colorScale');
+const { makeColorScale } = require('../frontend-src/colorScale');
 
 // Hex codes from d3.schemeTableau10
 const hexCodes = {

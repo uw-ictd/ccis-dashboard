@@ -33,7 +33,6 @@ const refrigeratorClasses = require('../model/refrigeratorClasses.json');
  *     min_opacity: double, 0-1 - minimum opacity of fill color
  *     max_opacity: double, 0-1 - maximum opacity of fill color
  *     fill_color: string - color to fill heatmap areas with,
- *     fill_outline_color: string - color to outline filled areas with
  * columns Array of Strings Required when using `style: 'list'`. Takes a list of column names to display
  *     in the table. NOTE: table names must match the database exactly (Postgres makes all column names
  *     lowercase).
@@ -106,7 +105,7 @@ module.exports = {
         style: 'bar'
     },
     // CCEM table 1.8
-    'Electricity availability': {
+    'CCE with Electricity availability': {
         type: 'refrigerator',
         groupBy: 'grid_power_availability',
         colorBy: 'grid_power_availability',
@@ -129,7 +128,7 @@ module.exports = {
         style: 'bar'
     },
     // CCEM table 1.8
-    'Electricity availability (pie)': {
+    'CCE with Electricity availability (pie)': {
         type: 'refrigerator',
         colorBy: 'grid_power_availability',
         colorMap: {
@@ -279,6 +278,13 @@ module.exports = {
         style: 'bar',
         legendNonzeroOnly: true
     },
+    'CCE type by facility type': {
+        type: 'refrigerator',
+        groupBy: 'facility_level',
+        colorBy: 'refrigerator_class',
+        style: 'bar',
+        legendNonzeroOnly: true
+    },
     'Facility type by CCE model': {
         type: 'refrigerator',
         groupBy: 'model_id',
@@ -346,8 +352,7 @@ module.exports = {
         fill_specs: {  // Example usage of fill specs using default specs
             min_opacity: 0.1,
             max_opacity: 0.95,
-            fill_color: '#9D41AB',
-            fill_outline_color: '#680D75'
+            fill_color: 'purple'
         }
     },
     'Percentage of facilities with power source: grid (region)': {
@@ -358,8 +363,7 @@ module.exports = {
         fill_specs: {  // Example usage of fill specs using default specs
             min_opacity: 0.1,
             max_opacity: 0.95,
-            fill_color: '#9D41AB',
-            fill_outline_color: '#680D75'
+            fill_color: 'purple'
         }
     },
     'Percentage of facilities with 4+ hours of grid power (district)': {
@@ -368,7 +372,7 @@ module.exports = {
         colorBy: 'grid_power_at_least_4',
         regionLevel: 'District (Level 3)',
         fill_specs: {
-            fill_color: '#59a14f'
+            fill_color: 'purple'
         }
     },
     'Percentage of facilities with 4+ hours of grid power (region)': {
@@ -377,7 +381,7 @@ module.exports = {
         colorBy: 'grid_power_at_least_4',
         regionLevel: 'Region (Level 2)',
         fill_specs: {
-            fill_color: '#59a14f'
+            fill_color: 'purple'
         }
     },
     'All facilities list': {
@@ -492,7 +496,7 @@ module.exports = {
         colorBy: 'updated_facilities',
         regionLevel: 'Region (Level 2)',
         fill_specs: {
-            fill_color: '#59a14f'
+            fill_color: 'purple'
         }
     },
     'Update status by facility': {

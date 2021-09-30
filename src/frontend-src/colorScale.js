@@ -1,7 +1,7 @@
 const d3 = require('d3');
 const { colorNameToIndex, colorScheme } = require('../config/colorScheme');
 
-module.exports = function(fullColorDomain, colorMap) {
+function makeColorScale(fullColorDomain, colorMap) {
     if (!colorMap) return d3.scaleOrdinal(fullColorDomain, colorScheme);
 
     const valuesWithoutColors = fullColorDomain.filter(value => {
@@ -31,6 +31,12 @@ module.exports = function(fullColorDomain, colorMap) {
             const index = valuesWithoutColors.indexOf(value);
             color = unusedColors[index % unusedColors.length]
         }
-        return colorScheme[colorNameToIndex[color]];
+        return getColorFromName(color);
     }
 };
+
+function getColorFromName(colorName) {
+    return d3.schemeTableau10[colorNameToIndex[colorName]];
+}
+
+module.exports = {makeColorScale, getColorFromName};

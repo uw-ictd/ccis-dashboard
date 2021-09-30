@@ -20,6 +20,7 @@ function tabSelector(tabs, tabName) {
     if (isEmpty(select.mapContainer(tabName)) &&
         isEmpty(select.chartContainer(tabName)) &&
         isEmpty(select.legendContainer(tabName)) &&
+        isEmpty(select.listWrapper(tabName)) &&
         tabs[tabName].defaultViz) {
         select.vizSelector(tabName).value = tabs[tabName].defaultViz;
         select.displayButton(tabName).click();

@@ -1,11 +1,11 @@
 const shapefiles = require('../config/shapefiles');
-const default_fill_color = '#9D41AB';
-const default_fill_outline_color = '#680D75';
+const default_fill_color = 'purple';
+const default_fill_outline_color = '#555';
 const default_min_opacity = 0.1;
 const default_max_opacity = 0.95;
-const missing_data_fill_color = '#7F7980';
-const missing_data_fill_outline_color = '#635E63';
+const missing_data_fill_color = 'gray';
 const missing_data_opacity = 0.5;
+const { getColorFromName } = require('./colorScale');
 
 module.exports = function(mapboxgl, map, data, visualization) {
     const regionLevelIndex = shapefiles.levelNames.indexOf(visualization.regionLevel);
@@ -29,8 +29,8 @@ function _drawLayer(map, mapboxgl, data, visualization, regionLevelIndex, geoJSO
 
     // Set layer specifications (defines regions/districts with only missing data first)
     let fill_opacity = missing_data_opacity;
-    let fill_color = missing_data_fill_color;
-    let fill_outline_color = missing_data_fill_outline_color;
+    let fill_color = getColorFromName(missing_data_fill_color);
+    let fill_outline_color = default_fill_outline_color;
     let description = `<p class='popup-info'>
         Total Number of Facilities: ${total}<br>
         Missing Data: ${missingData}</p>`;
@@ -40,10 +40,9 @@ function _drawLayer(map, mapboxgl, data, visualization, regionLevelIndex, geoJSO
             visualization.fill_specs.min_opacity : default_min_opacity;
         const max_opacity = (visualization.fill_specs && visualization.fill_specs.max_opacity) ?
             visualization.fill_specs.max_opacity : default_max_opacity;
-        fill_color = (visualization.fill_specs && visualization.fill_specs.fill_color) ?
-            visualization.fill_specs.fill_color : default_fill_color;
-        fill_outline_color = (visualization.fill_specs && visualization.fill_specs.fill_outline_color) ?
-            visualization.fill_specs.fill_outline_color : default_fill_outline_color;
+        const fill_color_name = (visualization.fill_specs && visualization.fill_specs.fill_color) ?
+        visualization.fill_specs.fill_color : default_fill_color;
+        fill_color = getColorFromName(fill_color_name);
 
         fill_opacity = (numerator / denominator) * (max_opacity - min_opacity) + min_opacity;
         description = `<p class='popup-info'>
