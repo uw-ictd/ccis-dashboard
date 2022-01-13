@@ -11,7 +11,6 @@ beforeAll(async () => {
     await getServer(PORT, dbOptionsSeeded);
 
     const options = new firefox.Options();
-    options.addArguments("-headless");
 
     driver = await new Builder()
         .forBrowser('firefox')
@@ -31,8 +30,9 @@ describe('Map end-to-end tests', function () {
 
     // After logging in, wait for the main page to render
     test('Map should render', async () => {
-        const map = driver.wait(until.elementLocated(By.css('#Export .map canvas')));
-        expect(map.isDisplayed()).resolves.toBe(true);
+        const tab = driver.wait(until.elementLocated(By.id('CCE-tab')));
+        await tab.click();
+        const map = driver.wait(until.elementLocated(By.css('#CCE .map canvas')));
         const { height, width } = await map.getRect();
         expect(height).toBeGreaterThan(0);
         expect(width).toBeGreaterThan(0);

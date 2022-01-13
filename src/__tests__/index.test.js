@@ -74,9 +74,9 @@ describe('/api/query integration tests', () => {
                     refrigeratorTypes: [ 'VLS 054 SDD Greenline' ],
                     maintenancePriorities: [ 'low', 'high', 'not_applicable', '' ],
                     regions: [
-                        [ 'KAMPALA', 'KAMPALA DISTRICT' ],
-                        [ 'LANGO', 'APAC DISTRICT'],
-                        [ 'SOUTH CENTRAL', 'WAKISO DISTRICT' ]
+                        [ 'UGANDA', 'KAMPALA', 'KAMPALA DISTRICT' ],
+                        [ 'UGANDA', 'LANGO', 'APAC DISTRICT'],
+                        [ 'UGANDA', 'SOUTH CENTRAL', 'WAKISO DISTRICT' ]
                     ]
                 }
             });

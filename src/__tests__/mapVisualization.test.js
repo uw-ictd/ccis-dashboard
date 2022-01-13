@@ -2,7 +2,8 @@
  * @jest-environment jsdom
  */
 const visualizations = require('../config/visualizations');
-const {mapVisualization} = require('../frontend-src/mapVisualization');
+const { mapVisualization } = require('../frontend-src/mapVisualization');
+const mapConfig = require('../config/mapDisplay').mapVisualization;
 
 const mapboxMock = {
     makeMap: function () {},
@@ -27,7 +28,7 @@ const addToSpy = jest.fn(() => {});
 beforeEach(() => {
     // Clean up after other tests
     document.body.innerHTML = `<div id="test">
-        <div class="map-container"></div>
+        <div class="map-container map-container-0"></div>
     </div>`;
 });
 
@@ -45,15 +46,6 @@ describe('Map visualization tests', () => {
                 maintenance_priority$medium: 0,
                 maintenance_priority$not_applicable: 1,
                 maintenance_priority$missing_data: 2},
-            {   location_latitude: "0.71743",
-                location_longitude: "32.39919",
-                facility_name: "Facility name 2",
-                id_health_facilities: "6122-2002",
-                maintenance_priority$high: 0,
-                maintenance_priority$low: 0,
-                maintenance_priority$medium: 0,
-                maintenance_priority$missing_data: 3,
-                maintenance_priority$not_applicable: 1},
             {   location_latitude: "0.25555",
                 location_longitude: "32.62629",
                 facility_name: "A Medical Centre",
@@ -81,7 +73,7 @@ describe('Map visualization tests', () => {
         };
 
         const mapSpec = visualizations['Maintenance priority by facility'];
-        await mapVisualization(mapboxMock, data, metadata, mapSpec, 'test');
+        await mapVisualization(mapboxMock, data, metadata, mapSpec, 'test', mapConfig, 0);
         const markers = document.querySelectorAll('.marker');
         expect(addToSpy).toHaveBeenCalledTimes(3);
     });

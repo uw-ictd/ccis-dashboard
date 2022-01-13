@@ -17,7 +17,16 @@ const oneVisualization = Joi.object({
     legendNonzeroOnly: Joi.bool().optional(),
     legendOrder: Joi.array().optional(),
     regionLevel: Joi.string().valid('Region (Level 2)', 'District (Level 3)').optional(),
-    fill_specs: Joi.object().optional(),
+    fill_specs: Joi.object({ // for heatmaps
+        min_opacity: Joi.number().optional(),
+        max_opacity: Joi.number().optional(),
+        fill_color: Joi.string().optional(),
+        fill_outline_color: Joi.string().optional(),
+    }).optional(),
+    colorSpecs: Joi.object({ // for colored_facilities maps
+        opacity: Joi.number().optional(),
+        singleColor: Joi.string().optional()
+    }).optional(),
     sum: Joi.string().optional()
 });
 
@@ -31,8 +40,9 @@ const oneTab = Joi.object({
         is: Joi.required(),
         then: Joi.array().has(Joi.ref('...defaultViz'))
     }),
-    includeExport: Joi.boolean(),
-    defaultViz: Joi.string()
+    exportTab: Joi.boolean(),
+    defaultViz: Joi.string(),
+    multi: Joi.boolean().optional(),
 });
 
 const oneFilter = Joi.object({

@@ -45,7 +45,26 @@ function getFacilityQuery() {
         WHERE g.id_geographic_regions = h.admin_region_id`;
 }
 
+function getColdRoomQuery() {
+    return `SELECT g.levelNumber, g.regionLevel1, g.regionLevel2, g.regionLevel3, g.regionLevel4, g.regionLevel5, g.regionName,
+
+         h.id_health_facilities, h.admin_region_id, h.primary_facility_id, h.facility_name, h.ownership, h.facility_level,
+         h.location_latitude, h.location_longitude,
+         
+         c.backup_generator, c.backup_generator_functional_status, c.dimensions, c.functional_status, c.gross_volume, 
+         c.maintenance_priority, c.manufacturer, c.model, c.net_volume, c.notes, c.reason_not_working,
+         c.serial_number, c.storage_temperature, c.temperature_monitoring_device,
+         c.temperature_monitoring_device_functional_status, c.temperature_monitoring_device_type,
+         c.tracking_id, c.type, c.utilization, c.year, c.id_cold_rooms
+        FROM geographic_regions_odkx as g,
+             health_facilities2_odkx as h,
+             cold_rooms_odkx as c
+        WHERE g.id_geographic_regions = h.admin_region_id
+        AND h.id_health_facilities = c.facility_row_id`
+}
+
 module.exports = {
     getRefrigeratorQuery,
-    getFacilityQuery
+    getFacilityQuery,
+    getColdRoomQuery
 };

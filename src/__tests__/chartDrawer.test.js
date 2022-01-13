@@ -72,8 +72,8 @@ const pieMetadata = {
 beforeEach(() => {
     // Clean up after other tests
     document.body.innerHTML = `<div id="test">
-        <div class="legend-container"></div>
-        <div class="chart-container"></div>
+        <div class="legend-container legend-container-0"></div>
+        <div class="chart-container chart-container-0"></div>
     </div>`;
     // JSDOM doesn't implement SVG standards, including getBBox, which is
     // used in drawAllCharts
@@ -90,13 +90,13 @@ describe('Unit tests for drawAllCharts', () => {
     });
 
     test('Should produce a chart with the right number of rect\'s', () => {
-        drawAllCharts(data, metadata, visualizations[viz], 'test');
+        drawAllCharts(data, metadata, visualizations[viz], 'test', 0);
         const bars = document.querySelectorAll('#test .chart-container svg rect.bar');
         expect(bars.length).toBe(5*5);
     });
 
     test('Should produce a legend with the right number of rect\'s', () => {
-        drawAllCharts(data, metadata, visualizations[viz], 'test');
+        drawAllCharts(data, metadata, visualizations[viz], 'test', 0);
         const squares = document.querySelectorAll('#test .legend-container svg rect');
         expect(squares.length).toBe(metadata.fullColorDomain.length);
     });
@@ -127,19 +127,19 @@ describe('Unit tests for drawAllCharts', () => {
                 not_installed_removed_from_service: 0
             } ]
         ] ] ];
-        drawAllCharts(data, metadata, visualizations[viz], 'test');
+        drawAllCharts(data, metadata, visualizations[viz], 'test', 0);
         const squares = document.querySelectorAll('#test .legend-container svg rect');
         expect(squares.length).toBe(metadata.fullColorDomain.length);
     });
 
     test('Pie chart should render arcs', () => {
-        drawAllCharts(pieData, pieMetadata, pieSpec, 'test');
+        drawAllCharts(pieData, pieMetadata, pieSpec, 'test', 0);
         const arcs = document.querySelectorAll('#test .chart-container svg path.slice');
         expect(arcs.length).toBe(3);
     });
 
     test('Bar chart should have tooltips', () => {
-        drawAllCharts(data, metadata, visualizations[viz], 'test');
+        drawAllCharts(data, metadata, visualizations[viz], 'test', 0);
         document.querySelectorAll('#test .chart-container svg rect.bar')
             .forEach(slice => {
                 expect(slice._tippy).toBeTruthy();
@@ -147,7 +147,7 @@ describe('Unit tests for drawAllCharts', () => {
     });
 
     test('Pie chart should have tooltips', () => {
-        drawAllCharts(pieData, pieMetadata, pieSpec, 'test');
+        drawAllCharts(pieData, pieMetadata, pieSpec, 'test', 0);
         document.querySelectorAll('#test .chart-container svg path.slice')
             .forEach(slice => {
                 expect(slice._tippy).toBeTruthy();

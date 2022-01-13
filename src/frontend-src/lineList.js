@@ -14,9 +14,9 @@ function initTable(columns, tabName, id) {
     });
 }
 
-async function drawLineList(rows, { columns }, tabName, vizName) {
+async function drawLineList(rows, { columns }, tabName, vizName, vizIndex) {
     const id = `${tabName}-list`;
-    const container = select.listWrapper(tabName);
+    const container = select.listWrapper(tabName, vizIndex);
     container.innerHTML = tableTemplate({ rows, columns, tabName, id, getDataName });
     select.lineListButton(tabName).onclick = function() {
         downloadAsCSV(rows, vizName + '.csv');

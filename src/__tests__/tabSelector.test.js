@@ -10,7 +10,7 @@ const select = require('../frontend-src/selectors');
 const tabVisualizations = {
     'Export': {
         tabLabel: 'Export',
-        includeExport: true
+        exportTab: true
     },
     'tab_1': {
         tabLabel: 'tab_1',
@@ -36,30 +36,30 @@ beforeEach(() => {
         <button id="tab_2-tab" class="tabs">tab_2</button>
     </nav>
     <div id="Export">
-        <div class="map-container">test</div>
-        <div class="chart-container">test</div>
-        <div class="legend-container">test</div>
+        <div class="map-container map-container-0">test</div>
+        <div class="chart-container chart-container-0">test</div>
+        <div class="legend-container legend-container-0">test</div>
     </div>
     <div id="tab_1">
-        <div class="map-container">test</div>
-        <div class="chart-container">test</div>
-        <div class="legend-container">test</div>
+        <div class="map-container map-container-0">test</div>
+        <div class="chart-container chart-container-0">test</div>
+        <div class="legend-container legend-container-0">test</div>
     </div>
     <div id="tab_2">
-        <div class="map-container">test</div>
-        <div class="chart-container">test</div>
-        <div class="legend-container">test</div>
+        <div class="map-container map-container-0">test</div>
+        <div class="chart-container chart-container-0">test</div>
+        <div class="legend-container legend-container-0">test</div>
     </div>`;
 });
 
 function checkDisplayStyle(bool, tabName) {
-    expect(select.tabContent(tabName).classList.contains('hidden')).toBe(bool);
+    expect(select.tabContent(tabName, 0).classList.contains('hidden')).toBe(bool);
 }
 const expectVisible = checkDisplayStyle.bind({}, false);
 const expectHidden = checkDisplayStyle.bind({}, true);
 
 function checkTabActive(bool, tabName) {
-    expect(select.tab(tabName).classList.contains('active')).toBe(bool);
+    expect(select.tab(tabName, 0).classList.contains('active')).toBe(bool);
 }
 const expectActive = checkTabActive.bind({}, true);
 const expectInactive = checkTabActive.bind({}, false);
@@ -102,19 +102,19 @@ function checkTab2() {
 
 describe('Unit tests for tabSelector', () => {
     test('Check that elements are shown/hidden properly', () => {
-        tabSelector(tabVisualizations, 'Export');
+        tabSelector(null, tabVisualizations, 'Export');
         checkExportTab();
 
-        tabSelector(tabVisualizations, 'tab_1');
+        tabSelector(null, tabVisualizations, 'tab_1');
         checkTab1();
 
-        tabSelector(tabVisualizations, 'Export');
+        tabSelector(null, tabVisualizations, 'Export');
         checkExportTab();
 
-        tabSelector(tabVisualizations, 'tab_2');
+        tabSelector(null, tabVisualizations, 'tab_2');
         checkTab2();
 
-        tabSelector(tabVisualizations, 'Export');
+        tabSelector(null, tabVisualizations, 'Export');
         checkExportTab();
     });
 });

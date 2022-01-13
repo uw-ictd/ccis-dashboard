@@ -5,7 +5,7 @@ const drawLineList = require('../frontend-src/lineList');
 
 beforeEach(() => {
     document.body.innerHTML = `<div id="someTab">
-        <div class="list-wrapper"></div>
+        <div class="list-wrapper list-wrapper-0"></div>
     </div>`;
 });
 
@@ -17,7 +17,7 @@ describe('Line list visualization tests', () => {
     ];
 
     test('lineList makes a table', () => {
-        drawLineList(rows, { columns }, 'someTab', 'someViz');
+        drawLineList(rows, { columns }, 'someTab', 'someViz', 0);
         const table = document.querySelector('.list-wrapper table');
         expect(table).toBeTruthy;
         const tableRows = document.querySelectorAll('.list-wrapper table tr');
