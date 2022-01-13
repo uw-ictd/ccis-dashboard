@@ -1,0 +1,8 @@
+<!-- begin tab <%=tabName%>-->
+<div id="<%=tabName%>" class="bottom-wrapper multiviz">
+    <% Object.entries(tab.visualizations).forEach((viz, index) => { %>
+        <%- include('viz', { index }) %>
+    <% }); %>
+    <!-- end right main wrapper -->
+</div>
+<!-- end tab <%=tabName%>-->

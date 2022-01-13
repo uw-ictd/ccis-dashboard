@@ -7,7 +7,7 @@ const missing_data_fill_color = 'gray';
 const missing_data_opacity = 0.5;
 const { getColorFromName } = require('./colorScale');
 
-module.exports = function(mapboxgl, map, data, visualization) {
+module.exports = function makeHeatmap(mapboxgl, map, data, visualization) {
     const regionLevelIndex = shapefiles.levelNames.indexOf(visualization.regionLevel);
     const drawBoundary = _drawLayer.bind({}, map, mapboxgl, data, visualization, regionLevelIndex);
 

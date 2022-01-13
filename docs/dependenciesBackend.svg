@@ -47,8 +47,11 @@
 <!-- fs -->
 <g id="node1" class="node">
 <title>fs</title>
+<g id="a_node1"><a xlink:title="fs">
 <path fill="#ffffcc" stroke="grey" d="M134,-18C134,-18 92,-18 92,-18 89,-18 86,-15 86,-12 86,-12 86,-6 86,-6 86,-3 89,0 92,0 92,0 134,0 134,0 137,0 140,-3 140,-6 140,-6 140,-12 140,-12 140,-15 137,-18 134,-18"/>
 <text text-anchor="middle" x="113" y="-6.8" font-family="Helvetica,sans-Serif" font-size="9.00" fill="grey">fs</text>
+</a>
+</g>
 </g>
 <!-- package.json -->
 <g id="node2" class="node">
@@ -62,15 +65,18 @@
 <!-- path -->
 <g id="node3" class="node">
 <title>path</title>
+<g id="a_node3"><a xlink:title="path">
 <path fill="#ffffcc" stroke="grey" d="M608,-60C608,-60 566,-60 566,-60 563,-60 560,-57 560,-54 560,-54 560,-48 560,-48 560,-45 563,-42 566,-42 566,-42 608,-42 608,-42 611,-42 614,-45 614,-48 614,-48 614,-54 614,-54 614,-57 611,-60 608,-60"/>
 <text text-anchor="middle" x="587" y="-48.8" font-family="Helvetica,sans-Serif" font-size="9.00" fill="grey">path</text>
+</a>
+</g>
 </g>
 <!-- src/config/Uganda_Districts_2020.json -->
 <g id="node4" class="node">
 <title>src/config/Uganda_Districts_2020.json</title>
 <g id="a_node4"><a xlink:href="src/config/Uganda_Districts_2020.json" xlink:title="Uganda_Districts_2020.json">
 <path fill="#ffee44" stroke="black" d="M519.5,-231C519.5,-231 398.5,-231 398.5,-231 395.5,-231 392.5,-228 392.5,-225 392.5,-225 392.5,-219 392.5,-219 392.5,-216 395.5,-213 398.5,-213 398.5,-213 519.5,-213 519.5,-213 522.5,-213 525.5,-216 525.5,-219 525.5,-219 525.5,-225 525.5,-225 525.5,-228 522.5,-231 519.5,-231"/>
-<text text-anchor="middle" x="459" y="-219.8" font-family="Helvetica,sans-Serif" font-size="9.00">Uganda_Districts_2020.json</text>
+<text text-anchor="start" x="400.5" y="-219.8" font-family="Helvetica,sans-Serif" font-size="9.00">Uganda_Districts_2020.json</text>
 </a>
 </g>
 </g>
@@ -79,7 +85,7 @@
 <title>src/config/Uganda_Regions_2020.json</title>
 <g id="a_node5"><a xlink:href="src/config/Uganda_Regions_2020.json" xlink:title="Uganda_Regions_2020.json">
 <path fill="#ffee44" stroke="black" d="M520.5,-261C520.5,-261 397.5,-261 397.5,-261 394.5,-261 391.5,-258 391.5,-255 391.5,-255 391.5,-249 391.5,-249 391.5,-246 394.5,-243 397.5,-243 397.5,-243 520.5,-243 520.5,-243 523.5,-243 526.5,-246 526.5,-249 526.5,-249 526.5,-255 526.5,-255 526.5,-258 523.5,-261 520.5,-261"/>
-<text text-anchor="middle" x="459" y="-249.8" font-family="Helvetica,sans-Serif" font-size="9.00">Uganda_Regions_2020.json</text>
+<text text-anchor="start" x="399.5" y="-249.8" font-family="Helvetica,sans-Serif" font-size="9.00">Uganda_Regions_2020.json</text>
 </a>
 </g>
 </g>
@@ -88,7 +94,7 @@
 <title>src/config/computedColumns.js</title>
 <g id="a_node6"><a xlink:href="src/config/computedColumns.js" xlink:title="computedColumns.js">
 <path fill="#ffffcc" stroke="black" d="M370.5,-306C370.5,-306 279.5,-306 279.5,-306 276.5,-306 273.5,-303 273.5,-300 273.5,-300 273.5,-294 273.5,-294 273.5,-291 276.5,-288 279.5,-288 279.5,-288 370.5,-288 370.5,-288 373.5,-288 376.5,-291 376.5,-294 376.5,-294 376.5,-300 376.5,-300 376.5,-303 373.5,-306 370.5,-306"/>
-<text text-anchor="middle" x="325" y="-294.8" font-family="Helvetica,sans-Serif" font-size="9.00">computedColumns.js</text>
+<text text-anchor="start" x="281.5" y="-294.8" font-family="Helvetica,sans-Serif" font-size="9.00">computedColumns.js</text>
 </a>
 </g>
 </g>
@@ -96,53 +102,53 @@
 <g id="node7" class="node">
 <title>src/model/refrigeratorClasses.json</title>
 <g id="a_node7"><a xlink:href="src/model/refrigeratorClasses.json" xlink:title="refrigeratorClasses.json">
-<path fill="#ffee44" stroke="black" d="M510,-576C510,-576 408,-576 408,-576 405,-576 402,-573 402,-570 402,-570 402,-564 402,-564 402,-561 405,-558 408,-558 408,-558 510,-558 510,-558 513,-558 516,-561 516,-564 516,-564 516,-570 516,-570 516,-573 513,-576 510,-576"/>
-<text text-anchor="middle" x="459" y="-564.8" font-family="Helvetica,sans-Serif" font-size="9.00">refrigeratorClasses.json</text>
+<path fill="#ffee44" stroke="black" d="M510,-606C510,-606 408,-606 408,-606 405,-606 402,-603 402,-600 402,-600 402,-594 402,-594 402,-591 405,-588 408,-588 408,-588 510,-588 510,-588 513,-588 516,-591 516,-594 516,-594 516,-600 516,-600 516,-603 513,-606 510,-606"/>
+<text text-anchor="start" x="410" y="-594.8" font-family="Helvetica,sans-Serif" font-size="9.00">refrigeratorClasses.json</text>
 </a>
 </g>
 </g>
 <!-- src/config/computedColumns.js&#45;&gt;src/model/refrigeratorClasses.json -->
 <g id="edge1" class="edge">
 <title>src/config/computedColumns.js&#45;&gt;src/model/refrigeratorClasses.json</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M344.1,-306.04C355.59,-312.84 369.57,-323.34 376.5,-337 386.97,-357.62 370.33,-526.72 384.5,-545 387.78,-549.24 391.85,-552.69 396.38,-555.49"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="395.61,-557.46 401.88,-558.49 397.62,-553.78 395.61,-557.46"/>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M344.12,-306.02C355.63,-312.82 369.6,-323.32 376.5,-337 388.76,-361.32 366.93,-561.19 384.5,-582 387.75,-585.85 391.69,-588.88 396.05,-591.24"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="395.44,-593.28 401.76,-593.9 397.21,-589.47 395.44,-593.28"/>
 </g>
 <!-- src/config/filterSpecification.js -->
 <g id="node8" class="node">
 <title>src/config/filterSpecification.js</title>
 <g id="a_node8"><a xlink:href="src/config/filterSpecification.js" xlink:title="filterSpecification.js">
 <path fill="#ffffcc" stroke="black" d="M366.5,-276C366.5,-276 283.5,-276 283.5,-276 280.5,-276 277.5,-273 277.5,-270 277.5,-270 277.5,-264 277.5,-264 277.5,-261 280.5,-258 283.5,-258 283.5,-258 366.5,-258 366.5,-258 369.5,-258 372.5,-261 372.5,-264 372.5,-264 372.5,-270 372.5,-270 372.5,-273 369.5,-276 366.5,-276"/>
-<text text-anchor="middle" x="325" y="-264.8" font-family="Helvetica,sans-Serif" font-size="9.00">filterSpecification.js</text>
+<text text-anchor="start" x="285.5" y="-264.8" font-family="Helvetica,sans-Serif" font-size="9.00">filterSpecification.js</text>
 </a>
 </g>
 </g>
 <!-- src/config/filterSpecification.js&#45;&gt;src/model/refrigeratorClasses.json -->
 <g id="edge3" class="edge">
 <title>src/config/filterSpecification.js&#45;&gt;src/model/refrigeratorClasses.json</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M370.23,-276.03C372.59,-277.71 374.71,-279.68 376.5,-282 394.34,-305.16 366.69,-521.82 384.5,-545 387.77,-549.25 391.82,-552.71 396.34,-555.52"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="395.56,-557.49 401.83,-558.53 397.58,-553.8 395.56,-557.49"/>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M370.24,-276.02C372.59,-277.7 374.72,-279.68 376.5,-282 396.8,-308.46 363.07,-556.45 384.5,-582 387.74,-585.86 391.67,-588.89 396.02,-591.27"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="395.41,-593.3 401.73,-593.93 397.18,-589.49 395.41,-593.3"/>
 </g>
 <!-- src/model/facilityClasses.json -->
 <g id="node9" class="node">
 <title>src/model/facilityClasses.json</title>
 <g id="a_node9"><a xlink:href="src/model/facilityClasses.json" xlink:title="facilityClasses.json">
-<path fill="#ffee44" stroke="black" d="M500.5,-606C500.5,-606 417.5,-606 417.5,-606 414.5,-606 411.5,-603 411.5,-600 411.5,-600 411.5,-594 411.5,-594 411.5,-591 414.5,-588 417.5,-588 417.5,-588 500.5,-588 500.5,-588 503.5,-588 506.5,-591 506.5,-594 506.5,-594 506.5,-600 506.5,-600 506.5,-603 503.5,-606 500.5,-606"/>
-<text text-anchor="middle" x="459" y="-594.8" font-family="Helvetica,sans-Serif" font-size="9.00">facilityClasses.json</text>
+<path fill="#ffee44" stroke="black" d="M500.5,-576C500.5,-576 417.5,-576 417.5,-576 414.5,-576 411.5,-573 411.5,-570 411.5,-570 411.5,-564 411.5,-564 411.5,-561 414.5,-558 417.5,-558 417.5,-558 500.5,-558 500.5,-558 503.5,-558 506.5,-561 506.5,-564 506.5,-564 506.5,-570 506.5,-570 506.5,-573 503.5,-576 500.5,-576"/>
+<text text-anchor="start" x="419.5" y="-564.8" font-family="Helvetica,sans-Serif" font-size="9.00">facilityClasses.json</text>
 </a>
 </g>
 </g>
 <!-- src/config/filterSpecification.js&#45;&gt;src/model/facilityClasses.json -->
 <g id="edge2" class="edge">
 <title>src/config/filterSpecification.js&#45;&gt;src/model/facilityClasses.json</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M370.24,-276.02C372.59,-277.7 374.72,-279.68 376.5,-282 396.8,-308.46 363.07,-556.45 384.5,-582 389.9,-588.44 397.25,-592.59 405.23,-595.19"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="405.08,-597.32 411.42,-596.88 406.19,-593.27 405.08,-597.32"/>
+<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M370.23,-276.03C372.59,-277.71 374.71,-279.68 376.5,-282 394.34,-305.16 366.69,-521.82 384.5,-545 389.84,-551.95 397.29,-556.78 405.42,-560.12"/>
+<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="404.78,-562.12 411.13,-562.21 406.22,-558.18 404.78,-562.12"/>
 </g>
 <!-- src/config/shapefiles.js -->
 <g id="node10" class="node">
 <title>src/config/shapefiles.js</title>
 <g id="a_node10"><a xlink:href="src/config/shapefiles.js" xlink:title="shapefiles.js">
 <path fill="#ffffcc" stroke="black" d="M353,-246C353,-246 297,-246 297,-246 294,-246 291,-243 291,-240 291,-240 291,-234 291,-234 291,-231 294,-228 297,-228 297,-228 353,-228 353,-228 356,-228 359,-231 359,-234 359,-234 359,-240 359,-240 359,-243 356,-246 353,-246"/>
-<text text-anchor="middle" x="325" y="-234.8" font-family="Helvetica,sans-Serif" font-size="9.00">shapefiles.js</text>
+<text text-anchor="start" x="299" y="-234.8" font-family="Helvetica,sans-Serif" font-size="9.00">shapefiles.js</text>
 </a>
 </g>
 </g>
@@ -163,7 +169,7 @@
 <title>src/config/tabVisualizations.js</title>
 <g id="a_node11"><a xlink:href="src/config/tabVisualizations.js" xlink:title="tabVisualizations.js">
 <path fill="#ffffcc" stroke="black" d="M366.5,-216C366.5,-216 283.5,-216 283.5,-216 280.5,-216 277.5,-213 277.5,-210 277.5,-210 277.5,-204 277.5,-204 277.5,-201 280.5,-198 283.5,-198 283.5,-198 366.5,-198 366.5,-198 369.5,-198 372.5,-201 372.5,-204 372.5,-204 372.5,-210 372.5,-210 372.5,-213 369.5,-216 366.5,-216"/>
-<text text-anchor="middle" x="325" y="-204.8" font-family="Helvetica,sans-Serif" font-size="9.00">tabVisualizations.js</text>
+<text text-anchor="start" x="285.5" y="-204.8" font-family="Helvetica,sans-Serif" font-size="9.00">tabVisualizations.js</text>
 </a>
 </g>
 </g>
@@ -172,22 +178,16 @@
 <title>src/config/visualizations.js</title>
 <g id="a_node12"><a xlink:href="src/config/visualizations.js" xlink:title="visualizations.js">
 <path fill="#ffffcc" stroke="black" d="M359.5,-186C359.5,-186 290.5,-186 290.5,-186 287.5,-186 284.5,-183 284.5,-180 284.5,-180 284.5,-174 284.5,-174 284.5,-171 287.5,-168 290.5,-168 290.5,-168 359.5,-168 359.5,-168 362.5,-168 365.5,-171 365.5,-174 365.5,-174 365.5,-180 365.5,-180 365.5,-183 362.5,-186 359.5,-186"/>
-<text text-anchor="middle" x="325" y="-174.8" font-family="Helvetica,sans-Serif" font-size="9.00">visualizations.js</text>
+<text text-anchor="start" x="292.5" y="-174.8" font-family="Helvetica,sans-Serif" font-size="9.00">visualizations.js</text>
 </a>
 </g>
-</g>
-<!-- src/config/visualizations.js&#45;&gt;src/model/refrigeratorClasses.json -->
-<g id="edge6" class="edge">
-<title>src/config/visualizations.js&#45;&gt;src/model/refrigeratorClasses.json</title>
-<path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M365.6,-183.2C369.82,-185.36 373.61,-188.22 376.5,-192 400.32,-223.18 360.72,-513.8 384.5,-545 387.75,-549.26 391.8,-552.73 396.3,-555.55"/>
-<polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="395.52,-557.51 401.79,-558.56 397.54,-553.83 395.52,-557.51"/>
 </g>
 <!-- src/controller/exportQueries.js -->
 <g id="node13" class="node">
 <title>src/controller/exportQueries.js</title>
 <g id="a_node13"><a xlink:href="src/controller/exportQueries.js" xlink:title="exportQueries.js">
 <path fill="#ffffcc" stroke="black" d="M238,-516C238,-516 167,-516 167,-516 164,-516 161,-513 161,-510 161,-510 161,-504 161,-504 161,-501 164,-498 167,-498 167,-498 238,-498 238,-498 241,-498 244,-501 244,-504 244,-504 244,-510 244,-510 244,-513 241,-516 238,-516"/>
-<text text-anchor="middle" x="202.5" y="-504.8" font-family="Helvetica,sans-Serif" font-size="9.00">exportQueries.js</text>
+<text text-anchor="start" x="169" y="-504.8" font-family="Helvetica,sans-Serif" font-size="9.00">exportQueries.js</text>
 </a>
 </g>
 </g>
@@ -196,7 +196,7 @@
 <title>src/controller/filterOptions.js</title>
 <g id="a_node14"><a xlink:href="src/controller/filterOptions.js" xlink:title="filterOptions.js">
 <path fill="#ffffcc" stroke="black" d="M356,-424C356,-424 294,-424 294,-424 291,-424 288,-421 288,-418 288,-418 288,-412 288,-412 288,-409 291,-406 294,-406 294,-406 356,-406 356,-406 359,-406 362,-409 362,-412 362,-412 362,-418 362,-418 362,-421 359,-424 356,-424"/>
-<text text-anchor="middle" x="325" y="-412.8" font-family="Helvetica,sans-Serif" font-size="9.00">filterOptions.js</text>
+<text text-anchor="start" x="296" y="-412.8" font-family="Helvetica,sans-Serif" font-size="9.00">filterOptions.js</text>
 </a>
 </g>
 </g>
@@ -205,12 +205,12 @@
 <title>src/util/mergeFilterOptions.js</title>
 <g id="a_node15"><a xlink:href="src/util/mergeFilterOptions.js" xlink:title="mergeFilterOptions.js">
 <path fill="#ffffcc" stroke="black" d="M505,-396C505,-396 413,-396 413,-396 410,-396 407,-393 407,-390 407,-390 407,-384 407,-384 407,-381 410,-378 413,-378 413,-378 505,-378 505,-378 508,-378 511,-381 511,-384 511,-384 511,-390 511,-390 511,-393 508,-396 505,-396"/>
-<text text-anchor="middle" x="459" y="-384.8" font-family="Helvetica,sans-Serif" font-size="9.00">mergeFilterOptions.js</text>
+<text text-anchor="start" x="415" y="-384.8" font-family="Helvetica,sans-Serif" font-size="9.00">mergeFilterOptions.js</text>
 </a>
 </g>
 </g>
 <!-- src/controller/filterOptions.js&#45;&gt;src/util/mergeFilterOptions.js -->
-<g id="edge7" class="edge">
+<g id="edge6" class="edge">
 <title>src/controller/filterOptions.js&#45;&gt;src/util/mergeFilterOptions.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M362.18,-406.86C369.56,-405.23 377.28,-403.54 384.5,-402 391.66,-400.47 399.23,-398.89 406.67,-397.36"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="407.43,-399.34 412.88,-396.08 406.58,-395.23 407.43,-399.34"/>
@@ -220,12 +220,12 @@
 <title>src/controller/formatResponse.js</title>
 <g id="a_node16"><a xlink:href="src/controller/formatResponse.js" xlink:title="formatResponse.js">
 <path fill="#ffffcc" stroke="black" d="M243,-366C243,-366 162,-366 162,-366 159,-366 156,-363 156,-360 156,-360 156,-354 156,-354 156,-351 159,-348 162,-348 162,-348 243,-348 243,-348 246,-348 249,-351 249,-354 249,-354 249,-360 249,-360 249,-363 246,-366 243,-366"/>
-<text text-anchor="middle" x="202.5" y="-354.8" font-family="Helvetica,sans-Serif" font-size="9.00">formatResponse.js</text>
+<text text-anchor="start" x="164" y="-354.8" font-family="Helvetica,sans-Serif" font-size="9.00">formatResponse.js</text>
 </a>
 </g>
 </g>
 <!-- src/controller/formatResponse.js&#45;&gt;src/config/visualizations.js -->
-<g id="edge8" class="edge">
+<g id="edge7" class="edge">
 <title>src/controller/formatResponse.js&#45;&gt;src/config/visualizations.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M241.62,-347.9C247.82,-344.78 253.5,-340.6 257.5,-335 275.99,-309.09 245.29,-216.59 265.5,-192 269.02,-187.72 273.58,-184.56 278.6,-182.25"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="279.38,-184.21 284.21,-180.07 277.85,-180.29 279.38,-184.21"/>
@@ -235,42 +235,42 @@
 <title>src/controller/getIndexData.js</title>
 <g id="a_node17"><a xlink:href="src/controller/getIndexData.js" xlink:title="getIndexData.js">
 <path fill="#ffffcc" stroke="black" d="M236.5,-426C236.5,-426 168.5,-426 168.5,-426 165.5,-426 162.5,-423 162.5,-420 162.5,-420 162.5,-414 162.5,-414 162.5,-411 165.5,-408 168.5,-408 168.5,-408 236.5,-408 236.5,-408 239.5,-408 242.5,-411 242.5,-414 242.5,-414 242.5,-420 242.5,-420 242.5,-423 239.5,-426 236.5,-426"/>
-<text text-anchor="middle" x="202.5" y="-414.8" font-family="Helvetica,sans-Serif" font-size="9.00">getIndexData.js</text>
+<text text-anchor="start" x="170.5" y="-414.8" font-family="Helvetica,sans-Serif" font-size="9.00">getIndexData.js</text>
 </a>
 </g>
 </g>
 <!-- src/controller/getIndexData.js&#45;&gt;package.json -->
-<g id="edge9" class="edge">
+<g id="edge8" class="edge">
 <title>src/controller/getIndexData.js&#45;&gt;package.json</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M242.59,-412.63C248.38,-410.3 253.67,-406.91 257.5,-402 278.37,-375.28 247.83,-125.93 265.5,-97 270.95,-88.08 279.83,-81.47 289.04,-76.65"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="290,-78.53 294.48,-74.02 288.17,-74.74 290,-78.53"/>
 </g>
 <!-- src/controller/getIndexData.js&#45;&gt;src/config/filterSpecification.js -->
-<g id="edge10" class="edge">
+<g id="edge9" class="edge">
 <title>src/controller/getIndexData.js&#45;&gt;src/config/filterSpecification.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M242.7,-412.38C248.39,-410.08 253.63,-406.75 257.5,-402 274.37,-381.27 248.42,-302.56 265.5,-282 267.41,-279.7 269.62,-277.73 272.04,-276.04"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="273.17,-277.81 277.27,-272.95 271.03,-274.19 273.17,-277.81"/>
 </g>
 <!-- src/controller/getIndexData.js&#45;&gt;src/config/tabVisualizations.js -->
-<g id="edge11" class="edge">
+<g id="edge10" class="edge">
 <title>src/controller/getIndexData.js&#45;&gt;src/config/tabVisualizations.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M242.52,-412.57C248.31,-410.25 253.62,-406.87 257.5,-402 269.97,-386.33 252.88,-237.54 265.5,-222 267.42,-219.63 269.66,-217.61 272.13,-215.88"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="273.36,-217.59 277.46,-212.74 271.23,-213.98 273.36,-217.59"/>
 </g>
 <!-- src/controller/getIndexData.js&#45;&gt;src/config/visualizations.js -->
-<g id="edge12" class="edge">
+<g id="edge11" class="edge">
 <title>src/controller/getIndexData.js&#45;&gt;src/config/visualizations.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M242.55,-412.59C248.33,-410.27 253.64,-406.89 257.5,-402 271.98,-383.68 250.84,-210.17 265.5,-192 269.03,-187.63 273.65,-184.43 278.74,-182.1"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="279.58,-184.02 284.43,-179.91 278.07,-180.11 279.58,-184.02"/>
 </g>
 <!-- src/controller/getIndexData.js&#45;&gt;src/controller/filterOptions.js -->
-<g id="edge13" class="edge">
+<g id="edge12" class="edge">
 <title>src/controller/getIndexData.js&#45;&gt;src/controller/filterOptions.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M242.62,-416.35C255.14,-416.14 269.06,-415.91 281.79,-415.7"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="281.97,-417.8 287.93,-415.6 281.9,-413.6 281.97,-417.8"/>
 </g>
 <!-- src/controller/getIndexData.js&#45;&gt;src/util/mergeFilterOptions.js -->
-<g id="edge16" class="edge">
+<g id="edge15" class="edge">
 <title>src/controller/getIndexData.js&#45;&gt;src/util/mergeFilterOptions.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M242.63,-409.94C247.93,-407.93 253.07,-405.33 257.5,-402 262.92,-397.92 259.6,-392.34 265.5,-389 287.82,-376.38 352.54,-378.17 400.81,-381.63"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="400.77,-383.73 406.91,-382.08 401.08,-379.54 400.77,-383.73"/>
@@ -280,12 +280,12 @@
 <title>src/shared/exportOptions.js</title>
 <g id="a_node18"><a xlink:href="src/shared/exportOptions.js" xlink:title="exportOptions.js">
 <path fill="#ffffcc" stroke="black" d="M360.5,-126C360.5,-126 289.5,-126 289.5,-126 286.5,-126 283.5,-123 283.5,-120 283.5,-120 283.5,-114 283.5,-114 283.5,-111 286.5,-108 289.5,-108 289.5,-108 360.5,-108 360.5,-108 363.5,-108 366.5,-111 366.5,-114 366.5,-114 366.5,-120 366.5,-120 366.5,-123 363.5,-126 360.5,-126"/>
-<text text-anchor="middle" x="325" y="-114.8" font-family="Helvetica,sans-Serif" font-size="9.00">exportOptions.js</text>
+<text text-anchor="start" x="291.5" y="-114.8" font-family="Helvetica,sans-Serif" font-size="9.00">exportOptions.js</text>
 </a>
 </g>
 </g>
 <!-- src/controller/getIndexData.js&#45;&gt;src/shared/exportOptions.js -->
-<g id="edge14" class="edge">
+<g id="edge13" class="edge">
 <title>src/controller/getIndexData.js&#45;&gt;src/shared/exportOptions.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M242.57,-412.6C248.35,-410.28 253.65,-406.9 257.5,-402 274.33,-380.59 252.4,-180.88 265.5,-157 272.21,-144.76 284.46,-135.52 296.03,-129.01"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="297.31,-130.71 301.62,-126.04 295.34,-127 297.31,-130.71"/>
@@ -295,12 +295,12 @@
 <title>src/util/configValidation.js</title>
 <g id="a_node19"><a xlink:href="src/util/configValidation.js" xlink:title="configValidation.js">
 <path fill="#ffffcc" stroke="black" d="M498.5,-456C498.5,-456 419.5,-456 419.5,-456 416.5,-456 413.5,-453 413.5,-450 413.5,-450 413.5,-444 413.5,-444 413.5,-441 416.5,-438 419.5,-438 419.5,-438 498.5,-438 498.5,-438 501.5,-438 504.5,-441 504.5,-444 504.5,-444 504.5,-450 504.5,-450 504.5,-453 501.5,-456 498.5,-456"/>
-<text text-anchor="middle" x="459" y="-444.8" font-family="Helvetica,sans-Serif" font-size="9.00">configValidation.js</text>
+<text text-anchor="start" x="421.5" y="-444.8" font-family="Helvetica,sans-Serif" font-size="9.00">configValidation.js</text>
 </a>
 </g>
 </g>
 <!-- src/controller/getIndexData.js&#45;&gt;src/util/configValidation.js -->
-<g id="edge15" class="edge">
+<g id="edge14" class="edge">
 <title>src/controller/getIndexData.js&#45;&gt;src/util/configValidation.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M242.73,-425.96C250.26,-427.47 258.1,-428.9 265.5,-430 313.38,-437.11 368.44,-441.6 407.37,-444.17"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="407.36,-446.28 413.48,-444.57 407.63,-442.09 407.36,-446.28"/>
@@ -310,12 +310,12 @@
 <title>src/util/configSchemas.js</title>
 <g id="a_node36"><a xlink:href="src/util/configSchemas.js" xlink:title="configSchemas.js">
 <path fill="#ffffcc" stroke="black" d="M625.5,-411C625.5,-411 548.5,-411 548.5,-411 545.5,-411 542.5,-408 542.5,-405 542.5,-405 542.5,-399 542.5,-399 542.5,-396 545.5,-393 548.5,-393 548.5,-393 625.5,-393 625.5,-393 628.5,-393 631.5,-396 631.5,-399 631.5,-399 631.5,-405 631.5,-405 631.5,-408 628.5,-411 625.5,-411"/>
-<text text-anchor="middle" x="587" y="-399.8" font-family="Helvetica,sans-Serif" font-size="9.00">configSchemas.js</text>
+<text text-anchor="start" x="550.5" y="-399.8" font-family="Helvetica,sans-Serif" font-size="9.00">configSchemas.js</text>
 </a>
 </g>
 </g>
 <!-- src/util/configValidation.js&#45;&gt;src/util/configSchemas.js -->
-<g id="edge49" class="edge">
+<g id="edge48" class="edge">
 <title>src/util/configValidation.js&#45;&gt;src/util/configSchemas.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M504.8,-440.46C514.75,-438.33 525.13,-435.56 534.5,-432 546.25,-427.53 558.45,-420.55 568.02,-414.44"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="569.17,-416.2 573.05,-411.16 566.88,-412.68 569.17,-416.2"/>
@@ -325,7 +325,7 @@
 <title>src/controller/indicatorQueries.js</title>
 <g id="a_node20"><a xlink:href="src/controller/indicatorQueries.js" xlink:title="indicatorQueries.js">
 <path fill="#ffffcc" stroke="black" d="M243,-396C243,-396 162,-396 162,-396 159,-396 156,-393 156,-390 156,-390 156,-384 156,-384 156,-381 159,-378 162,-378 162,-378 243,-378 243,-378 246,-378 249,-381 249,-384 249,-384 249,-390 249,-390 249,-393 246,-396 243,-396"/>
-<text text-anchor="middle" x="202.5" y="-384.8" font-family="Helvetica,sans-Serif" font-size="9.00">indicatorQueries.js</text>
+<text text-anchor="start" x="164" y="-384.8" font-family="Helvetica,sans-Serif" font-size="9.00">indicatorQueries.js</text>
 </a>
 </g>
 </g>
@@ -334,12 +334,12 @@
 <title>src/controller/legendQuery.js</title>
 <g id="a_node21"><a xlink:href="src/controller/legendQuery.js" xlink:title="legendQuery.js">
 <path fill="#ffffcc" stroke="black" d="M236,-486C236,-486 169,-486 169,-486 166,-486 163,-483 163,-480 163,-480 163,-474 163,-474 163,-471 166,-468 169,-468 169,-468 236,-468 236,-468 239,-468 242,-471 242,-474 242,-474 242,-480 242,-480 242,-483 239,-486 236,-486"/>
-<text text-anchor="middle" x="202.5" y="-474.8" font-family="Helvetica,sans-Serif" font-size="9.00">legendQuery.js</text>
+<text text-anchor="start" x="171" y="-474.8" font-family="Helvetica,sans-Serif" font-size="9.00">legendQuery.js</text>
 </a>
 </g>
 </g>
 <!-- src/controller/legendQuery.js&#45;&gt;src/config/computedColumns.js -->
-<g id="edge17" class="edge">
+<g id="edge16" class="edge">
 <title>src/controller/legendQuery.js&#45;&gt;src/config/computedColumns.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M242.17,-472.61C248.07,-470.29 253.51,-466.91 257.5,-462 275.04,-440.39 251.73,-361.19 265.5,-337 272.4,-324.87 284.68,-315.64 296.2,-309.11"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="297.48,-310.81 301.78,-306.13 295.49,-307.11 297.48,-310.81"/>
@@ -349,12 +349,12 @@
 <title>src/model/tableName.js</title>
 <g id="a_node22"><a xlink:href="src/model/tableName.js" xlink:title="tableName.js">
 <path fill="#ffffcc" stroke="black" d="M488.5,-636C488.5,-636 429.5,-636 429.5,-636 426.5,-636 423.5,-633 423.5,-630 423.5,-630 423.5,-624 423.5,-624 423.5,-621 426.5,-618 429.5,-618 429.5,-618 488.5,-618 488.5,-618 491.5,-618 494.5,-621 494.5,-624 494.5,-624 494.5,-630 494.5,-630 494.5,-633 491.5,-636 488.5,-636"/>
-<text text-anchor="middle" x="459" y="-624.8" font-family="Helvetica,sans-Serif" font-size="9.00">tableName.js</text>
+<text text-anchor="start" x="431.5" y="-624.8" font-family="Helvetica,sans-Serif" font-size="9.00">tableName.js</text>
 </a>
 </g>
 </g>
 <!-- src/controller/legendQuery.js&#45;&gt;src/model/tableName.js -->
-<g id="edge18" class="edge">
+<g id="edge17" class="edge">
 <title>src/controller/legendQuery.js&#45;&gt;src/model/tableName.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M242.08,-474.96C282.21,-475.16 343.68,-482.4 376.5,-521 389.65,-536.46 370.98,-596.85 384.5,-612 392.77,-621.27 405.08,-625.71 417.28,-627.64"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="417.02,-629.73 423.24,-628.4 417.55,-625.56 417.02,-629.73"/>
@@ -364,12 +364,12 @@
 <title>src/util/searchComputedColumns.js</title>
 <g id="a_node23"><a xlink:href="src/util/searchComputedColumns.js" xlink:title="searchComputedColumns.js">
 <path fill="#ffffcc" stroke="black" d="M519.5,-426C519.5,-426 398.5,-426 398.5,-426 395.5,-426 392.5,-423 392.5,-420 392.5,-420 392.5,-414 392.5,-414 392.5,-411 395.5,-408 398.5,-408 398.5,-408 519.5,-408 519.5,-408 522.5,-408 525.5,-411 525.5,-414 525.5,-414 525.5,-420 525.5,-420 525.5,-423 522.5,-426 519.5,-426"/>
-<text text-anchor="middle" x="459" y="-414.8" font-family="Helvetica,sans-Serif" font-size="9.00">searchComputedColumns.js</text>
+<text text-anchor="start" x="400.5" y="-414.8" font-family="Helvetica,sans-Serif" font-size="9.00">searchComputedColumns.js</text>
 </a>
 </g>
 </g>
 <!-- src/controller/legendQuery.js&#45;&gt;src/util/searchComputedColumns.js -->
-<g id="edge19" class="edge">
+<g id="edge18" class="edge">
 <title>src/controller/legendQuery.js&#45;&gt;src/util/searchComputedColumns.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M238.1,-467.94C274.45,-458.52 333.34,-443.58 384.5,-432 391.45,-430.43 398.78,-428.84 406.02,-427.32"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="406.62,-429.34 412.06,-426.06 405.76,-425.23 406.62,-429.34"/>
@@ -379,42 +379,42 @@
 <title>src/controller/queryTemplate.js</title>
 <g id="a_node24"><a xlink:href="src/controller/queryTemplate.js" xlink:title="queryTemplate.js">
 <path fill="#ffffcc" stroke="black" d="M239.5,-456C239.5,-456 165.5,-456 165.5,-456 162.5,-456 159.5,-453 159.5,-450 159.5,-450 159.5,-444 159.5,-444 159.5,-441 162.5,-438 165.5,-438 165.5,-438 239.5,-438 239.5,-438 242.5,-438 245.5,-441 245.5,-444 245.5,-444 245.5,-450 245.5,-450 245.5,-453 242.5,-456 239.5,-456"/>
-<text text-anchor="middle" x="202.5" y="-444.8" font-family="Helvetica,sans-Serif" font-size="9.00">queryTemplate.js</text>
+<text text-anchor="start" x="167.5" y="-444.8" font-family="Helvetica,sans-Serif" font-size="9.00">queryTemplate.js</text>
 </a>
 </g>
 </g>
 <!-- src/controller/queryTemplate.js&#45;&gt;src/config/computedColumns.js -->
-<g id="edge20" class="edge">
+<g id="edge19" class="edge">
 <title>src/controller/queryTemplate.js&#45;&gt;src/config/computedColumns.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M245.57,-441.03C250.13,-438.83 254.27,-435.9 257.5,-432 271.02,-415.69 254.83,-355.31 265.5,-337 272.58,-324.85 285,-315.58 296.58,-309.03"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="297.87,-310.72 302.17,-306.04 295.89,-307.02 297.87,-310.72"/>
 </g>
 <!-- src/controller/queryTemplate.js&#45;&gt;src/config/filterSpecification.js -->
-<g id="edge21" class="edge">
+<g id="edge20" class="edge">
 <title>src/controller/queryTemplate.js&#45;&gt;src/config/filterSpecification.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M245.69,-441.12C250.22,-438.91 254.33,-435.95 257.5,-432 278.4,-405.97 244.34,-307.82 265.5,-282 267.43,-279.64 269.68,-277.62 272.15,-275.9"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="273.38,-277.61 277.5,-272.77 271.26,-273.99 273.38,-277.61"/>
 </g>
 <!-- src/controller/queryTemplate.js&#45;&gt;src/config/shapefiles.js -->
-<g id="edge22" class="edge">
+<g id="edge21" class="edge">
 <title>src/controller/queryTemplate.js&#45;&gt;src/config/shapefiles.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M245.72,-441.15C250.25,-438.93 254.35,-435.96 257.5,-432 269.97,-416.33 252.88,-267.54 265.5,-252 270.45,-245.9 277.51,-242.09 285.03,-239.75"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="285.56,-241.78 290.83,-238.23 284.5,-237.71 285.56,-241.78"/>
 </g>
 <!-- src/controller/queryTemplate.js&#45;&gt;src/util/configValidation.js -->
-<g id="edge24" class="edge">
+<g id="edge23" class="edge">
 <title>src/controller/queryTemplate.js&#45;&gt;src/util/configValidation.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M245.53,-447C289.84,-447 359.69,-447 407.1,-447"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="407.34,-449.1 413.34,-447 407.34,-444.9 407.34,-449.1"/>
 </g>
 <!-- src/controller/queryTemplate.js&#45;&gt;src/model/tableName.js -->
-<g id="edge23" class="edge">
+<g id="edge22" class="edge">
 <title>src/controller/queryTemplate.js&#45;&gt;src/model/tableName.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M245.58,-450.31C293.92,-454.54 367.76,-462.47 376.5,-472 397.56,-494.97 364.11,-588.43 384.5,-612 392.7,-621.48 405.13,-625.95 417.44,-627.84"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="417.25,-629.93 423.45,-628.57 417.75,-625.76 417.25,-629.93"/>
 </g>
 <!-- src/controller/queryTemplate.js&#45;&gt;src/util/searchComputedColumns.js -->
-<g id="edge25" class="edge">
+<g id="edge24" class="edge">
 <title>src/controller/queryTemplate.js&#45;&gt;src/util/searchComputedColumns.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M245.53,-440.26C249.98,-438.18 254.1,-435.48 257.5,-432 267.73,-421.5 253.94,-409.02 265.5,-400 284.94,-384.82 352.02,-396.99 376.5,-400 380.14,-400.45 380.93,-401.19 384.5,-402 391.45,-403.58 398.78,-405.16 406.01,-406.69"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="405.76,-408.78 412.06,-407.95 406.62,-404.67 405.76,-408.78"/>
@@ -424,7 +424,7 @@
 <title>src/model/db.js</title>
 <g id="a_node25"><a xlink:href="src/model/db.js" xlink:title="db.js">
 <path fill="#ffffcc" stroke="black" d="M480,-666C480,-666 438,-666 438,-666 435,-666 432,-663 432,-660 432,-660 432,-654 432,-654 432,-651 435,-648 438,-648 438,-648 480,-648 480,-648 483,-648 486,-651 486,-654 486,-654 486,-660 486,-660 486,-663 483,-666 480,-666"/>
-<text text-anchor="middle" x="459" y="-654.8" font-family="Helvetica,sans-Serif" font-size="9.00">db.js</text>
+<text text-anchor="start" x="449" y="-654.8" font-family="Helvetica,sans-Serif" font-size="9.00">db.js</text>
 </a>
 </g>
 </g>
@@ -433,12 +433,12 @@
 <title>src/util/env.js</title>
 <g id="a_node26"><a xlink:href="src/util/env.js" xlink:title="env.js">
 <path fill="#ffffcc" stroke="black" d="M480,-366C480,-366 438,-366 438,-366 435,-366 432,-363 432,-360 432,-360 432,-354 432,-354 432,-351 435,-348 438,-348 438,-348 480,-348 480,-348 483,-348 486,-351 486,-354 486,-354 486,-360 486,-360 486,-363 483,-366 480,-366"/>
-<text text-anchor="middle" x="459" y="-354.8" font-family="Helvetica,sans-Serif" font-size="9.00">env.js</text>
+<text text-anchor="start" x="446.5" y="-354.8" font-family="Helvetica,sans-Serif" font-size="9.00">env.js</text>
 </a>
 </g>
 </g>
 <!-- src/model/db.js&#45;&gt;src/util/env.js -->
-<g id="edge26" class="edge">
+<g id="edge25" class="edge">
 <title>src/model/db.js&#45;&gt;src/util/env.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M431.69,-659.62C411.5,-659.83 386.51,-655.85 380.5,-636 376.35,-622.28 376.35,-391.72 380.5,-378 385.9,-360.17 406.62,-355.15 425.42,-354.46"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="425.72,-356.56 431.69,-354.38 425.67,-352.36 425.72,-356.56"/>
@@ -448,18 +448,18 @@
 <title>src/model/dbTransactions.js</title>
 <g id="a_node27"><a xlink:href="src/model/dbTransactions.js" xlink:title="dbTransactions.js">
 <path fill="#ffffcc" stroke="black" d="M625.5,-666C625.5,-666 548.5,-666 548.5,-666 545.5,-666 542.5,-663 542.5,-660 542.5,-660 542.5,-654 542.5,-654 542.5,-651 545.5,-648 548.5,-648 548.5,-648 625.5,-648 625.5,-648 628.5,-648 631.5,-651 631.5,-654 631.5,-654 631.5,-660 631.5,-660 631.5,-663 628.5,-666 625.5,-666"/>
-<text text-anchor="middle" x="587" y="-654.8" font-family="Helvetica,sans-Serif" font-size="9.00">dbTransactions.js</text>
+<text text-anchor="start" x="550.5" y="-654.8" font-family="Helvetica,sans-Serif" font-size="9.00">dbTransactions.js</text>
 </a>
 </g>
 </g>
 <!-- src/model/db.js&#45;&gt;src/model/dbTransactions.js -->
-<g id="edge27" class="edge">
+<g id="edge26" class="edge">
 <title>src/model/db.js&#45;&gt;src/model/dbTransactions.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M486.11,-657C500.49,-657 518.83,-657 535.86,-657"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="536.06,-659.1 542.06,-657 536.06,-654.9 536.06,-659.1"/>
 </g>
 <!-- src/util/env.js&#45;&gt;path -->
-<g id="edge50" class="edge">
+<g id="edge49" class="edge">
 <title>src/util/env.js&#45;&gt;path</title>
 <path fill="none" stroke="#000000" stroke-dasharray="5,2" stroke-opacity="0.200000" d="M486.05,-355.98C502.29,-353.93 522.34,-348.55 534.5,-335 570.77,-294.59 582.54,-119.05 585.3,-66.15"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-opacity="0.200000" points="587.4,-66.15 585.6,-60.05 583.2,-65.94 587.4,-66.15"/>
@@ -469,42 +469,42 @@
 <title>src/routes/api.js</title>
 <g id="a_node28"><a xlink:href="src/routes/api.js" xlink:title="api.js">
 <path fill="#ffffcc" stroke="black" d="M134,-276C134,-276 92,-276 92,-276 89,-276 86,-273 86,-270 86,-270 86,-264 86,-264 86,-261 89,-258 92,-258 92,-258 134,-258 134,-258 137,-258 140,-261 140,-264 140,-264 140,-270 140,-270 140,-273 137,-276 134,-276"/>
-<text text-anchor="middle" x="113" y="-264.8" font-family="Helvetica,sans-Serif" font-size="9.00">api.js</text>
+<text text-anchor="start" x="102" y="-264.8" font-family="Helvetica,sans-Serif" font-size="9.00">api.js</text>
 </a>
 </g>
 </g>
 <!-- src/routes/api.js&#45;&gt;src/config/visualizations.js -->
-<g id="edge28" class="edge">
+<g id="edge27" class="edge">
 <title>src/routes/api.js&#45;&gt;src/config/visualizations.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M133.82,-276.11C136.14,-277.81 138.29,-279.77 140,-282 148.4,-292.95 137.06,-303.59 148,-312 186.59,-341.65 221.96,-345.25 257.5,-312 277.02,-293.74 248.42,-212.56 265.5,-192 269.04,-187.74 273.62,-184.59 278.65,-182.29"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="279.42,-184.24 284.26,-180.11 277.9,-180.33 279.42,-184.24"/>
 </g>
 <!-- src/routes/api.js&#45;&gt;src/controller/exportQueries.js -->
-<g id="edge29" class="edge">
+<g id="edge28" class="edge">
 <title>src/routes/api.js&#45;&gt;src/controller/exportQueries.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M135.04,-276.37C136.99,-277.99 138.71,-279.86 140,-282 152.06,-301.99 133.54,-473.67 148,-492 150.13,-494.7 152.7,-496.94 155.55,-498.79"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="154.67,-500.7 160.95,-501.73 156.68,-497.01 154.67,-500.7"/>
 </g>
 <!-- src/routes/api.js&#45;&gt;src/controller/formatResponse.js -->
-<g id="edge30" class="edge">
+<g id="edge29" class="edge">
 <title>src/routes/api.js&#45;&gt;src/controller/formatResponse.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M134.31,-276.13C136.49,-277.81 138.47,-279.76 140,-282 153.42,-301.68 133.3,-316.26 148,-335 151.16,-339.03 155.19,-342.33 159.61,-345.03"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="158.68,-346.91 164.96,-347.93 160.69,-343.22 158.68,-346.91"/>
 </g>
 <!-- src/routes/api.js&#45;&gt;src/controller/indicatorQueries.js -->
-<g id="edge31" class="edge">
+<g id="edge30" class="edge">
 <title>src/routes/api.js&#45;&gt;src/controller/indicatorQueries.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M134.44,-276.04C136.6,-277.74 138.54,-279.72 140,-282 150.8,-298.93 135.17,-356.55 148,-372 148.83,-373 149.73,-373.94 150.67,-374.82"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="149.75,-376.76 155.79,-378.73 152.3,-373.42 149.75,-376.76"/>
 </g>
 <!-- src/routes/api.js&#45;&gt;src/controller/legendQuery.js -->
-<g id="edge32" class="edge">
+<g id="edge31" class="edge">
 <title>src/routes/api.js&#45;&gt;src/controller/legendQuery.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M135.03,-276.38C136.98,-278 138.7,-279.86 140,-282 150.4,-299.11 135.55,-446.32 148,-462 150.52,-465.17 153.65,-467.71 157.13,-469.73"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="156.52,-471.77 162.84,-472.5 158.36,-467.99 156.52,-471.77"/>
 </g>
 <!-- src/routes/api.js&#45;&gt;src/controller/queryTemplate.js -->
-<g id="edge33" class="edge">
+<g id="edge32" class="edge">
 <title>src/routes/api.js&#45;&gt;src/controller/queryTemplate.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M134.76,-276.19C136.81,-277.85 138.64,-279.78 140,-282 157.46,-310.45 127.13,-405.95 148,-432 149.73,-434.16 151.74,-436.02 153.96,-437.63"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="153.22,-439.64 159.44,-440.94 155.39,-436.04 153.22,-439.64"/>
@@ -514,12 +514,12 @@
 <title>src/util/auth.js</title>
 <g id="a_node29"><a xlink:href="src/util/auth.js" xlink:title="auth.js">
 <path fill="#ffffcc" stroke="black" d="M480,-486C480,-486 438,-486 438,-486 435,-486 432,-483 432,-480 432,-480 432,-474 432,-474 432,-471 435,-468 438,-468 438,-468 480,-468 480,-468 483,-468 486,-471 486,-474 486,-474 486,-480 486,-480 486,-483 483,-486 480,-486"/>
-<text text-anchor="middle" x="459" y="-474.8" font-family="Helvetica,sans-Serif" font-size="9.00">auth.js</text>
+<text text-anchor="start" x="445" y="-474.8" font-family="Helvetica,sans-Serif" font-size="9.00">auth.js</text>
 </a>
 </g>
 </g>
 <!-- src/routes/api.js&#45;&gt;src/util/auth.js -->
-<g id="edge34" class="edge">
+<g id="edge33" class="edge">
 <title>src/routes/api.js&#45;&gt;src/util/auth.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M135.06,-276.36C137,-277.98 138.72,-279.85 140,-282 147.5,-294.55 137.51,-534.82 148,-545 166.22,-562.68 357.25,-561.56 376.5,-545 394.56,-529.46 368.09,-509.27 384.5,-492 394.94,-481.01 411.07,-476.91 425.57,-475.71"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="425.79,-477.8 431.66,-475.36 425.55,-473.61 425.79,-477.8"/>
@@ -529,12 +529,12 @@
 <title>src/routes/schemas.js</title>
 <g id="a_node30"><a xlink:href="src/routes/schemas.js" xlink:title="schemas.js">
 <path fill="#ffffcc" stroke="black" d="M227.5,-306C227.5,-306 177.5,-306 177.5,-306 174.5,-306 171.5,-303 171.5,-300 171.5,-300 171.5,-294 171.5,-294 171.5,-291 174.5,-288 177.5,-288 177.5,-288 227.5,-288 227.5,-288 230.5,-288 233.5,-291 233.5,-294 233.5,-294 233.5,-300 233.5,-300 233.5,-303 230.5,-306 227.5,-306"/>
-<text text-anchor="middle" x="202.5" y="-294.8" font-family="Helvetica,sans-Serif" font-size="9.00">schemas.js</text>
+<text text-anchor="start" x="179.5" y="-294.8" font-family="Helvetica,sans-Serif" font-size="9.00">schemas.js</text>
 </a>
 </g>
 </g>
 <!-- src/routes/api.js&#45;&gt;src/routes/schemas.js -->
-<g id="edge35" class="edge">
+<g id="edge34" class="edge">
 <title>src/routes/api.js&#45;&gt;src/routes/schemas.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M133.23,-276.05C138,-278.14 143.14,-280.26 148,-282 153.58,-284 159.57,-285.91 165.45,-287.65"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="164.92,-289.68 171.27,-289.33 166.09,-285.65 164.92,-289.68"/>
@@ -544,18 +544,18 @@
 <title>src/routes/schemaValidator.js</title>
 <g id="a_node31"><a xlink:href="src/routes/schemaValidator.js" xlink:title="schemaValidator.js">
 <path fill="#ffffcc" stroke="black" d="M243.5,-276C243.5,-276 161.5,-276 161.5,-276 158.5,-276 155.5,-273 155.5,-270 155.5,-270 155.5,-264 155.5,-264 155.5,-261 158.5,-258 161.5,-258 161.5,-258 243.5,-258 243.5,-258 246.5,-258 249.5,-261 249.5,-264 249.5,-264 249.5,-270 249.5,-270 249.5,-273 246.5,-276 243.5,-276"/>
-<text text-anchor="middle" x="202.5" y="-264.8" font-family="Helvetica,sans-Serif" font-size="9.00">schemaValidator.js</text>
+<text text-anchor="start" x="163.5" y="-264.8" font-family="Helvetica,sans-Serif" font-size="9.00">schemaValidator.js</text>
 </a>
 </g>
 </g>
 <!-- src/routes/api.js&#45;&gt;src/routes/schemaValidator.js -->
-<g id="edge36" class="edge">
+<g id="edge35" class="edge">
 <title>src/routes/api.js&#45;&gt;src/routes/schemaValidator.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M140.25,-267C143.12,-267 146.11,-267 149.16,-267"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="149.48,-269.1 155.48,-267 149.48,-264.9 149.48,-269.1"/>
 </g>
 <!-- src/routes/schemas.js&#45;&gt;src/shared/exportOptions.js -->
-<g id="edge39" class="edge">
+<g id="edge38" class="edge">
 <title>src/routes/schemas.js&#45;&gt;src/shared/exportOptions.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M233.52,-295.24C242.55,-293.17 251.61,-289.25 257.5,-282 275.04,-260.39 251.73,-181.19 265.5,-157 272.4,-144.87 284.68,-135.64 296.2,-129.11"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="297.48,-130.81 301.78,-126.13 295.49,-127.11 297.48,-130.81"/>
@@ -565,18 +565,18 @@
 <title>src/routes/index.js</title>
 <g id="a_node32"><a xlink:href="src/routes/index.js" xlink:title="index.js">
 <path fill="#ffffcc" stroke="black" d="M134,-306C134,-306 92,-306 92,-306 89,-306 86,-303 86,-300 86,-300 86,-294 86,-294 86,-291 89,-288 92,-288 92,-288 134,-288 134,-288 137,-288 140,-291 140,-294 140,-294 140,-300 140,-300 140,-303 137,-306 134,-306"/>
-<text text-anchor="middle" x="113" y="-294.8" font-family="Helvetica,sans-Serif" font-size="9.00">index.js</text>
+<text text-anchor="start" x="97" y="-294.8" font-family="Helvetica,sans-Serif" font-size="9.00">index.js</text>
 </a>
 </g>
 </g>
 <!-- src/routes/index.js&#45;&gt;src/controller/getIndexData.js -->
-<g id="edge37" class="edge">
+<g id="edge36" class="edge">
 <title>src/routes/index.js&#45;&gt;src/controller/getIndexData.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M136.8,-306.37C138.01,-307.46 139.09,-308.66 140,-310 151.54,-326.97 134.9,-386.2 148,-402 150.5,-405.02 153.56,-407.46 156.94,-409.43"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="156.16,-411.38 162.47,-412.15 158.01,-407.62 156.16,-411.38"/>
 </g>
 <!-- src/routes/index.js&#45;&gt;src/util/auth.js -->
-<g id="edge38" class="edge">
+<g id="edge37" class="edge">
 <title>src/routes/index.js&#45;&gt;src/util/auth.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M136.88,-306.32C138.07,-307.42 139.13,-308.64 140,-310 154.11,-331.99 129.21,-526.84 148,-545 157.13,-553.82 366.88,-553.28 376.5,-545 394.56,-529.46 368.09,-509.27 384.5,-492 394.94,-481.01 411.07,-476.91 425.57,-475.71"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="425.79,-477.8 431.66,-475.36 425.55,-473.61 425.79,-477.8"/>
@@ -586,42 +586,42 @@
 <title>src/server.js</title>
 <g id="a_node33"><a xlink:href="src/server.js" xlink:title="server.js">
 <path fill="#ffffcc" stroke="black" d="M64,-276C64,-276 22,-276 22,-276 19,-276 16,-273 16,-270 16,-270 16,-264 16,-264 16,-261 19,-258 22,-258 22,-258 64,-258 64,-258 67,-258 70,-261 70,-264 70,-264 70,-270 70,-270 70,-273 67,-276 64,-276"/>
-<text text-anchor="middle" x="43" y="-264.8" font-family="Helvetica,sans-Serif" font-size="9.00">server.js</text>
+<text text-anchor="start" x="25.5" y="-264.8" font-family="Helvetica,sans-Serif" font-size="9.00">server.js</text>
 </a>
 </g>
 </g>
 <!-- src/server.js&#45;&gt;fs -->
-<g id="edge45" class="edge">
+<g id="edge44" class="edge">
 <title>src/server.js&#45;&gt;fs</title>
 <path fill="none" stroke="#000000" stroke-dasharray="5,2" stroke-opacity="0.200000" d="M44.2,-257.98C45.25,-219.01 51.03,-65.4 78,-27 79.35,-25.08 80.96,-23.35 82.75,-21.8"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-opacity="0.200000" points="84.22,-23.32 87.8,-18.07 81.73,-19.94 84.22,-23.32"/>
 </g>
 <!-- src/server.js&#45;&gt;path -->
-<g id="edge46" class="edge">
+<g id="edge45" class="edge">
 <title>src/server.js&#45;&gt;path</title>
 <path fill="none" stroke="#000000" stroke-dasharray="5,2" stroke-opacity="0.200000" d="M45.53,-257.98C53.29,-215.46 92.37,-37 201.5,-37 201.5,-37 201.5,-37 326,-37 408.15,-37 504.69,-44.05 553.79,-48.15"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-opacity="0.200000" points="553.67,-50.25 559.82,-48.66 554.02,-46.06 553.67,-50.25"/>
 </g>
 <!-- src/server.js&#45;&gt;src/model/db.js -->
-<g id="edge40" class="edge">
+<g id="edge39" class="edge">
 <title>src/server.js&#45;&gt;src/model/db.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M44.59,-276.2C47.61,-315.49 64.61,-471.11 148,-555 225.43,-632.89 363.34,-651.31 425.74,-655.66"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="425.78,-657.76 431.9,-656.06 426.05,-653.57 425.78,-657.76"/>
 </g>
 <!-- src/server.js&#45;&gt;src/util/env.js -->
-<g id="edge44" class="edge">
+<g id="edge43" class="edge">
 <title>src/server.js&#45;&gt;src/util/env.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M51.63,-257.89C77.66,-227.64 166.81,-130.51 265.5,-97 288.86,-89.07 358.77,-79.85 376.5,-97 395.52,-115.39 368.34,-314.05 384.5,-335 394.18,-347.55 410.74,-353.19 425.7,-355.63"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="425.75,-357.75 431.98,-356.49 426.32,-353.59 425.75,-357.75"/>
 </g>
 <!-- src/server.js&#45;&gt;src/routes/api.js -->
-<g id="edge41" class="edge">
+<g id="edge40" class="edge">
 <title>src/server.js&#45;&gt;src/routes/api.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M70.1,-267C73.12,-267 76.23,-267 79.33,-267"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="79.64,-269.1 85.64,-267 79.64,-264.9 79.64,-269.1"/>
 </g>
 <!-- src/server.js&#45;&gt;src/routes/index.js -->
-<g id="edge42" class="edge">
+<g id="edge41" class="edge">
 <title>src/server.js&#45;&gt;src/routes/index.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M64.4,-276C71,-278.91 78.42,-282.19 85.41,-285.27"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="84.8,-287.3 91.14,-287.8 86.5,-283.45 84.8,-287.3"/>
@@ -631,12 +631,12 @@
 <title>src/util/configPassport.js</title>
 <g id="a_node34"><a xlink:href="src/util/configPassport.js" xlink:title="configPassport.js">
 <path fill="#ffffcc" stroke="black" d="M496,-516C496,-516 422,-516 422,-516 419,-516 416,-513 416,-510 416,-510 416,-504 416,-504 416,-501 419,-498 422,-498 422,-498 496,-498 496,-498 499,-498 502,-501 502,-504 502,-504 502,-510 502,-510 502,-513 499,-516 496,-516"/>
-<text text-anchor="middle" x="459" y="-504.8" font-family="Helvetica,sans-Serif" font-size="9.00">configPassport.js</text>
+<text text-anchor="start" x="424" y="-504.8" font-family="Helvetica,sans-Serif" font-size="9.00">configPassport.js</text>
 </a>
 </g>
 </g>
 <!-- src/server.js&#45;&gt;src/util/configPassport.js -->
-<g id="edge43" class="edge">
+<g id="edge42" class="edge">
 <title>src/server.js&#45;&gt;src/util/configPassport.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M44.27,-276.1C45.84,-325.69 54.5,-561.89 78,-583 120.46,-621.13 158.17,-660.9 376.5,-555 381.02,-552.81 380.47,-550.01 384.5,-547 399.29,-535.94 417.52,-526 432.12,-518.8"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="433.25,-520.59 437.73,-516.08 431.41,-516.81 433.25,-520.59"/>
@@ -646,18 +646,18 @@
 <title>src/util/odkxAuth.js</title>
 <g id="a_node35"><a xlink:href="src/util/odkxAuth.js" xlink:title="odkxAuth.js">
 <path fill="#ffffcc" stroke="black" d="M613,-516C613,-516 561,-516 561,-516 558,-516 555,-513 555,-510 555,-510 555,-504 555,-504 555,-501 558,-498 561,-498 561,-498 613,-498 613,-498 616,-498 619,-501 619,-504 619,-504 619,-510 619,-510 619,-513 616,-516 613,-516"/>
-<text text-anchor="middle" x="587" y="-504.8" font-family="Helvetica,sans-Serif" font-size="9.00">odkxAuth.js</text>
+<text text-anchor="start" x="563" y="-504.8" font-family="Helvetica,sans-Serif" font-size="9.00">odkxAuth.js</text>
 </a>
 </g>
 </g>
 <!-- src/util/configPassport.js&#45;&gt;src/util/odkxAuth.js -->
-<g id="edge47" class="edge">
+<g id="edge46" class="edge">
 <title>src/util/configPassport.js&#45;&gt;src/util/odkxAuth.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M502.31,-507C517.32,-507 534.1,-507 548.67,-507"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="548.76,-509.1 554.76,-507 548.76,-504.9 548.76,-509.1"/>
 </g>
 <!-- src/util/configSchemas.js&#45;&gt;src/config/visualizations.js -->
-<g id="edge48" class="edge">
+<g id="edge47" class="edge">
 <title>src/util/configSchemas.js&#45;&gt;src/config/visualizations.js</title>
 <path fill="none" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" d="M579.94,-392.87C571.14,-380.17 553.77,-357.03 534.5,-342 475.73,-296.15 427,-328.23 384.5,-267 365.39,-239.46 397.95,-217.76 376.5,-192 374.95,-190.13 373.17,-188.49 371.24,-187.05"/>
 <polygon fill="#000000" fill-opacity="0.200000" stroke="#000000" stroke-width="2" stroke-opacity="0.200000" points="372,-185.05 365.79,-183.68 369.79,-188.62 372,-185.05"/>

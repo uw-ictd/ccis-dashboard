@@ -5,7 +5,7 @@ Good code checklist:
 * [ ] 4. Appropriate tests
 * [ ] 5. Formatting
 
-* 1. API boundaries, separation of modules/functions
+# 1. API boundaries, separation of modules/functions
 You can think of each function or module as having an API, but there are three main interfaces to focus on in this application: the frontend, the backend, and the config files.
 
 * The `config/` files are where all deployment-specific details should go, and they should *only* have deployment-specific details. They should be especially well-documented, since this is the part we expect deployment architects to modify.

@@ -123,9 +123,7 @@ function makeMapSelect(vizSpec) {
                 // options is an Array
                 return `SUM(CASE WHEN ${missingDataClause(col)} = 'Missing data' THEN 1 ELSE 0 END) as "${col}${MAP_SEPARATOR}missing_data", `
                 + options
-                    .map(option => {
-                        return `SUM(CASE WHEN ${referToColumn(col)} = '${option}' THEN 1 ELSE 0 END) as "${col}${MAP_SEPARATOR}${option}"`;
-                    })
+                    .map(option => `SUM(CASE WHEN ${referToColumn(col)} = '${option}' THEN 1 ELSE 0 END) as "${col}${MAP_SEPARATOR}${option}"`)
                     .join(', ');
             }
         }).join(', ')

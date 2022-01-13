@@ -41,8 +41,8 @@ const drawColorLegend = require('./colorLegend');
  * groupBy:  String to show to user as axis label
  * repeatBy: undefined|String to show to user in titles of small multiple charts
  */
-function drawAllCharts(data, { fullDomain, fullColorDomain }, { groupBy, repeatBy, type, style, sum, colorMap, colorBy, disableLegend, legendNonzeroOnly, legendOrder }, tabName) {
-    const parentElement = d3.select(select.chartContainerStr(tabName));
+function drawAllCharts(data, { fullDomain, fullColorDomain }, { groupBy, repeatBy, type, style, sum, colorMap, colorBy, disableLegend, legendNonzeroOnly, legendOrder }, tabName, index) {
+    const parentElement = d3.select(select.chartContainerStr(tabName, index));
     const colorDomain = !disableLegend && legendNonzeroOnly ? getNonZeroOptions(data) : fullColorDomain;
 
     // Make color scale
@@ -100,7 +100,7 @@ function drawAllCharts(data, { fullDomain, fullColorDomain }, { groupBy, repeatB
 
     if (colorDomain) {
         // Make color legend for charts
-        drawColorLegend(d3.select(select.legendContainerStr(tabName)),
+        drawColorLegend(d3.select(select.legendContainerStr(tabName, index)),
             colorDomain.map(x => x ? x : 'undefined'),
             colorScale,
             {style, groupBy, colorBy, disableLegend, legendOrder}
@@ -108,8 +108,8 @@ function drawAllCharts(data, { fullDomain, fullColorDomain }, { groupBy, repeatB
     }
 
     // Add tooltips to rects & slices
-    const rectBarStr = select.chartContainerStr(tabName) + ' svg rect.bar';
-    const pathSliceStr = select.chartContainerStr(tabName) + ' svg path.slice';
+    const rectBarStr = select.chartContainerStr(tabName, index) + ' svg rect.bar';
+    const pathSliceStr = select.chartContainerStr(tabName, index) + ' svg path.slice';
     createSingleton(tippy(rectBarStr));
     createSingleton(tippy(pathSliceStr));
 }

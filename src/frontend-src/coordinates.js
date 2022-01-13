@@ -29,7 +29,7 @@ const CIRCLE_DIAMETER = '15px';
  *
  * Throws an error if facilities is missing or mapType is not implemented
  */
-module.exports = function(data, visualization, colorScale) {
+module.exports = function makeMarkerInfo(data, visualization, colorScale) {
     /*
      * A map visualization cannot use repeatBy, so data has length 1, and
      *    data[0][0] is null (since there is no repeatlabel).
@@ -46,16 +46,7 @@ module.exports = function(data, visualization, colorScale) {
         const title = facility.facility_name;
 
         let markerInfo;
-        if (visualization.mapType === 'maintenance_priority') {
-            if (!facility[`${visualization.mapType}${MAP_SEPARATOR}low`] &&
-                !facility[`${visualization.mapType}${MAP_SEPARATOR}medium`] &&
-                !facility[`${visualization.mapType}${MAP_SEPARATOR}high`]) {
-                return null;
-            }
-            markerInfo = getMaintenancePriorityInfo(facility);
-        } else if (visualization.mapType === 'facility_details') {
-            markerInfo = getFacilityDetails(facility);
-        } else if (visualization.mapType === 'alarm_counts') {
+        if (visualization.mapType === 'alarm_counts') {
             markerInfo = getAlarmCountInfo(facility);
         } else if (visualization.mapType === 'colored_facilities') {
             markerInfo = getFacilityColorInfo(facility, visualization, colorScale);
@@ -73,62 +64,6 @@ module.exports = function(data, visualization, colorScale) {
         };
     });
 };
-
-/*
- * priorities: Object mapping the strings 'maintenance_priority$high', 'maintenance_priority$medium',
- *   and 'maintenance_priority$low' to Numbers, representing the number of refrigerators with that
- *   maintenance priority
- * output: 'high'|'medium'|'low'|'none', the highest priority with positive count
- */
-function getHighestMaintenancePriority(priorities) {
-    if (priorities[`maintenance_priority${MAP_SEPARATOR}high`] > 0) return 'high';
-    if (priorities[`maintenance_priority${MAP_SEPARATOR}medium`] > 0) return 'medium';
-    if (priorities[`maintenance_priority${MAP_SEPARATOR}low`] > 0) return 'low';
-}
-
-/*
- * input: <what format should facility have?>
- * output: undefined or an Object with parameters 'description', 'iconImage', and 'iconSize'
- *   If the output is undefined, there is nothing to display for this facility
- */
-function getMaintenancePriorityInfo(facility) {
-    const description = `low: ${facility[`maintenance_priority${MAP_SEPARATOR}low`]}
-        <br>medium: ${facility[`maintenance_priority${MAP_SEPARATOR}medium`]}
-        <br>high: ${facility[`maintenance_priority${MAP_SEPARATOR}high`]}`;
-    let color;
-    const priority = getHighestMaintenancePriority(facility);
-    if (priority === 'high') color = 'red';
-    if (priority === 'medium') color = 'orange';
-    if (priority === 'low') color = 'yellow';
-    const iconImage = coloredCircle(color, 0.8);
-    const iconSize = [ CIRCLE_DIAMETER, CIRCLE_DIAMETER ];
-    return { description, iconImage, iconSize };
-}
-
-const classifictationDisplayInfo = Object.keys(refrigeratorClasses);
-
-function getRefrigeratorCountsDisplay(facility) {
-    const filteredList = classifictationDisplayInfo.filter(classification => facility[`refrigerator_class${MAP_SEPARATOR}${classification}`] > 0);
-    if (!filteredList.length) {
-        return 'No Refrigerators Here';
-    }
-    const list = filteredList.map(classification => `<li>${classification} : ${facility[`refrigerator_class${MAP_SEPARATOR}${classification}`]}</li>`).join('');
-    return `<ul class =\'ref-counts\'>${list}</ul>`;
-}
-
-/*
- * input: facility information to display
- * output: object with parameters 'description', 'iconImage', and 'iconSize'
- */
-function getFacilityDetails(facility) {
-    const description = `<p class='popup-info'> Ownership : ${facility['ownership']}
-    <br>Level : ${facility['facility_level']}<br>
-    Refrigerator Counts: </p>
-    ${getRefrigeratorCountsDisplay(facility)}`;
-    const iconImage = coloredCircle('purple', '0.5');
-    const iconSize = [ CIRCLE_DIAMETER, CIRCLE_DIAMETER ];
-    return { description, iconImage, iconSize };
-}
 
 function getAlarmImage(alarms) {
     if (alarms > 10) {
@@ -148,17 +83,34 @@ function getAlarmCountInfo(facility) {
     return { description, iconImage, iconSize };
 }
 
+function getPopupTextItem(facilityData, [ propertyName, propertyType ]) {
+    if (Array.isArray(propertyType)) {
+        // This is actually a list of properties
+        return propertyType.map(item => {
+            const key = `${propertyName}${MAP_SEPARATOR}${item}`;
+            return `${propertyName} ${item}: ${facilityData[key]}`;
+        });
+    } else {
+        // Normal single property
+        return `${propertyName}: ${facilityData[propertyName]}`;
+    }
+}
+
 function getFacilityColorInfo(facility, visualization, colorScale) {
-    const description = `<p class='facility-info'>` +
-        Object.keys(visualization.facilityPopup)
-        .map(item => `${item}: ${facility[item]}`)
-        .join(`<br>`) +
-        `</p>`;
-    // 'facility_status' is the generic name for the metric to determine the facility color
-    // It has to appear as a variable in the SQL query in computedColumns.js
-    // Refer to 'FacilityUpdateStatus' in computedColumns.js as an example
-    if (!facility[visualization.colorBy]) throw new Error(`No color specified for value ${visualization.colorBy}`);
-    const iconImage = coloredCircleHex(colorScale(facility[visualization.colorBy]), 0.5);
+    const description = "<p class='facility-info'>" +
+        Object.entries(visualization.facilityPopup)
+        .flatMap(getPopupTextItem.bind({}, facility))
+        .join('<br>') +
+        '</p>';
+    const opacity = (visualization.colorSpecs && visualization.colorSpecs.opacity) ?
+        visualization.colorSpecs.opacity : 0.5;
+    let iconImage;
+    if (visualization.colorBy) {
+        iconImage = coloredCircleHex(colorScale(facility[visualization.colorBy]), opacity);
+    } else {
+        if (!visualization.colorSpecs.singleColor) throw new Error('Map visualization with no `colorBy` is missing `colorSpecs.singleColor` attribute');
+        iconImage = coloredCircle(visualization.colorSpecs.singleColor, opacity);
+    }
     const iconSize = [ CIRCLE_DIAMETER, CIRCLE_DIAMETER ];
     return { description, iconImage, iconSize };
 }

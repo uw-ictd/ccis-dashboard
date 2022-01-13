@@ -46,6 +46,8 @@ describe('Export tests', function () {
 
     // After logging in, wait for the main page to render, then click `export`
     test('Export button should render', async () => {
+        const tab = driver.wait(until.elementLocated(By.id('Export-tab')));
+        await tab.click();
         const exportButton = driver.wait(until.elementLocated(By.id('export')));
     }, 10000);
 

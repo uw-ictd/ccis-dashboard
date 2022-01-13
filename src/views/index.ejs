@@ -21,7 +21,13 @@
 
     <div id="bottom-outer-wrapper">
         <% Object.entries(tabVisualizations).forEach(([ tabName, tab ]) => { %>
+            <% if (tab.exportTab) { %>
+            <%- include('partials/exportTab', { tabName, tab }) %>
+            <% } else if (tab.multi) { %>
+            <%- include('partials/multiTab', { tabName, tab }) %>
+            <% } else { %>
             <%- include('partials/tab', { tabName, tab }) %>
+            <% } %>
         <% }); %>
     </div>
 </body>

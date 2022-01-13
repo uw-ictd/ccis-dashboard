@@ -16,11 +16,6 @@ beforeEach(() => {
         return { x: 0, y: 0, height: 0, width: 0 };
     };
     document.body.innerHTML = `
-    <div id="Export">
-        <select id="Export-facilityTypes-selector" multiple></select>
-        <select id="Export-refrigeratorTypes-selector" multiple></select>
-        <select id="Export-maintenancePriorities-selector" multiple></select>
-    </div>
     <div id="Facilities">
         <select id="Facilities-facilityTypes-selector" multiple>
             <option value="#Facilities-facilityTypes-selector|Test group 1" class="parent"></option>
@@ -50,10 +45,10 @@ beforeEach(() => {
         <select class="visualization-selector">
             <option value="Age by CCE model"></option>
         </select>
-        <div class="map-container"></div>
-        <div class="chart-wrapper"></div>
-        <div class="list-wrapper"></div>
-        <div class="result-text-container"></div>
+        <div class="map-container-0"></div>
+        <div class="chart-wrapper-0"></div>
+        <div class="list-wrapper-0"></div>
+        <div class="result-text-container-0"></div>
     </div>
     <div id="CCE">
         <select id="CCE-facilityTypes-selector" multiple></select>
@@ -110,10 +105,10 @@ describe('Filter UI tests', () =>  {
         // Set up the dropdowns, this calls selectAll
         setupFilters(filters);
         // Deselect this whole group
-        multiselects[5].deselect('#Facilities-refrigeratorTypes-selector|Deselect me');
-        multiselects[5].deselect('#Facilities-refrigeratorTypes-selector|nope');
-        multiselects[5].deselect('#Facilities-refrigeratorTypes-selector|not here');
-        drawVisualization(mapboxDependencyMock, filters, regionSelectorMock, 'Facilities');
+        multiselects[2].deselect('#Facilities-refrigeratorTypes-selector|Deselect me');
+        multiselects[2].deselect('#Facilities-refrigeratorTypes-selector|nope');
+        multiselects[2].deselect('#Facilities-refrigeratorTypes-selector|not here');
+        drawVisualization(mapboxDependencyMock, filters, regionSelectorMock, 'Facilities', 0);
         expect(fetch).toHaveBeenCalledWith(expect.any(String), expect.objectContaining({
             body: expect.any(String)
         }));

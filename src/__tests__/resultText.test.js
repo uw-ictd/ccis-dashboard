@@ -10,12 +10,12 @@
      document.body.innerHTML = `
      <div id="Vaccines">
         <div class="left-wrapper"></div>
-        <div class="main-wrapper">
-          <div class="viz-title">CCE utilization (bar)</div>
-          <div class="viz-wrapper"> 
-            <div class="map-container"></div>
-            <div class="chart-wrapper"></div>
-            <div class="result-text-container"></div>
+        <div class="main-wrapper main-wrapper-0">
+          <div class="viz-title viz-title-0">CCE utilization (bar)</div>
+          <div class="viz-wrapper viz-wrapper-0">
+            <div class="map-container map-container-0"></div>
+            <div class="chart-wrapper chart-wrapper-0"></div>
+            <div class="result-text-container result-text-container-0"></div>
           </div>
         </div>
      </div>`;
@@ -23,7 +23,7 @@
  
  describe('Result text tests', () =>  {
      test('Adds svg with text when function is called', () => {
-        writeTextInsteadOfChart("test text", "Vaccines");
+        writeTextInsteadOfChart("test text", "Vaccines", 0);
         const textContainer = document.querySelector('.result-text-container svg text');
         expect(textContainer).toBeTruthy();
      });

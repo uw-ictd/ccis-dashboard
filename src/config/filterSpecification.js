@@ -76,7 +76,7 @@ module.exports = {
             // of geographic_regions_odkx. If only some columns are included,
             // it's okay: only the ones specified in the filter must match.
             // So [ 'Uganda' ] will match any region within Uganda.
-            'regionLevel2', 'regionLevel3'
+            'regionLevel1', 'regionLevel2', 'regionLevel3'
         ]
     }
 };

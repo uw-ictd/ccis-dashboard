@@ -1,8 +1,3 @@
-
-//const level2Ids = level2Uganda.features.map(getLayerId);
-//const level3Ids = level3Uganda.features.map(getLayerId);
-//const boundaries = level2Uganda.features.concat(level3Uganda.features);
-
 // Call this in `map.on('load', ...)`
 // regionNamesContainer must be a ul element to display region names within
 function RegionSelector({mapboxgl}, map, shapefiles, regionNamesContainer) {
@@ -10,9 +5,10 @@ function RegionSelector({mapboxgl}, map, shapefiles, regionNamesContainer) {
     this._DESELECT_OPACITY = 0.1;
     this._SEPARATOR = '|';
     this._TOP = '__top__';
+    this._topLevelName = shapefiles.topLevelName;
     this._map = map;
     this._shapefiles = shapefiles;
-    this._currentParent = null;
+    this._currentSelection = null;
     this._currentLayers = []; // Which regions are displayed?
     this._selections = {};  // Which regions are selected?
     this._showMapAtNode = showMapAtNode;
@@ -25,6 +21,8 @@ function RegionSelector({mapboxgl}, map, shapefiles, regionNamesContainer) {
     this._addLayerToMap = addLayerToMap.bind(this);
     this._makeHierarchy = makeHierarchy;
     this._getIDsFromLevel = getIDsFromLevel;
+    this._getCurrentIndex = getCurrentIndex;
+    this._updateSelections = updateSelections;
     this._regionNameKeys = shapefiles.regionNameKeys;
     // The map will only show boundaries between these two levels
     this._topLevelIndex = shapefiles.levelNames.indexOf(shapefiles.topLevel);
@@ -34,48 +32,71 @@ function RegionSelector({mapboxgl}, map, shapefiles, regionNamesContainer) {
     this.getSelectedRegions = getSelectedRegions;
     this._showRegionSelectionInstr = showRegionSelectionInstr;
     this._regionNamesContainer = regionNamesContainer;
+    this._recentClick = null;
 
     // This default double-click handler needs to be registered before the
     // individual event handlers for each layer
-    map.on('dblclick', () => {
+    map.on('dblclick', (e) => {
         // If we are at the lowest level, any double-click should return to the top
-        const currentIndex = this._currentParent === this._TOP ?
-                             this._topLevelIndex :
-                             this._currentParent.split(this._SEPARATOR).length;
-        if (currentIndex >= this._bottomLevelIndex) {
+        const currentIndex = this._getCurrentIndex();
+        if (currentIndex == this._bottomLevelIndex) {
+            this._recentClick = e.lngLat;
             this._showMapAtNode(this._TOP);
         }
     });
+
     // Add GeoJSON to the map
     const boundaries = shapefiles.levels
-        .slice(this._topLevelIndex, this._bottomLevelIndex + 1)
+        .slice(this._topLevelIndex + 1, this._bottomLevelIndex + 1)
         .map(level => level.features)
     boundaries.flat().forEach(this._addLayerToMap);
-    // All but the last level
-    const upperLevelBoundaries = boundaries.slice(0, -1);
-    upperLevelBoundaries.flat().forEach((geoJSONFeature => {
+    boundaries.flat().forEach((geoJSONFeature => {
         const layerID = this._getRegionID(geoJSONFeature);
-        map.on('dblclick', layerID, this._showMapAtNode.bind(this, layerID));
+        map.on('dblclick', layerID, (e) => {
+            // // If we are at the lowest level, any double-click should return to the top
+            if(this._recentClick && this._recentClick[0] == e.lngLat[0] && this._recentClick[1] == e.lngLat[1]) { // (if we already double clicked on bottom layer to go to top level)
+                this._recentClick = null;
+            } else {
+                const currentIndex = this._getCurrentIndex();
+                if (currentIndex != this._bottomLevelIndex) {
+                    this._showMapAtNode(layerID);
+                }
+            }
+        });
     }).bind(this));
+
     this._showMapAtNode(this._TOP);
     this._showRegionSelectionInstr(mapboxgl);
 }
 
-function showMapAtNode(regionLayerID) {
+function showMapAtNode(selectedLayerID) {
+    this._currentSelection = selectedLayerID;
+    const displayedIndex = Math.min(this._getCurrentIndex() + 1, this._bottomLevelIndex); // Show children, unless we're at the bottom
     // Clear prior boundaries
     this._currentLayers.forEach(layerID => {
         this._map.setLayoutProperty(layerID, 'visibility', 'none');
         this._deselect(layerID);
     });
-    this._currentLayers = null;
-    // Add all children of this node to layers and show them
-    const children = this._hierarchy[regionLayerID];
-    children.forEach(layerID => {
+    this._selections = {};
+    this._currentLayers = this._getIDsFromLevel(displayedIndex);
+    this._currentLayers.forEach(layerID => {
         this._map.setLayoutProperty(layerID, 'visibility', 'visible');
-        this._select(layerID);
     });
-    this._currentLayers = children;
-    this._currentParent = regionLayerID;
+    const children = this._hierarchy[selectedLayerID];
+    if (selectedLayerID == this._TOP) { // go back to country mode
+        children.forEach(layerID => {
+            this._map.setLayoutProperty(layerID, 'visibility', 'visible');
+            this._select(layerID);
+        });
+    } else { // selectedRegionId is not top level;
+        if (children) {
+            children.forEach(childLayerID => {
+                this._select(childLayerID);
+            });
+        } else {
+            this._select(this._currentSelection);
+        }
+    }
 }
 
 function showRegionSelectionInstr(mapboxgl) {
@@ -103,9 +124,9 @@ function makeHierarchy({ levels }) {
     // TOP represents the highest level *displayed in the UI*, but we need
     // reference to higher levels as well since a region will count as selected
     // if all its children are
-    hierarchy[this._TOP] = this._getIDsFromLevel(this._topLevelIndex);
+    hierarchy[this._TOP] = this._getIDsFromLevel(this._topLevelIndex + 1);
     // We start at 1 since the nodes at level 0 don't have parents
-    for (let i = 1; i <= this._bottomLevelIndex; i++) {
+    for (let i = (this._topLevelIndex + 2); i <= this._bottomLevelIndex; i++) {
         levels[i].features.forEach(geoJSONFeature => {
             const thisID = this._getRegionID(geoJSONFeature);
             const parentID = this._getParentRegionID(thisID);
@@ -121,7 +142,7 @@ function makeHierarchy({ levels }) {
 function getRegionID(geoJSONFeature) {
     return this._regionNameKeys
         .map(key => geoJSONFeature.properties[key])
-        .filter(name => !!name) // Remove empty strings
+        .filter(name => Boolean(name)) // Remove empty strings
         .join(this._SEPARATOR);
 }
 
@@ -131,21 +152,35 @@ function getRegionID(geoJSONFeature) {
 //   getParentRegionID('Uganda') throws an Error
 function getParentRegionID(childRegionID) {
     if (childRegionID.indexOf(this._SEPARATOR) < 0) {
-        throw new Error(`Child region ${childRegionID} must have a parent!`);
+        return this._TOP;
     }
     return childRegionID.substr(0, childRegionID.lastIndexOf(this._SEPARATOR));
 }
 
 function select(layerID) {
-    this._selections[layerID] = true;
+    this._updateSelections(true, layerID);
     this._map.setPaintProperty(layerID, 'fill-opacity', this._SELECT_OPACITY);
     this._displayRegionNames();
 }
 
 function deselect(layerID) {
-    this._selections[layerID] = false;
+    this._updateSelections(false, layerID);
     this._map.setPaintProperty(layerID, 'fill-opacity', this._DESELECT_OPACITY);
     this._displayRegionNames();
+}
+
+function updateSelections(value, layerID) {
+    const currentIndex = this._getCurrentIndex();
+    if (currentIndex == this._bottomLevelIndex) {
+        this._selections[layerID] = value;
+    } else {
+        const parentID = this._getParentRegionID(layerID);
+        if (parentID == this._TOP) {
+            this._selections[this._topLevelName] = value;
+        } else {
+            this._selections[parentID] = value;
+        }
+    }
 }
 
 function displayRegionNames() {
@@ -172,8 +207,28 @@ function displayRegionNames() {
     }
 }
 
-function toggleSelection(layerID) {
-    this._selections[layerID] ? this._deselect(layerID) : this._select(layerID);
+// toggle parent's children
+// special case for bottom level - toggle current layerID
+function toggleSelection(parentID, layerID) {
+    const currentIndex = this._getCurrentIndex();
+    if (currentIndex == this._bottomLevelIndex) { // bottom level mode
+        this._selections[layerID] ? this._deselect(layerID) : this._select(layerID);
+    } else {
+        const children = this._hierarchy[parentID];
+        let currParentName = parentID;
+        if (parentID == this._TOP) {
+            currParentName = this._topLevelName;
+        }
+        const currSelectionValue = this._selections[currParentName];
+        children.forEach(layerID => {
+            // toggle children of what is selected instead
+            currSelectionValue ? this._deselect(layerID) : this._select(layerID);
+        });
+    }
+}
+
+function getCurrentIndex() {
+    return this._currentSelection === this._TOP ? this._topLevelIndex : this._currentSelection.split(this._SEPARATOR).length;
 }
 
 // Throughout, but especially in this function, we assume that
@@ -186,22 +241,25 @@ function isLowestLevel(layerID) {
 
 function addLayerToMap(geoJSONFeature) {
     const layerID = this._getRegionID(geoJSONFeature);
-    this._map.addSource(layerID, {
-        type: 'geojson',
-        data: geoJSONFeature
-    });
-    this._map.addLayer({
-        id: layerID,
-        type: 'fill',
-        source: layerID,
-        layout: { visibility: 'none' },
-        paint: {
-            'fill-color': '#935181',
-            'fill-outline-color': '#7A3166',
-            'fill-opacity': this._DESELECT_OPACITY
-        }
-    });
-    this._map.on('click', layerID, toggleSelection.bind(this, layerID));
+    if (this._map.getLayer(layerID) == undefined){
+        this._map.addSource(layerID, {
+            type: 'geojson',
+            data: geoJSONFeature
+        });
+        this._map.addLayer({
+            id: layerID,
+            type: 'fill',
+            source: layerID,
+            layout: { visibility: 'none' },
+            paint: {
+                'fill-color': '#935181',
+                'fill-outline-color': '#7A3166',
+                'fill-opacity': this._DESELECT_OPACITY
+            }
+        });
+        const parentID = this._getParentRegionID(layerID);
+        this._map.on('click', layerID, toggleSelection.bind(this, parentID, layerID));
+    }
 }
 
 function getIDsFromLevel(shapefilesIndex) {
@@ -210,6 +268,11 @@ function getIDsFromLevel(shapefilesIndex) {
 }
 
 function getSelectedRegions() {
+    // If just top level is selected, return only top level name
+    if (this._selections[this._topLevelName] == true) {
+        return [ this._topLevelName.split(this._SEPARATOR) ];
+    }
+
     const that = this;
     const regions = [];
     // This recursive helper function builds a set with every layerID in
@@ -222,9 +285,15 @@ function getSelectedRegions() {
             return true;
         }
     }
+    // find first non null element
+    const index = this._shapefiles.levels.findIndex(x => x !== null)
     // We can return regions from the selection that were in levels above
     // `shapefiles.topLevel` with this
-    this._getIDsFromLevel(0).forEach(helper);
+    this._getIDsFromLevel(index).forEach(helper);
+    if (this._topLevelName != undefined) {
+        return regions.map(id => (this._topLevelName + this._SEPARATOR + id).split(this._SEPARATOR));
+    }
+    // else for example, ccisCountryName is defined and each id already has a top level name
     return regions.map(id => id.split(this._SEPARATOR));
 }
 

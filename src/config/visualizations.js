@@ -1,5 +1,3 @@
-const refrigeratorClasses = require('../model/refrigeratorClasses.json');
-
 /*
  * groupBy String [optional], required if style = 'bar'
  *   either the name of a column in the database or one provided by
@@ -60,6 +58,19 @@ module.exports = {
     'Age by CCE model': {
         type: 'refrigerator',
         groupBy: 'model_id',
+        colorBy: 'AgeGroups',
+        colorMap: {
+            '0-5 Years': 'green',
+            '6-10 Years': 'yellow',
+            '>10 Years': 'red',
+            'Missing data': 'gray'
+        },
+        style: 'bar',
+        legendOrder: ['0-5 Years', '6-10 Years', '>10 Years', 'Missing data']
+    },
+    'Age by CCE type': {
+        type: 'refrigerator',
+        groupBy: 'refrigerator_class',
         colorBy: 'AgeGroups',
         colorMap: {
             '0-5 Years': 'green',
@@ -180,10 +191,22 @@ module.exports = {
     // Maintenance priority map
     'Maintenance priority by facility': {
         type: 'refrigerator',
-        mapType: 'maintenance_priority',
+        mapType: 'colored_facilities',
         style: 'map',
+        colorBy: 'facility_maintenance_priority',
+        colorMap: {
+            'high': 'red',
+            'medium': 'orange',
+            'low': 'yellow'
+        },
+        colorSpecs: {
+            opacity: 0.8
+        },
         facilityPopup: {
-            'maintenance_priority': [ 'high', 'low', 'medium', 'not_applicable' ]
+            'facility_maintenance_priority': 'BY_FACILITY',
+            'maintenance_priority': [ 'high', 'medium', 'low' ],
+            'regionlevel2': 'BY_FACILITY',
+            'regionlevel3': 'BY_FACILITY'
         }
     },
     // count of refrigerators for each classification
@@ -229,7 +252,7 @@ module.exports = {
         },
         style: 'bar'
     },
-    'Maintence priority by model': {
+    'Maintenance priority by model': {
         type: 'refrigerator',
         groupBy: 'model_id',
         colorBy: 'maintenance_priority',
@@ -240,6 +263,18 @@ module.exports = {
             'high': 'red',
             'Missing data': 'gray'
         },
+        style: 'bar'
+    },
+    'Models of CCE with maintenance needs': {
+        type: 'refrigerator',
+        groupBy: 'model_id',
+        colorBy: 'maintenance_priority_filtered',
+        colorMap: {
+            'low': 'yellow',
+            'medium': 'orange',
+            'high': 'red',
+        },
+        legendOrder: [ 'high', 'medium', 'low' ],
         style: 'bar'
     },
     'CCE facility power availability by model': {
@@ -298,12 +333,17 @@ module.exports = {
     // Facility details map
     'Facility details map': {
         type: 'facility',
-        mapType: 'facility_details',
+        mapType: 'colored_facilities',
         style: 'map',
+        colorSpecs: {
+            singleColor: 'purple'
+        },
         facilityPopup: {
-            'refrigerator_class': Object.keys(refrigeratorClasses),
+            'regionlevel2': 'BY_FACILITY',
+            'regionlevel3': 'BY_FACILITY',
             'facility_level': 'BY_FACILITY',
-            'ownership': 'BY_FACILITY'
+            'ownership': 'BY_FACILITY',
+            'refrigerator_class': [ 'ILR', 'Absorption', 'Freezer', 'Solar', 'Other' ],
         }
     },
     'Recent alarms map': {
@@ -432,8 +472,8 @@ module.exports = {
             'regionlevel3',
             'model_id',
             'year_installed',
-            'functional_status_filtered',
-            'maintenance_priority_filtered',
+            'nonworking_functional_status',
+            'nonworking_maintenance_priority',
             'reason_not_working'
         ]
     },

@@ -137,11 +137,23 @@ module.exports = [
     },
     {
         name: 'FunctionalStatusFiltered',
-        query: `SELECT id_refrigerators, functional_status as functional_status_filtered, maintenance_priority as maintenance_priority_filtered
+        query: `SELECT id_refrigerators, functional_status as nonworking_functional_status, maintenance_priority as nonworking_maintenance_priority
             FROM refrigerators_odkx
             WHERE functional_status = 'not_functioning'
                OR (maintenance_priority IS NOT NULL AND maintenance_priority != 'not_applicable')`,
-        provides: [ 'functional_status_filtered', 'maintenance_priority_filtered' ],
+        provides: [ 'nonworking_functional_status', 'nonworking_maintenance_priority' ],
+        joinOn: {
+            table: 'refrigerators_odkx',
+            localColumn: 'id_refrigerators',
+            foreignColumn: 'id_refrigerators'
+        }
+    },
+    {
+        name: 'MaintenancePriorityFiltered',
+        query: `SELECT id_refrigerators, maintenance_priority as maintenance_priority_filtered
+            FROM refrigerators_odkx
+            WHERE maintenance_priority IS NOT NULL AND maintenance_priority != 'not_applicable'`,
+        provides: [ 'maintenance_priority_filtered' ],
         joinOn: {
             table: 'refrigerators_odkx',
             localColumn: 'id_refrigerators',
@@ -296,6 +308,42 @@ module.exports = [
             table: 'refrigerator_types_odkx',
             localColumn: 'id_refrigerator_types',
             foreignColumn: 'id_refrigerator_types'
+        }
+    },
+    {
+        name: 'FacilityMaintenancePriority',
+        query: `
+        SELECT id_health_facilities, facility_maintenance_priority,
+               CAST(priorities.high_count AS VARCHAR) AS high_count,
+               CAST(priorities.medium_count AS VARCHAR) AS medium_count,
+               CAST(priorities.low_count AS VARCHAR) AS low_count
+        FROM (
+            SELECT id_health_facilities,
+            CASE
+                WHEN high_count > 0 THEN 'high'
+                WHEN medium_count > 0 THEN 'medium'
+                WHEN low_count > 0 THEN 'low'
+                ELSE NULL
+            END AS facility_maintenance_priority,
+            counts.high_count, counts.medium_count, counts.low_count
+            FROM (
+                SELECT id_health_facilities,
+                SUM(CASE WHEN maintenance_priority = 'high' THEN 1 ELSE 0 END) AS high_count,
+                SUM(CASE WHEN maintenance_priority = 'medium' THEN 1 ELSE 0 END) AS medium_count,
+                SUM(CASE WHEN maintenance_priority = 'low' THEN 1 ELSE 0 END) AS low_count
+                FROM health_facilities2_odkx
+                JOIN refrigerators_odkx ON health_facilities2_odkx.id_health_facilities = refrigerators_odkx.facility_row_id
+                JOIN refrigerator_types_odkx ON refrigerator_types_odkx.id_refrigerator_types = refrigerators_odkx.model_row_id
+                GROUP BY id_health_facilities
+            ) AS counts
+        ) priorities
+        WHERE facility_maintenance_priority IS NOT NULL
+        `,
+        provides: [ 'facility_maintenance_priority', 'high_count', 'medium_count', 'low_count' ],
+        joinOn: {
+            table: 'health_facilities2_odkx',
+            localColumn: 'id_health_facilities',
+            foreignColumn: 'id_health_facilities'
         }
     }
 ];

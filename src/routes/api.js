@@ -2,7 +2,7 @@ const express = require('express');
 const visualizations = require('../config/visualizations');
 const vizQuery = require('../controller/queryTemplate');
 const formatResponse = require('../controller/formatResponse');
-const { getRefrigeratorQuery, getFacilityQuery } = require('../controller/exportQueries');
+const { getRefrigeratorQuery, getFacilityQuery, getColdRoomQuery } = require('../controller/exportQueries');
 const { getIndicatorsQuery } = require('../controller/indicatorQueries');
 const legendQuery = require('../controller/legendQuery');
 const checkSchema = require('./schemaValidator');
@@ -60,7 +60,10 @@ module.exports = function makeQueryRouter(db) {
                 data = await db.query(getRefrigeratorQuery());
             } else if (req.body.table === 'facility_big_table') {
                 data = await db.query(getFacilityQuery());
-            } else {
+            } else if (req.body.table === 'cold_rooms_big_table') {
+                data = await db.query(getColdRoomQuery());
+            }
+            else {
                 throw new Error('Did not input a valid table. Expected refrigerator_big_table or facility_big_table');
             }
             res.status(200).send(data);

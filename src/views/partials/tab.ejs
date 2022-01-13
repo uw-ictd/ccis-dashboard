@@ -26,21 +26,6 @@
             <button class="display" type="button" onclick="drawVisualization('<%=tabName%>')">Display</button>
         </div>
         <% } %>
-        <!-- Export div -->
-        <% if (tab.includeExport) { %>
-        <div id="export-div" class="display-export">
-            <!-- Export selection and button -->
-            <div>
-                Select the data you would like to export:
-                <select id="export-selector">
-                    <% Object.entries(exportOptions).forEach(([ key, name ]) => { %>
-                    <option value="<%=key%>"><%=name%></option>
-                    <% }); %>
-                </select>
-            </div>
-            <button id="export" type="button" onclick="exportTables()">Export</button>
-        </div>
-        <% } %>
         <div class="map"></div>
         <ul class="region-list"></ul>
 
@@ -48,18 +33,7 @@
     <!-- end left filter -->
 
     <!-- begin right main wrapper -->
-    <div class="main-wrapper">
-        <div class="viz-title"></div>
-        <div class="viz-wrapper">
-            <div class="map-container"></div>
-            <div class="chart-wrapper">
-                <div class="chart-container"></div>
-                <div class="legend-container"></div>
-            </div>
-            <div class="list-wrapper"></div>
-            <div class="result-text-container"></div>
-        </div>
-    </div>
+    <%- include('viz', { index: 0 }) %>
     <!-- end right main wrapper -->
 
 </div>

@@ -3,9 +3,29 @@
  */
 
 module.exports = {
+    mainsummary: {
+        tabLabel: 'Summary',
+        multi: true,
+        visualizations: [
+            'Age by CCE type',
+            'Percentage of facilities with 4+ hours of grid power (district)',
+            'CCE by working status',
+            'CCE type by facility type',
+        ]
+    },
+    maintenanceoverview: {
+        tabLabel: 'Maintenance Overview',
+        multi: true,
+        visualizations: [
+            'Maintenance priority by facility',
+            'Recent alarms map',
+            'Models of CCE with maintenance needs',
+            'Non-functional CCE list'
+        ]
+    },
     'Export': {
         tabLabel: 'Export',
-        includeExport: true
+        exportTab: true
     },
     'Facilities': {
         tabLabel: 'Facilities',
@@ -36,7 +56,8 @@ module.exports = {
             'CCE utilization',
             'CCE models by age group',
             'CCE models by age group (pie)',
-            'Maintence priority by model',
+            'Maintenance priority by model',
+            'Models of CCE with maintenance needs',
             'Maintenance priority by facility',
             'CCE by type (pie)',
             'CCE model (bar)',
@@ -51,15 +72,18 @@ module.exports = {
         ],
         defaultViz: 'Age by CCE model'
     },
-    'Vaccines': {
-        tabLabel: 'Vaccines',
-        visualizations: [
-            'Refrigeration volume vs requirements map (demo)',
-            'Freezer volume vs requirements map (demo)',
-            'Facilities with volume shortage (demo)'
-        ],
-        defaultViz: 'Refrigeration volume vs requirements map (demo)',
-    },
+    /*
+     * // Demo data
+     *'Vaccines': {
+     *    tabLabel: 'Vaccines',
+     *    visualizations: [
+     *        'Refrigeration volume vs requirements map (demo)',
+     *        'Freezer volume vs requirements map (demo)',
+     *        'Facilities with volume shortage (demo)'
+     *    ],
+     *    defaultViz: 'Refrigeration volume vs requirements map (demo)',
+     *},
+     */
     'System-Use': {
         tabLabel: 'System Use',
         visualizations: [

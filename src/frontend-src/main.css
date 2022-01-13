@@ -82,8 +82,8 @@ body
     display: flex;
     justify-content: flex-start;
     flex-wrap: wrap;
-    background-color: var(--main-theme-xlight);
     overflow: hidden; /* Don't show off-screen tabs */
+    border-bottom: 2px solid var(--main-theme);
 }
 
 .tabs
@@ -99,6 +99,8 @@ body
     border-right: 1px solid white;
     outline: none;
     cursor: pointer;
+    border-radius: 10px 10px 0 0;
+    background-color: var(--main-theme-xlight);
 }
 
 #top-tabs button:hover
@@ -128,6 +130,12 @@ body
     height: 100%;
     justify-content: flex-start;
     margin: 0 2em 0 2em
+}
+
+.bottom-wrapper.multiviz
+{
+    justify-content: space-around;
+    align-content: space-around;
 }
 
 .hidden
@@ -198,7 +206,16 @@ body
     width: 0;
 }
 
-.viz-title {
+.multiviz .main-wrapper
+{
+    height: 47%;
+    width: 47%;
+    flex-basis: auto;
+    flex-grow: 0;
+}
+
+.viz-title
+{
     margin-bottom: 1em;
     font-weight: bold;
     font-size: x-large;
@@ -253,11 +270,24 @@ body
     display: none;
 }
 
+.multiviz .chart-wrapper
+{
+    flex-flow: row;
+    justify-content: center;
+}
+
 .chart-container
 {
     margin-left: 30px;
     height: 100%;
     flex-grow: 6;
+}
+
+.multiviz .chart-container
+{
+    flex-grow: 1;
+    margin: 0;
+    flex-basis: 70%; /* adds up to 100% with legend-container's flex-basis */
 }
 
 .chart-container svg
@@ -267,10 +297,28 @@ body
     box-sizing: border-box; /* Include padding as part of the height */
 }
 
+.multiviz .chart-container svg
+{
+    float: right;
+}
+
 .legend-container
 {
     margin-right: 30px;
     width: 15vw;
+}
+
+.multiviz .legend-container
+{
+    margin-right: 0px;
+    width: 0;
+    flex-basis: 30%; /* See chart-container's flex-basis */
+}
+
+.multiviz .legend-container > svg
+{
+    max-height: 100%;
+    max-width: 100%;
 }
 
 /* Map styling */
@@ -294,6 +342,10 @@ body
 .mapboxgl-popup-content {
     text-align: left;
     font: 12px/20px 'Open Sans', sans-serif;
+}
+
+.mapboxgl-canvas, .mapboxgl-map {
+    min-height: 250px;
 }
 
 ul {

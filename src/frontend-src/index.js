@@ -26,16 +26,22 @@ document.addEventListener('DOMContentLoaded', function() {
     setupFilters(window._dropdownFilters);
 
     // Create a region selector for each tab
-    const regionSelectorPromises = Object.fromEntries(Object.keys(tabVisualizations).map(tabToRegionSelector));
+    const regionSelectorPromises = Object.fromEntries(
+        Object.keys(tabVisualizations)
+            .filter(tabName => !tabVisualizations[tabName].multi && !tabVisualizations[tabName].exportTab)
+            .map(tabToRegionSelector)
+    );
 
     window.drawVisualization = async function(tabName) {
-        drawVisualization(mapboxDependency, window._dropdownFilters, await regionSelectorPromises[tabName], tabName);
+        drawVisualization(mapboxDependency, window._dropdownFilters, await regionSelectorPromises[tabName], tabName, 0);
     };
     window.tabSelector = function (tabName) {
-        tabSelector(tabVisualizations, tabName);
+        tabSelector(mapboxDependency, tabVisualizations, tabName);
         // Manually trigger a resize event so that the map selector shows properly
         window.dispatchEvent(new Event('resize'));
     };
-    // Start with export tab as default
-    select.tab('Export').click();
+    // Start with first tab
+    // Warning: this relies on Object.values giving a consistent order, but
+    // objects are not ordered! It does seem to work, but it's a bad pattern
+    select.tab(Object.keys(tabVisualizations)[0]).click();
 });
