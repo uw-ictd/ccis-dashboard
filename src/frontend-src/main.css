@@ -154,12 +154,20 @@ body
     margin-right: 2em;
     display: flex;
     flex-direction: column;
+    gap: 5px;
+}
+
+.filter
+{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    border: solid #ccc 1px;
+    padding: 0.5ex;
 }
 
 .filter > table
 {
-    border: solid #ccc 1px;
-    padding: 0.5ex;
     margin-bottom: 0.5ex;
 }
 
@@ -170,22 +178,25 @@ body
 
 .display-export
 {
-    margin: 5px 0 5px 0;
     display: flex;
     align-items: center;
+    margin-bottom: 1ex;
 }
 
 .visualization-selector, #export-selector
 {
-    font-size: small;
     margin-right: 10px;
+    font-size: large
 }
 
 .display, #export
 {
     padding: 0.5ex;
-    font-size: small;
+    font-weight: bold;
     margin: 0.5ex;
+    flex-grow: 1;
+    max-width: 128px;
+    height: 100%;
 }
 
 .map
@@ -219,7 +230,6 @@ body
     margin-bottom: 1em;
     font-weight: bold;
     font-size: x-large;
-    text-decoration: underline;
     display: flex;
     justify-content: center;
 }
@@ -273,7 +283,6 @@ body
 .multiviz .chart-wrapper
 {
     flex-flow: row;
-    justify-content: center;
 }
 
 .chart-container
@@ -287,7 +296,6 @@ body
 {
     flex-grow: 1;
     margin: 0;
-    flex-basis: 70%; /* adds up to 100% with legend-container's flex-basis */
 }
 
 .chart-container svg
@@ -302,23 +310,20 @@ body
     float: right;
 }
 
+/* Increase font size for multiviz tabs */
+.chart-container g, .chart-container text
+{
+    font-size: 20px;
+}
+
 .legend-container
 {
     margin-right: 30px;
-    width: 15vw;
 }
 
 .multiviz .legend-container
 {
     margin-right: 0px;
-    width: 0;
-    flex-basis: 30%; /* See chart-container's flex-basis */
-}
-
-.multiviz .legend-container > svg
-{
-    max-height: 100%;
-    max-width: 100%;
 }
 
 /* Map styling */

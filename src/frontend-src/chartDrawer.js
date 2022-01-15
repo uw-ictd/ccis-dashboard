@@ -57,8 +57,8 @@ function drawAllCharts(data, { fullDomain, fullColorDomain }, { groupBy, repeatB
         type,
         style,
         sum,
-        axisWidth: repeatBy ? 200 : 600,
-        axisHeight: repeatBy ? 150 : 400
+        parentWidth: parseInt(parentElement.style('width')),
+        parentHeight: parseInt(parentElement.style('height'))
     };
 
     if (style === 'bar') {
@@ -161,16 +161,41 @@ function getNonZeroOptions(data) {
  * colorDomain: Array
  * colorScale:      D3 scale
  * groupBy:         String
- * axisWidth:       Number
- * axisHeight:      Number
+ * parentWidth:     Number
+ * parentHeight:    Number
  * title:           String
  */
-function drawBarChart(series, { parentElement, axisWidth, axisHeight, title,
+function drawBarChart(series, { parentElement, parentWidth, parentHeight, title,
     fullDomain, fullRange, colorDomain, colorScale, groupBy, type, sum }) {
+    const axisWidth = parentWidth - 60; // When the y-axis measures things with 4 digits, it takes up about 60 pixels
+
+    /*
+     * First, time to calculate some sizes for the x-axis
+     */
+    // Magic constants here were determined experimentally: about 27 pixels for the main x-axis label,
+    // and about 4 pixels per character in the tick labels
+    let axisHeight = parentHeight - 27 - 8.5*Math.max(...fullDomain.map(str => str.length));
+    let angle = '-65';
+    let xOffset = '-.8em';
+    let yOffset = '-.15em';
+    let anchor = 'end';
+    if (series[0].length === 1) { // Number of x-axis items
+        angle = '0';
+        xOffset = '0em';
+        yOffset = '2ex';
+        anchor = 'middle';
+        axisHeight = parentHeight - 21;
+    } else if (series[0].length < 12) {
+        angle = '-30';
+        xOffset = '0em';
+        yOffset = '.6em';
+        axisHeight = parentHeight - 27 - 4.2*Math.max(...fullDomain.map(str => str.length));
+    }
+
     const canvas = parentElement.append('svg');
     makeTitle(canvas, axisWidth, title);
 
-    // Scales map values in the domain to values in the range
+    // A scale maps values in the domain to values in the range
     const xScale = d3.scaleBand()
         .domain(fullDomain)
         .range([0, axisWidth])
@@ -183,15 +208,15 @@ function drawBarChart(series, { parentElement, axisWidth, axisHeight, title,
         .attr('class', 'bar-label')
         .attr('transform', `translate(0, ${axisHeight})`)
         .call(xAxis);
-
     canvas.selectAll('.bar-label text')
-        .style('text-anchor', 'end')
-        .attr('dx', '-.8em')
-        .attr('dy', '-.15em')
-        .attr('transform', 'rotate(-65)');
+        .style('text-anchor', anchor)
+        .attr('dx', xOffset)
+        .attr('dy', yOffset)
+        .attr('transform', `rotate(${angle})`);
 
+    const { height } = canvas.selectAll('.bar-label').node().getBBox();
     canvas.append('text')
-        .attr('transform', `translate(${axisWidth/2}, ${axisHeight + 100})`)
+        .attr('transform', `translate(${axisWidth/2}, ${height + axisHeight - 18})`)
         .attr('dy', '4ex')
         .attr('fill', 'currentColor')
         .style('text-anchor', 'middle')
@@ -215,11 +240,15 @@ function drawBarChart(series, { parentElement, axisWidth, axisHeight, title,
 
     // Make y-axis and add to canvas
     const yAxis = d3.axisLeft()
-        .scale(yScale);
+        .scale(yScale)
+        .ticks(Math.max(axisHeight/30,2)); // Limit the number of ticks based on available space
     canvas.append('g')
+        .attr('class', 'y-axis')
         .call(yAxis)
-      .append('text')
-        .attr('transform', `translate(0,${axisHeight/2}) rotate(-90)`)
+
+    const { width } = canvas.selectAll('.y-axis').node().getBBox();
+    canvas.append('text')
+        .attr('transform', `translate(-${width+27},${axisHeight/2}) rotate(-90)`)
         .attr('dy', '2ex')
         .attr('fill', 'currentColor')
         .style('text-anchor', 'middle')

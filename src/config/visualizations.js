@@ -60,7 +60,7 @@ module.exports = {
         groupBy: 'model_id',
         colorBy: 'AgeGroups',
         colorMap: {
-            '0-5 Years': 'green',
+            '0-5 Years': 'blue',
             '6-10 Years': 'yellow',
             '>10 Years': 'red',
             'Missing data': 'gray'
@@ -73,7 +73,7 @@ module.exports = {
         groupBy: 'refrigerator_class',
         colorBy: 'AgeGroups',
         colorMap: {
-            '0-5 Years': 'green',
+            '0-5 Years': 'blue',
             '6-10 Years': 'yellow',
             '>10 Years': 'red',
             'Missing data': 'gray'
@@ -167,7 +167,7 @@ module.exports = {
         colorBy: 'AgeGroups',
         sort: 'DESC',
         colorMap: {
-            '0-5 Years': 'green',
+            '0-5 Years': 'blue',
             '6-10 Years': 'yellow',
             '>10 Years': 'red',
             'Missing data': 'gray'
@@ -180,7 +180,7 @@ module.exports = {
         colorBy: 'AgeGroups',
         sort: 'DESC',
         colorMap: {
-            '0-5 Years': 'green',
+            '0-5 Years': 'blue',
             '6-10 Years': 'yellow',
             '>10 Years': 'red',
             'Missing data': 'gray'

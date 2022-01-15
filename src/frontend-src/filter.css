@@ -1,7 +1,8 @@
 /* Loaded after multiselect/multiselect.css to override the default settings */
 .multiselect-wrapper
 {
-	font-family: 'Open Sans', Sans-Serif;
+    font-family: 'Open Sans', Sans-Serif;
+    width: 80%;
 }
 
 .multiselect-input-div > input
@@ -12,4 +13,9 @@
 .multiselect-count
 {
     background-color: var(--main-theme-xlight);
+}
+
+.multiselect-td
+{
+    text-align: center;
 }

@@ -77,9 +77,11 @@ beforeEach(() => {
     </div>`;
     // JSDOM doesn't implement SVG standards, including getBBox, which is
     // used in drawAllCharts
-    window.SVGGraphicsElement.prototype.getBBox = function getBBox() {
+    function getBBox() {
         return { x: 0, y: 0, height: 0, width: 0 };
-    };
+    }
+    window.SVGGraphicsElement.prototype.getBBox = getBBox;
+    window.SVGElement.prototype.getBBox = getBBox;
 });
 
 describe('Unit tests for drawAllCharts', () => {

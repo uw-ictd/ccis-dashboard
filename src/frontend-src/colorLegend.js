@@ -12,10 +12,10 @@ function drawColorLegend(parentElement, colorDomainStrings, colorScale, {style, 
        return;
    }
 
-  const SQ_WIDTH = 15; // Width of the colored square. In pixels, of course
-  const PADDING = 4;
-  const FONT_SIZE = 11;
-  const index = i => colorDomainStrings.length - 1 - i;
+   const SQ_WIDTH = 20; // Width of the colored square. In pixels, of course
+   const PADDING = 6;
+   const FONT_SIZE = 16;
+   const index = i => colorDomainStrings.length - 1 - i;
    const orderedOptions = legendOrder ? legendOrder.filter(s => colorDomainStrings.includes(s)): [];
    const unorderedOptions = colorDomainStrings.filter(s => !orderedOptions.includes(s));
    // legendOptions[0] goes at the bottom, so we need to reverse the ordered options 
@@ -37,7 +37,9 @@ function drawColorLegend(parentElement, colorDomainStrings, colorScale, {style, 
       .attr('x', SQ_WIDTH + PADDING)
       .attr('font-size', FONT_SIZE)
       .text((d, i) => d);
-  fitCanvasToContents(canvas);
+  const { width, height } = canvas.node().getBBox();
+  canvas.attr('width', width);
+  canvas.attr('height', height);
 }
 
 module.exports = drawColorLegend;
