@@ -2,6 +2,20 @@
 <div id="<%=tabName%>" class="bottom-wrapper">
     <!-- begin left filter -->
     <div class="left-wrapper">
+        <!-- Visualization selection and button -->
+        <% if (tab.visualizations) { %>
+        <div class="display-export">
+            <div>
+                <div>Select a visualization:</div>
+                <select class="visualization-selector" onchange="selectVisualization('<%=tabName%>')">
+                    <% tab.visualizations.forEach(y => { %>
+                    <option value="<%=y%>"><%=y%></option>
+                    <% }); %>
+                </select>
+            </div>
+            <button class="display" type="button" onclick="drawVisualization('<%=tabName%>')">Display</button>
+        </div>
+        <% } %>
         <div class="filter">
             <table>
                 <tr>
@@ -11,23 +25,9 @@
                     <%- include('filterOption', { ...filterSpec, key }) %>
                 <% }); %>
             </table>
-        </div>
-        <!-- Visualization selection and button -->
-        <% if (tab.visualizations) { %>
-        <div class="display-div display-export">
-            <div>
-                Select a visualization:
-                <select class="visualization-selector">
-                    <% tab.visualizations.forEach(y => { %>
-                    <option value="<%=y%>"><%=y%></option>
-                    <% }); %>
-                </select>
-            </div>
-            <button class="display" type="button" onclick="drawVisualization('<%=tabName%>')">Display</button>
-        </div>
-        <% } %>
         <div class="map"></div>
         <ul class="region-list"></ul>
+        </div>
 
     </div>
     <!-- end left filter -->

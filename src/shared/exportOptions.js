@@ -12,7 +12,8 @@ module.exports = {
         'geographic_regions_odkx',
         'maintenance_logs_odkx',
         'refrigerator_moves_odkx',
-        'refrigerator_temperature_data_odkx'
+        'refrigerator_temperature_data_odkx',
+        'ft_daily_temp_records_odkx'
     ],
     dropdownNames: {
         refrigerator_big_table: 'Refrigerator Table (CCIS format)',
@@ -25,7 +26,8 @@ module.exports = {
         maintenance_logs_odkx: 'Maintenance logs (ODK-X format)',
         cold_rooms_odkx: 'Cold rooms (ODK-X format)',
         refrigerator_moves_odkx: 'Refrigerator moves (ODK-X format)',
-        refrigerator_temperature_data_odkx: 'Temperature data (ODK-X format)',
+        refrigerator_temperature_data_odkx: 'Refrigerator temperature data (ODK-X format)',
+        ft_daily_temp_records_odkx: 'Fridge tag daily temperature data (ODK-X format)',
         all_odkx_tables: 'All ODK-X tables'
     }
 };

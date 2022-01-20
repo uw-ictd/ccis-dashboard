@@ -10,13 +10,17 @@ const d3 = require('d3');
 const select = require('./selectors');
 const writeTextInsteadOfChart = require('./resultText');
 const tabVisualizations = require('../config/tabVisualizations');
+const filterSpecification = require('../config/filterSpecification');
+const enableDropdownForViz = require('../shared/filterDisable');
+const { setFilterEnabled } = require('./filter');
 
 function drawVisualization(mapboxDependency, dropdownFilters, regionSelector, tabName, index, visualizationName) {
     const vizName = tabVisualizations[tabName].multi ? visualizationName: getVisualizationName(tabName);
     const mapConfig = tabVisualizations[tabName].multi ? mapDisplay.smallMapMultiviz : mapDisplay.mapVisualization;
     const visualization = visualizations[vizName];
+    tearDownVisualizationsNonMap(tabName, index);
     if ((visualization.style != 'map' && visualization.style != 'heatmap') || select.mapContainer(tabName, index).style.display == 'none') {
-        tearDownVisualizations(tabName, index);
+        tearDownMap(tabName, index);
         writeTextInsteadOfChart('Visualization is loading...', tabName, index);
     }
     return post('./api/query', {
@@ -24,11 +28,11 @@ function drawVisualization(mapboxDependency, dropdownFilters, regionSelector, ta
         filter: getFilterParams(dropdownFilters, regionSelector, tabName)
     }).then(async (body) => {
         // Clean up, unless  we're drawing a map when there was a map before
+        tearDownVisualizationsNonMap(tabName, index);
         if ((visualization.style != 'map' && visualization.style != 'heatmap') ||
             select.mapContainer(tabName, index).style.display == 'none' ||
             !body.data.length) {
-            removeText(tabName, index);
-            tearDownVisualizations(tabName, index);
+            tearDownMap(tabName, index);
         }
         // Alert for empty result
         if (!body.data.length) {
@@ -50,7 +54,7 @@ function drawVisualization(mapboxDependency, dropdownFilters, regionSelector, ta
             drawLineList(body.data, visualization, tabName, vizName, index);
         } else {
             // Make the containing div element visible
-            select.chartWrapper(tabName, index).style.display = 'flex';
+            select.chartContainer(tabName, index).style.display = 'block';
             await drawAllCharts(body.data, body.metadata, visualization, tabName, index);
         }
     }).catch(async (error) => {
@@ -90,14 +94,26 @@ function removeText(tabName, index) {
     d3.selectAll(resultTextContainerSvgStr).remove();
 }
 
-function tearDownVisualizations(tabName, index) {
+function tearDownVisualizationsNonMap(tabName, index) {
     const chartWrapperSvgStr = select.chartWrapperStr(tabName, index) + ' svg';
     d3.selectAll(chartWrapperSvgStr).remove(); // clear previous charts/legend
-    select.mapContainer(tabName, index).style.display = 'none';
-    select.chartWrapper(tabName, index).style.display = 'none';
+    select.chartContainer(tabName, index).style.display = 'none';
     select.listWrapper(tabName, index).style.display = 'none';
     removeText(tabName, index);
+}
+
+function tearDownMap(tabName, index) {
+    select.mapContainer(tabName, index).style.display = 'none';
     removeMap(tabName, index);
 }
 
-module.exports = drawVisualization;
+function selectVisualization(tabName) {
+    const vizName = getVisualizationName(tabName);
+    Object.entries(filterSpecification)
+        .filter(([filterID, filterObj]) => filterObj.useInDropdowns)
+        .forEach(([filterID, filterObj]) => {
+            setFilterEnabled(tabName, filterID, enableDropdownForViz(visualizations[vizName], filterObj.table));
+        })
+}
+
+module.exports = {drawVisualization, selectVisualization};

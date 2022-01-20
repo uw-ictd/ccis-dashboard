@@ -1,6 +1,6 @@
 <tr>
     <td><%=title%></td>
-    <td>
+    <td class="multiselect-td">
     <% const id = `${tabName}-${key}-selector`; %>
     <% if (locals.grouped) { %>
         <%- include('groupedDropdown', { id, classes }); %>

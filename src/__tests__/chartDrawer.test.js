@@ -3,6 +3,7 @@
  */
 const drawAllCharts = require('../frontend-src/chartDrawer');
 const visualizations = require('../config/visualizations');
+const { mockGetBBox } = require('../testUtils');
 
 const viz = 'CCE utilization';
 const metadata = {
@@ -75,11 +76,7 @@ beforeEach(() => {
         <div class="legend-container legend-container-0"></div>
         <div class="chart-container chart-container-0"></div>
     </div>`;
-    // JSDOM doesn't implement SVG standards, including getBBox, which is
-    // used in drawAllCharts
-    window.SVGGraphicsElement.prototype.getBBox = function getBBox() {
-        return { x: 0, y: 0, height: 0, width: 0 };
-    };
+    mockGetBBox();
 });
 
 describe('Unit tests for drawAllCharts', () => {

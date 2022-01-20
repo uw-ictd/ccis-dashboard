@@ -2,14 +2,14 @@ require('./main.css');
 require('tippy.js/dist/tippy.css');
 const mapboxDependency = require('./map');
 const RegionSelector = require('./RegionSelector');
-const drawVisualization = require('./visualizationController');
+const { drawVisualization, selectVisualization } = require('./visualizationController');
 const tabSelector = require('./tabSelector');
 const tabVisualizations = require('../config/tabVisualizations');
 const makeMap = mapboxDependency.makeMap;
 const mapDisplay = require('../config/mapDisplay').regionSelector;
 const { getIndicators } = require('./indicatorsController');
 const select = require('./selectors');
-const setupFilters = require('./filter');
+const { setupFilters } = require('./filter');
 
 function tabToRegionSelector(tabName) {
     const shapefiles = import('../config/shapefiles');
@@ -40,6 +40,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Manually trigger a resize event so that the map selector shows properly
         window.dispatchEvent(new Event('resize'));
     };
+    window.selectVisualization = async function(tabName) {
+        selectVisualization(tabName);
+    }
     // Start with first tab
     // Warning: this relies on Object.values giving a consistent order, but
     // objects are not ordered! It does seem to work, but it's a bad pattern

@@ -74,6 +74,16 @@ function mapSeries(arr, fn) {
     }, Promise.resolve([]));
 }
 
+function mockGetBBox() {
+    // JSDOM doesn't implement SVG standards, including getBBox, which is
+    // used in drawAllCharts
+    function getBBox() {
+        return { x: 0, y: 0, height: 0, width: 0 };
+    }
+    window.SVGGraphicsElement.prototype.getBBox = getBBox;
+    window.SVGElement.prototype.getBBox = getBBox;
+}
+
 module.exports = {
     TEST_USER,
     TEST_PASSWORD,
@@ -84,5 +94,6 @@ module.exports = {
     logIn,
     runSQL,
     silenceErrors,
-    mapSeries
+    mapSeries,
+    mockGetBBox
 };

@@ -6,7 +6,7 @@ const select = require('./selectors');
 const tabs = require('../config/tabVisualizations');
 const tabVisualizations = require('../config/tabVisualizations');
 
-module.exports = function setupFilters(dropdownFilters) {
+function setupFilters(dropdownFilters) {
     Object.keys(tabs)
         .filter(tab => !tabVisualizations[tab].multi && !tabVisualizations[tab].exportTab)
         .forEach(tabName => {
@@ -19,3 +19,10 @@ module.exports = function setupFilters(dropdownFilters) {
             });
     });
 }
+
+function setFilterEnabled(tabName, filterID, enabled) {
+    id = select.filterStr(tabName, filterID);
+    const temp = document.multiselect(id);
+    temp.setIsEnabled(enabled);
+}
+module.exports = {setupFilters, setFilterEnabled}

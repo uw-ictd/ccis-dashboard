@@ -164,9 +164,11 @@ module.exports = [
         name: 'FacilityUpdateStatus',
         query: `SELECT id_health_facilities,
             CASE
-                 WHEN lastupdateuser_health_facilities = 'init' THEN 'Never'
-                 WHEN savepointtimestamp_health_facilities::timestamp::date <= current_date - '3 months'::interval THEN 'Stale'
-                 WHEN savepointtimestamp_health_facilities::timestamp::date > current_date - '3 months'::interval THEN 'Recent'
+                 WHEN lastupdateuser_health_facilities = 'init' OR 
+                      savepointtimestamp_health_facilities::timestamp::date < current_date - '3 months'::interval
+                      THEN '> 3 months/Never'
+                 WHEN savepointtimestamp_health_facilities::timestamp::date <= current_date - '1 months'::interval THEN '1-3 months'
+                 WHEN savepointtimestamp_health_facilities::timestamp::date > current_date - '1 months'::interval THEN '< 1 month'
                  ELSE 'Error'
             END AS facility_update_status
             FROM health_facilities2_odkx`,

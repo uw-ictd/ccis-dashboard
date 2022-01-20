@@ -1,5 +1,5 @@
 const select = require('./selectors');
-const drawVisualization = require('./visualizationController');
+const { drawVisualization, selectVisualization } = require('./visualizationController');
 
 // Check if innerHTML of DOM object is empty
 function isEmpty(domObject) {
@@ -29,6 +29,7 @@ function tabSelector(mapboxDependency, tabs, tabName) {
             isEmpty(select.legendContainer(tabName, 0)) &&
             isEmpty(select.listWrapper(tabName, 0))) {
             select.vizSelector(tabName).value = tabs[tabName].defaultViz;
+            selectVisualization(tabName);
             select.displayButton(tabName).click();
         }
     }

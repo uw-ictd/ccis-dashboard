@@ -7,10 +7,10 @@ module.exports = {
         tabLabel: 'Summary',
         multi: true,
         visualizations: [
-            'Age by CCE type',
-            'Percentage of facilities with 4+ hours of grid power (district)',
             'CCE by working status',
-            'CCE type by facility type',
+            'CCE utilization (bar)',
+            'Age by CCE type',
+            'Update status by facility'
         ]
     },
     maintenanceoverview: {
