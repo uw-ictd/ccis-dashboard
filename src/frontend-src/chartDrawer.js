@@ -279,7 +279,8 @@ function drawBarChart(series, { parentElement, parentWidth, parentHeight, title,
             .attr('height', (d, i) => yScale(d[0]) - yScale(d[1]))
             // For tooltips
             .attr('tabindex', '0')
-            .attr('data-tippy-content', d => `${d.key}: ${d[1]-d[0]}`);
+            .attr('data-tippy-content', d => `${d.key}: ${d[1]-d[0]}`)
+            .style('outline', 'none');
     fitCanvasToContents(canvas);
 }
 
@@ -304,6 +305,7 @@ function drawPieChart(data, { parentElement, title, colorScale }) {
             .attr('fill', d => colorScale(d.data[0]))
             .attr('stroke', 'white')
             .style('stroke-width', '1px')
+            .style('outline', 'none')
             // For tooltips
             .attr('tabindex', '0')
             // d.data has the same [key, value] format as in arcs

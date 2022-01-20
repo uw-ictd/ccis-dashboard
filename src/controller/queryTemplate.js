@@ -4,6 +4,7 @@ const filterSpecification = require('../config/filterSpecification');
 const findQueryForColumn = require('../util/searchComputedColumns');
 const validate = require('../util/configValidation');
 const shapefiles = require('../config/shapefiles');
+const enableDropdownForViz = require('../shared/filterDisable');
 validate('computedColumns', computedColumns);
 
 const MAP_SEPARATOR = '$';
@@ -153,9 +154,7 @@ function makeFilterStr(vizSpec) {
     const filter = vizSpec.filter;
     if (!filter) return '';
     return 'WHERE ' + Object.entries(filterSpecification)
-        .filter(([filterName, { table }]) =>
-            !(vizSpec.type === 'facility' &&
-              (table === 'refrigerator_types_odkx' || table === 'refrigerators_odkx')))
+        .filter(([_, { table }]) => enableDropdownForViz(vizSpec, table))
         .filter(([filterName, _]) => Boolean(filter[filterName]))
         .map(([filterName, thisFilterSpec]) => {
             if (thisFilterSpec.multiColumn) {

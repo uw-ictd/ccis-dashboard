@@ -243,6 +243,7 @@ body
 .map-container
 {
     height: 100%;
+    flex-grow: 1;
     display: none;
 }
 
@@ -277,7 +278,6 @@ body
     display: flex;
     flex-flow: row wrap;
     height: 100%;
-    display: none;
 }
 
 .multiviz .chart-wrapper
@@ -289,7 +289,8 @@ body
 {
     margin-left: 30px;
     height: 100%;
-    flex-grow: 6;
+    flex-grow: 1;
+    display: none;
 }
 
 .multiviz .chart-container

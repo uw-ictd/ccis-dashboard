@@ -545,9 +545,9 @@ module.exports = {
         style: 'map',
         colorBy: 'facility_update_status',
         colorMap: {
-            'Never': 'red',
-            'Stale': 'yellow',
-            'Recent': 'green'
+            '> 3 months/Never': 'red',
+            '1-3 months': 'yellow',
+            '< 1 month': 'green'
         },
         facilityPopup: {
             'facility_update_status': 'BY_FACILITY',

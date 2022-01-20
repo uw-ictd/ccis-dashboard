@@ -1,8 +1,8 @@
 /**
  * @jest-environment jsdom
  */
-const drawVisualization = require('../frontend-src/visualizationController');
-const setupFilters = require('../frontend-src/filter');
+const { drawVisualization } = require('../frontend-src/visualizationController');
+const { setupFilters } = require('../frontend-src/filter');
 
 const regionSelectorMock = {
     getSelectedRegions: () => [ [ 'Uganda', 'Kampala' ] ]
@@ -46,7 +46,7 @@ beforeEach(() => {
             <option value="Age by CCE model"></option>
         </select>
         <div class="map-container-0"></div>
-        <div class="chart-wrapper-0"></div>
+        <div class="chart-container-0"></div>
         <div class="list-wrapper-0"></div>
         <div class="result-text-container-0"></div>
     </div>

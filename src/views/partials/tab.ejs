@@ -7,7 +7,7 @@
         <div class="display-export">
             <div>
                 <div>Select a visualization:</div>
-                <select class="visualization-selector">
+                <select class="visualization-selector" onchange="selectVisualization('<%=tabName%>')">
                     <% tab.visualizations.forEach(y => { %>
                     <option value="<%=y%>"><%=y%></option>
                     <% }); %>

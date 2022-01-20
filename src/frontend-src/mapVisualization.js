@@ -3,9 +3,11 @@ const makeMarkerInfo = require('./coordinates');
 const { makeColorScale } = require('./colorScale');
 const makeHeatmap = require('./heatmapVisualization');
 const select = require('./selectors');
+const d3 = require('d3');
+const drawColorLegend = require('./colorLegend');
 const maps = {};
 
-function _drawMarker(mapboxgl, tabLabel, index, map, marker) {
+function _drawMarker(mapboxgl, tabName, index, map, marker) {
     // create a DOM element for the marker
     const el = document.createElement('div');
     el.className = 'marker';
@@ -23,33 +25,33 @@ function _drawMarker(mapboxgl, tabLabel, index, map, marker) {
         }).setHTML(`<h3> ${marker.title}
             </h3><p> ${marker.description} </p>`))
         .addTo(map);
-    maps[tabLabel][index].markers.push(markerObj);
+    maps[tabName][index].markers.push(markerObj);
 }
 
 /*
  * If a map already exists for this tab, this will clear all
  * markers. Otherwise, creates a map from the makeMap function.
 */
-async function setUpMap(makeMap, mapConfig, tabLabel, vizIndex) {
-    if (!maps[tabLabel]) {
-        maps[tabLabel] = {};
+async function setUpMap(makeMap, mapConfig, tabName, vizIndex) {
+    if (!maps[tabName]) {
+        maps[tabName] = {};
     }
-    if (!maps[tabLabel][vizIndex]) {
-        maps[tabLabel][vizIndex] = {
-            map: await makeMap(mapConfig, select.mapContainer(tabLabel, vizIndex)),
+    if (!maps[tabName][vizIndex]) {
+        maps[tabName][vizIndex] = {
+            map: await makeMap(mapConfig, select.mapContainer(tabName, vizIndex)),
             markers: [],
             sources: {}
         };
     } else {
-        maps[tabLabel][vizIndex].markers.forEach(marker => marker.remove());
-        Object.keys(maps[tabLabel][vizIndex].sources).forEach(source => {
-            maps[tabLabel][vizIndex].map.off('click', source, maps[tabLabel][vizIndex].sources[source]);  // remove event listener for popup
-            maps[tabLabel][vizIndex].map.removeLayer(source);  // Remove geoJSON layer
-            maps[tabLabel][vizIndex].map.removeSource(source);  // Remove geoJSON source
+        maps[tabName][vizIndex].markers.forEach(marker => marker.remove());
+        Object.keys(maps[tabName][vizIndex].sources).forEach(source => {
+            maps[tabName][vizIndex].map.off('click', source, maps[tabName][vizIndex].sources[source]);  // remove event listener for popup
+            maps[tabName][vizIndex].map.removeLayer(source);  // Remove geoJSON layer
+            maps[tabName][vizIndex].map.removeSource(source);  // Remove geoJSON source
         });
-        maps[tabLabel][vizIndex].sources = {};
+        maps[tabName][vizIndex].sources = {};
     }
-    return maps[tabLabel][vizIndex].map;
+    return maps[tabName][vizIndex].map;
 }
 
 /*
@@ -59,9 +61,9 @@ async function setUpMap(makeMap, mapConfig, tabLabel, vizIndex) {
  * data: array of data in map format, see coordinates.js for more info
  * mapType: String, currently only 'maintenance_priority' is supported
  */
-async function mapVisualization({ mapboxgl, makeMap }, data, { fullColorDomain }, visualization, tabLabel, mapConfig, vizIndex) {
-    const map = await setUpMap(makeMap, mapConfig, tabLabel, vizIndex);
-    const drawMarker = _drawMarker.bind({}, mapboxgl, tabLabel, vizIndex, map);
+async function mapVisualization({ mapboxgl, makeMap }, data, { fullColorDomain }, visualization, tabName, mapConfig, vizIndex) {
+    const map = await setUpMap(makeMap, mapConfig, tabName, vizIndex);
+    const drawMarker = _drawMarker.bind({}, mapboxgl, tabName, vizIndex, map);
 
     // Add markers 250 at a time
     const BATCH_SIZE = 250;
@@ -71,6 +73,16 @@ async function mapVisualization({ mapboxgl, makeMap }, data, { fullColorDomain }
     }
 
     const colorScale = makeColorScale(fullColorDomain, visualization.colorMap, visualization.singleColor);
+
+    // Draw the legend if it's enabled and has colors to draw
+    if (!(visualization.colorSpecs && visualization.colorSpecs.disableLegend) &&
+        !visualization.singleColor) {
+        drawColorLegend(d3.select(select.legendContainerStr(tabName, vizIndex)),
+            fullColorDomain.map(x => x ? x : 'undefined'),
+            colorScale,
+            visualization
+        );
+    }
 
     // Note: we return the map object before these asynchronous operations
     // complete
@@ -82,15 +94,15 @@ async function mapVisualization({ mapboxgl, makeMap }, data, { fullColorDomain }
     return map;
 }
 
-async function heatmapVisualization({ mapboxgl, makeMap }, data, visualization, tabLabel, mapConfig, vizIndex) {
-    const map = await setUpMap(makeMap, mapConfig, tabLabel, vizIndex);
-    maps[tabLabel][vizIndex].sources = makeHeatmap(mapboxgl, map, data, visualization, vizIndex);
+async function heatmapVisualization({ mapboxgl, makeMap }, data, visualization, tabName, mapConfig, vizIndex) {
+    const map = await setUpMap(makeMap, mapConfig, tabName, vizIndex);
+    maps[tabName][vizIndex].sources = makeHeatmap(mapboxgl, map, data, visualization, vizIndex);
     return map;
 }
 
-function removeMap(tabLabel, vizIndex) {
-    if (maps[tabLabel]) {
-        delete maps[tabLabel][vizIndex];
+function removeMap(tabName, vizIndex) {
+    if (maps[tabName]) {
+        delete maps[tabName][vizIndex];
     }
 }
 

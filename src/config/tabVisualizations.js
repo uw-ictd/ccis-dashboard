@@ -7,9 +7,9 @@ module.exports = {
         tabLabel: 'Summary',
         multi: true,
         visualizations: [
-            'Age by CCE type',
-            'CCE utilization (bar)',
             'CCE by working status',
+            'CCE utilization (bar)',
+            'Age by CCE type',
             'Update status by facility'
         ]
     },

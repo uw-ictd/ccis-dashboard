@@ -4,6 +4,7 @@
 const visualizations = require('../config/visualizations');
 const { mapVisualization } = require('../frontend-src/mapVisualization');
 const mapConfig = require('../config/mapDisplay').mapVisualization;
+const { mockGetBBox } = require('../testUtils');
 
 const mapboxMock = {
     makeMap: function () {},
@@ -29,7 +30,9 @@ beforeEach(() => {
     // Clean up after other tests
     document.body.innerHTML = `<div id="test">
         <div class="map-container map-container-0"></div>
+        <div class="legend-container legend-container-0"></div>
     </div>`;
+    mockGetBBox();
 });
 
 describe('Map visualization tests', () => {
