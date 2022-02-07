@@ -1,6 +1,8 @@
 const { runSQL, dbOptionsEmpty } = require('../testUtils');
 const db = require('../model/db')(dbOptionsEmpty);
-const { getRefrigeratorQuery, getFacilityQuery } = require('../controller/exportQueries');
+const exportOptions = require('../shared/exportOptions');
+const refrigeratorQuery = exportOptions['refrigerator_joined'].query;
+const facilityQuery = exportOptions['facility_joined'].query;
 let transaction;
 
 beforeAll(async () => {
@@ -26,7 +28,7 @@ afterAll(() => {
 describe('SQL query tests for table export', () =>  {
     test('Return refrigerator big table with export query', async () => {
         await runSQL(transaction, 'seedMainTables.sql');
-        const result = await transaction.query(getRefrigeratorQuery());
+        const result = await transaction.query(refrigeratorQuery);
         expect(result.length).toBeGreaterThanOrEqual(1);
         const columns = Object.keys(result[0]);
         expect(columns).toEqual(expect.arrayContaining([
@@ -57,8 +59,8 @@ describe('SQL query tests for table export', () =>  {
             'voltage_regulator_functional_status',
             'voltage_regulator_serial_number',
             'temperature_monitoring_device_functional_status',
-            'lastUpdateUser_refrigerator_types',
-            'savepointTimestamp_refrigerator_types',
+            'lastUpdateUser_refrigerators',
+            'savepointTimestamp_refrigerators',
             'catalog_id',
             'equipment_type',
             'manufacturer',
@@ -72,7 +74,7 @@ describe('SQL query tests for table export', () =>  {
 
     test('Return facility big table with export query', async () => {
         await runSQL(transaction, 'seedMainTables.sql');
-        const result = await transaction.query(getFacilityQuery());
+        const result = await transaction.query(facilityQuery);
         expect(result.length).toBeGreaterThanOrEqual(1);
         const columns = Object.keys(result[0]);
         expect(columns).toEqual(expect.arrayContaining([

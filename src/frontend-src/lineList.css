@@ -3,6 +3,7 @@
     height: 100%;
     display: none;
     flex-direction: column;
+    width: 100%;
 }
 
 .line-list-download

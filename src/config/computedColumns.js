@@ -274,6 +274,34 @@ module.exports = [
         }
     },
     {
+        name: 'FacilitiesWithCapacity',
+        query: `
+           SELECT id_health_facilities,
+           CASE WHEN SUM(refrigerator_net_volume) > 0.01 then 'TRUE'
+                ELSE 'FALSE'
+           END AS facility_has_refrigeration,
+           CASE WHEN SUM(freezer_net_volume) > 0.01 then 'TRUE'
+                ELSE 'FALSE'
+           END AS facility_has_freezer
+           FROM (
+                  SELECT id_health_facilities,
+                         CAST(NULLIF(refrigerator_types_odkx.refrigerator_net_volume, '') as numeric) as refrigerator_net_volume,
+                         CAST(NULLIF(refrigerator_types_odkx.freezer_net_volume, '') as numeric) as freezer_net_volume
+                  FROM health_facilities2_odkx
+                  LEFT JOIN refrigerators_odkx
+                       on health_facilities2_odkx.id_health_facilities = refrigerators_odkx.facility_row_id
+                  LEFT JOIN refrigerator_types_odkx
+                       on refrigerator_types_odkx.id_refrigerator_types = refrigerators_odkx.model_row_id
+           ) as numeric_volume
+         GROUP BY id_health_facilities`,
+        provides: [ 'facility_has_refrigeration', 'facility_has_freezer' ],
+        joinOn: {
+            table: 'health_facilities2_odkx',
+            localColumn: 'id_health_facilities',
+            foreignColumn: 'id_health_facilities'
+        }
+    },
+    {
         name: 'FacilityTimestampNice',
         query: `SELECT id_health_facilities, TO_CHAR(CAST(savepointtimestamp_health_facilities as timestamp), 'DD-MM-YYYY') as facility_savepoint
             FROM health_facilities2_odkx`,

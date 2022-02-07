@@ -9,8 +9,8 @@
             <div>
                 Select the data you would like to export:
                 <select id="export-selector">
-                    <% Object.entries(exportOptions).forEach(([ key, name ]) => { %>
-                    <option value="<%=key%>"><%=name%></option>
+                    <% Object.entries(exportOptions).forEach(([ key, options ]) => { %>
+                    <option value="<%=key%>"><%=options.name%></option>
                     <% }); %>
                 </select>
             </div>

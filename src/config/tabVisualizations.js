@@ -31,6 +31,8 @@ module.exports = {
         tabLabel: 'Facilities',
         visualizations: [
             'Facility details map',
+            'Percentage of facilities with freezer capacity',
+            'Percentage of facilities with refrigerator capacity',
             'Catchment population',
             'CCE model by facility power availability',
             'CCE facility power availability by model',
