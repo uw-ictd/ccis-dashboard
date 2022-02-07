@@ -2,7 +2,7 @@ const express = require('express');
 const visualizations = require('../config/visualizations');
 const vizQuery = require('../controller/queryTemplate');
 const formatResponse = require('../controller/formatResponse');
-const { getRefrigeratorQuery, getFacilityQuery, getColdRoomQuery } = require('../controller/exportQueries');
+const exportOptions = require('../shared/exportOptions');
 const { getIndicatorsQuery } = require('../controller/indicatorQueries');
 const legendQuery = require('../controller/legendQuery');
 const checkSchema = require('./schemaValidator');
@@ -53,19 +53,12 @@ module.exports = function makeQueryRouter(db) {
         }
     });
 
-    router.post('/bigTable', checkSchema(schemas.bigTableProps, 'body'), async (req, res) => {
+    router.post('/joinedTable', checkSchema(schemas.joinedTableProps, 'body'), async (req, res) => {
         try {
-            let data;
-            if (req.body.table === 'refrigerator_big_table') {
-                data = await db.query(getRefrigeratorQuery());
-            } else if (req.body.table === 'facility_big_table') {
-                data = await db.query(getFacilityQuery());
-            } else if (req.body.table === 'cold_rooms_big_table') {
-                data = await db.query(getColdRoomQuery());
-            }
-            else {
-                throw new Error('Did not input a valid table. Expected refrigerator_big_table or facility_big_table');
-            }
+            const query = exportOptions[req.body.table].query;
+            // functionName is not null because the schema checks that the input
+            // table matches exportOptions.joinedTables
+            const data = await db.query(query);
             res.status(200).send(data);
         } catch(err) {
             console.error(err);

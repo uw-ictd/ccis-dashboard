@@ -1,18 +1,19 @@
 const exportOptions = require('../shared/exportOptions');
+const { rawTableNames } = require('../shared/exportOptionsMetadata');
 const downloadAsCSV = require('./downloadAsCSV');
 const { post } = require('./httpTools');
 const API_RAW = './api/rawTable';
-const API_BIG = './api/bigTable';
+const API_JOINED = './api/joinedTable';
 
 function exportTables() {
     const tableName = getTableName();
     if (tableName === 'all_odkx_tables') { // all odk tables
-        exportOptions.rawTables.forEach(table => {
+        rawTableNames.forEach(table => {
             getTableData(API_RAW, table);
         });
-    } else if (exportOptions.bigTables.includes(tableName)) {
+    } else if (!exportOptions[tableName].rawTable) {
         // Joined tables
-        getTableData(API_BIG, tableName);
+        getTableData(API_JOINED, tableName);
     } else { // individual tables
         getTableData(API_RAW, tableName)
     }

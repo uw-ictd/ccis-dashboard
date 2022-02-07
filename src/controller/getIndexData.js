@@ -20,7 +20,7 @@ async function getIndexData(db)  {
         visualizations,
         tabVisualizations,
         filters,
-        exportOptions: exportOptions.dropdownNames
+        exportOptions: exportOptions
     };
 }
 

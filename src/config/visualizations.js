@@ -607,4 +607,22 @@ module.exports = {
         legendNonzeroOnly: true,
         sum: 'number_of_low_alarms_30'
     },
+    'Percentage of facilities with freezer capacity': {
+        type: 'facility',
+        style: 'heatmap',
+        colorBy: 'facility_has_freezer',
+        regionLevel: 'Region (Level 2)',
+        fill_specs: {
+            fill_color: 'purple'
+        }
+    },
+    'Percentage of facilities with refrigerator capacity': {
+        type: 'facility',
+        style: 'heatmap',
+        colorBy: 'facility_has_refrigeration',
+        regionLevel: 'Region (Level 2)',
+        fill_specs: {
+            fill_color: 'purple'
+        }
+    }
 };

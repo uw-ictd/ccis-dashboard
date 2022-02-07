@@ -53,35 +53,14 @@ describe('Export tests', function () {
 
     // Check that a file is downloading and contains data when the corresponding
     // export button is clicked for each option in exportOptions.js
-    test('Refrigerators big table downloaded with data', async () => {
-        await selectAndExportTable('refrigerator_big_table');
-    }, 60000);
+    Object.keys(exportOptions).forEach(tableName => {
+        if (tableName === 'all_odkx_tables') return;
+        test(`${tableName} downloaded with data`, async () => {
+            await selectAndExportTable(tableName);
+        }, 60000);
+    });
 
-    test('Facilities big table downloaded with data', async () => {
-        await selectAndExportTable('facility_big_table');
-    }, 60000);
-
-    test('Health facilities raw table downloaded with data', async () => {
-        await selectAndExportTable('health_facilities2_odkx');
-    }, 60000);
-
-    test('Refrigerator raw table downloaded with data', async () => {
-        await selectAndExportTable('refrigerators_odkx');
-    }, 60000);
-
-    test('Refrigerator types raw table downloaded with data', async () => {
-        await selectAndExportTable('refrigerator_types_odkx');
-    }, 60000);
-
-    test('Geographic regions raw table downloaded with data', async () => {
-        await selectAndExportTable('geographic_regions_odkx');
-    }, 60000);
-
-    test('Maintenance logs raw table downloaded with data', async () => {
-        await selectAndExportTable('maintenance_logs_odkx');
-    }, 60000);
-
-    // checks to make sure all 4 ODK-X tables are downloaded when this is clicked
+    // checks to make sure main ODK-X tables are downloaded when this is clicked. Other tables not seeded
     test('All raw tables downloaded with data', async () => {
         const dropdownElement = await driver.wait(until.elementLocated(By.css('[value=all_odkx_tables]')));
         dropdownElement.click();
