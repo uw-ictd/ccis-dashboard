@@ -23,7 +23,7 @@ function tabToRegionSelector(tabName) {
 document.addEventListener('DOMContentLoaded', function() {
     getIndicators();
     window.exportTables = require('./exportController');
-    setupFilters(window._dropdownFilters);
+    setupFilters(window._dropdownFilters, tabVisualizations);
 
     // Create a region selector for each tab
     const regionSelectorPromises = Object.fromEntries(
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
     );
 
     window.drawVisualization = async function(tabName) {
-        drawVisualization(mapboxDependency, window._dropdownFilters, await regionSelectorPromises[tabName], tabName, 0);
+        drawVisualization(mapboxDependency, window._dropdownFilters, await regionSelectorPromises[tabName], tabName, tabVisualizations, 0);
     };
     window.tabSelector = function (tabName) {
         tabSelector(mapboxDependency, tabVisualizations, tabName);

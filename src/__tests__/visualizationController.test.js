@@ -79,20 +79,20 @@ beforeEach(() => {
 
 describe('Filter UI tests', () =>  {
     test('When filter is picked, query should include it', () => {
-        const filters = [
-            ['maintenancePriorities', {
+        const filters = {
+            'maintenancePriorities': {
                 options: [ 'high' ],
                 useInDropdowns: true
-            }],
-            ['facilityTypes', {
+            },
+            'facilityTypes': {
                 grouped: true,
                 classes:  {
                     'Test group 1': [ 'foo', 'bar baz' ],
                     'Another test group': [ '' ]
                 },
                 useInDropdowns: true
-            }],
-            ['refrigeratorTypes', {
+            },
+            'refrigeratorTypes': {
                 grouped: true,
                 classes: {
                     'Deselect me': [ 'lots', 'of', 'fridges', 'that', 'we', 'don\'t', 'want' ],
@@ -100,15 +100,35 @@ describe('Filter UI tests', () =>  {
                     'Good fridges': [ 'just the one' ]
                 },
                 useInDropdowns: true
-            }]
-        ];
+            }
+        };
+        const tabToFilters = {
+            'Facilities': { 
+                enabledFilters: ['maintenancePriorities', 'facilityTypes', 'refrigeratorTypes'] 
+            },
+            'CCE': { 
+                enabledFilters: [] 
+            },
+            'Vaccines': { 
+                enabledFilters: [] 
+            },
+            'System-Use': { 
+                enabledFilters: [] 
+            },
+            'Temp-Alarms': { 
+                enabledFilters: [] 
+            },
+            'Maintenance': { 
+                enabledFilters: [] 
+            }
+        };
         // Set up the dropdowns, this calls selectAll
-        setupFilters(filters);
+        setupFilters(filters, tabToFilters);
         // Deselect this whole group
         multiselects[2].deselect('#Facilities-refrigeratorTypes-selector|Deselect me');
         multiselects[2].deselect('#Facilities-refrigeratorTypes-selector|nope');
         multiselects[2].deselect('#Facilities-refrigeratorTypes-selector|not here');
-        drawVisualization(mapboxDependencyMock, filters, regionSelectorMock, 'Facilities', 0);
+        drawVisualization(mapboxDependencyMock, filters, regionSelectorMock, 'Facilities', tabToFilters, 0);
         expect(fetch).toHaveBeenCalledWith(expect.any(String), expect.objectContaining({
             body: expect.any(String)
         }));

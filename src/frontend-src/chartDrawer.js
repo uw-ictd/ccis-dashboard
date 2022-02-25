@@ -61,7 +61,7 @@ function drawAllCharts(data, { fullDomain, fullColorDomain }, { groupBy, repeatB
         parentHeight: parseInt(parentElement.style('height'))
     };
 
-    if (style === 'bar') {
+    if (style === 'bar' || style === 'normalized-bar') {
         const allStacks = data.map(([repeatlabel, subChartData]) => {
             // return value is a 2d array that prepares data points to be stacked
             // according to their color
@@ -166,7 +166,7 @@ function getNonZeroOptions(data) {
  * title:           String
  */
 function drawBarChart(series, { parentElement, parentWidth, parentHeight, title,
-    fullDomain, fullRange, colorDomain, colorScale, groupBy, type, sum }) {
+    fullDomain, fullRange, colorDomain, colorScale, groupBy, type, style, sum }) {
     const axisWidth = parentWidth - 60; // When the y-axis measures things with 4 digits, it takes up about 60 pixels
 
     /*
@@ -223,6 +223,9 @@ function drawBarChart(series, { parentElement, parentWidth, parentHeight, title,
         .text(groupBy);
 
     // Make y-scale
+    if (style == 'normalized-bar') {
+        fullRange = [0,1];
+    }
     const yScale = d3.scaleLinear()
         .domain(fullRange)
         .range([axisHeight, 0]);
@@ -254,6 +257,7 @@ function drawBarChart(series, { parentElement, parentWidth, parentHeight, title,
         .style('text-anchor', 'middle')
         .text(yLabel);
 
+    const max = series[series.length - 1].map(d => d[1]);
     // Render bars
     canvas.selectAll('.barStack')
         .data(series)
@@ -273,15 +277,37 @@ function drawBarChart(series, { parentElement, parentWidth, parentHeight, title,
             .attr('class', 'bar')
             // The format of a datum d, if groupBy = 'Year', is like:
             //   [ 0, 103, data: [ '1998', { ... } ] ]
-            .attr('x', (d, i) => xScale(d.data[0]))
+            .attr('x', d => xScale(d.data[0]))
             .attr('width', xScale.bandwidth)
-            .attr('y', (d, i) => yScale(d[1]))
-            .attr('height', (d, i) => yScale(d[0]) - yScale(d[1]))
+            .attr('y', (d, i) => getY(style, yScale, d, i, max))
+            .attr('height', (d, i) => getHeight(style, yScale, d, i, max))
             // For tooltips
             .attr('tabindex', '0')
             .attr('data-tippy-content', d => `${d.key}: ${d[1]-d[0]}`)
             .style('outline', 'none');
     fitCanvasToContents(canvas);
+}
+
+// Get height of bar depending on graph style
+function getHeight(style, yScale, d, i, max) {
+    if (style === 'bar') {
+        return yScale(d[0]) - yScale(d[1]);
+    } else if (style === 'normalized-bar') {
+        return (yScale(d[0]) - yScale(d[1])) / (max[i]);
+    } else {
+        throw new Error("Style not supported.");
+    }
+}
+
+// Get y value of bar depending on graph style
+function getY(style, yScale, d, i, max) {
+    if (style === 'bar') {
+        return yScale(d[1]);
+    } else if (style === 'normalized-bar') {
+        return yScale(d[1] / max[i]);
+    } else {
+        throw new Error("Style not supported.");
+    }
 }
 
 function drawPieChart(data, { parentElement, title, colorScale }) {

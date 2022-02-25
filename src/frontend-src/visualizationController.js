@@ -14,7 +14,7 @@ const filterSpecification = require('../config/filterSpecification');
 const enableDropdownForViz = require('../shared/filterDisable');
 const { setFilterEnabled } = require('./filter');
 
-function drawVisualization(mapboxDependency, dropdownFilters, regionSelector, tabName, index, visualizationName) {
+function drawVisualization(mapboxDependency, dropdownFilters, regionSelector, tabName, tabToFilters, index, visualizationName) {
     const vizName = tabVisualizations[tabName].multi ? visualizationName: getVisualizationName(tabName);
     const mapConfig = tabVisualizations[tabName].multi ? mapDisplay.smallMapMultiviz : mapDisplay.mapVisualization;
     const visualization = visualizations[vizName];
@@ -25,7 +25,7 @@ function drawVisualization(mapboxDependency, dropdownFilters, regionSelector, ta
     }
     return post('./api/query', {
         visualization: vizName,
-        filter: getFilterParams(dropdownFilters, regionSelector, tabName)
+        filter: getFilterParams(dropdownFilters, regionSelector, tabName, tabToFilters)
     }).then(async (body) => {
         // Clean up, unless  we're drawing a map when there was a map before
         tearDownVisualizationsNonMap(tabName, index);
@@ -70,20 +70,21 @@ function getVisualizationName(tabName) {
     return select.vizSelector(tabName).value;
 }
 
-function getFilterParams(dropdownFilters, regionSelector, tabName) {
+function getFilterParams(dropdownFilters, regionSelector, tabName, tabToFilters) {
     if (!dropdownFilters) {
         return null;
     }
-    const params = Object.fromEntries(dropdownFilters.map(([filterID, filter]) => {
-        const selector = select.filterStr(tabName, filterID);
-        let selection;
-        if (filter.grouped) {
-            selection = getSelectionIgnoreGroups(selector);
-        } else {
-            selection = getSelection(selector);
-        }
-        return [filterID, selection];
-    }));
+    const params = Object.fromEntries(tabToFilters[tabName].enabledFilters
+        .map(filterID => {
+            const selector = select.filterStr(tabName, filterID);
+            let selection;
+            if (dropdownFilters[filterID].grouped) {
+                selection = getSelectionIgnoreGroups(selector);
+            } else {
+                selection = getSelection(selector);
+            }
+            return [filterID, selection];
+        }));
     params.regions = regionSelector.getSelectedRegions();
     return params;
 }

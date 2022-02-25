@@ -21,8 +21,8 @@
                 <tr>
                     <td><span class="smalltitle">Filter</span></td>
                 </tr>
-                <% filters.forEach(([key, filterSpec]) => { %>
-                    <%- include('filterOption', { ...filterSpec, key }) %>
+                <% tabVisualizations[tabName].enabledFilters.forEach(key => { %>
+                    <%- include('filterOption', { ...filters[key], key }) %>
                 <% }); %>
             </table>
         <div class="map"></div>

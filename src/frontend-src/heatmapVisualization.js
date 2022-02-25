@@ -7,7 +7,7 @@ const missing_data_fill_color = 'gray';
 const missing_data_opacity = 0.5;
 const { getColorFromName } = require('./colorScale');
 
-module.exports = function makeHeatmap(mapboxgl, map, data, visualization) {
+function makeHeatmap(mapboxgl, map, data, visualization) {
     const regionLevelIndex = shapefiles.levelNames.indexOf(visualization.regionLevel);
     const drawBoundary = _drawLayer.bind({}, map, mapboxgl, data, visualization, regionLevelIndex);
 
@@ -15,6 +15,9 @@ module.exports = function makeHeatmap(mapboxgl, map, data, visualization) {
     const boundaries = shapefiles.levels[regionLevelIndex].features;
     return Object.fromEntries(boundaries.map(drawBoundary));
 };
+
+module.exports = { makeHeatmap, default_fill_color, default_fill_outline_color, default_min_opacity,
+                 default_max_opacity, missing_data_fill_color, missing_data_opacity}
 
 function _drawLayer(map, mapboxgl, data, visualization, regionLevelIndex, geoJSONFeature) {
     // Get feature name (i.e. district or region name)

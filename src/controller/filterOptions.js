@@ -18,7 +18,7 @@ async function buildDropdownData(db, filterSpecification) {
             }
             return [key, newFilter];
         });
-    return await Promise.all(completeFilterPromises);
+    return Object.fromEntries(await Promise.all(completeFilterPromises));
 }
 
 

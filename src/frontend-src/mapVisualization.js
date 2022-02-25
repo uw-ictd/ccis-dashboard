@@ -1,10 +1,11 @@
 const eachSeries = require('async/eachSeries');
 const makeMarkerInfo = require('./coordinates');
 const { makeColorScale } = require('./colorScale');
-const makeHeatmap = require('./heatmapVisualization');
+const { makeHeatmap } = require('./heatmapVisualization');
 const select = require('./selectors');
 const d3 = require('d3');
 const drawColorLegend = require('./colorLegend');
+const drawHeatmapLegend = require('./heatmapLegend');
 const maps = {};
 
 function _drawMarker(mapboxgl, tabName, index, map, marker) {
@@ -95,6 +96,7 @@ async function mapVisualization({ mapboxgl, makeMap }, data, { fullColorDomain }
 }
 
 async function heatmapVisualization({ mapboxgl, makeMap }, data, visualization, tabName, mapConfig, vizIndex) {
+    drawHeatmapLegend(d3.select(select.legendContainerStr(tabName, vizIndex)), visualization)
     const map = await setUpMap(makeMap, mapConfig, tabName, vizIndex);
     maps[tabName][vizIndex].sources = makeHeatmap(mapboxgl, map, data, visualization, vizIndex);
     return map;

@@ -17,6 +17,9 @@ Some charts will show the last user to update a facility or CCE; on these, the "
 # Temperature alarms
 There are two tables with temperature data, one with data reported daily, and one with data in 30-day buckets. Aggregating data from both tables together is challenging. Currently the visualizations only reflect data from the table with 30-day buckets
 
+# Heatmaps
+Regions that have no data to display will be gray in the heatmaps.
+
 # Specific visualizations
 ## Update status by facility map
 On this map, facilities are color-coded by their update status, which is divided into three buckets:

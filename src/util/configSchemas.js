@@ -4,7 +4,7 @@ const visualizations = require('../config/visualizations');
 // TODO make this more strict: some options require other options
 const oneVisualization = Joi.object({
     type: Joi.string().valid('refrigerator', 'facility').required(),
-    style: Joi.string().valid('bar', 'pie', 'map', 'list' ,'heatmap').required(),
+    style: Joi.string().valid('normalized-bar','bar', 'pie', 'map', 'list' ,'heatmap').required(),
     groupBy: Joi.string().optional(),
     colorBy: Joi.string().optional(),
     repeatBy: Joi.string().optional(),
@@ -43,6 +43,7 @@ const oneTab = Joi.object({
     exportTab: Joi.boolean(),
     defaultViz: Joi.string(),
     multi: Joi.boolean().optional(),
+    enabledFilters: Joi.array().optional()
 });
 
 const oneFilter = Joi.object({
