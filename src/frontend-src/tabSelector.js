@@ -1,3 +1,4 @@
+const tabVisualizations = require('../config/tabVisualizations');
 const select = require('./selectors');
 const { drawVisualization, selectVisualization } = require('./visualizationController');
 
@@ -18,9 +19,13 @@ function tabSelector(mapboxDependency, tabs, tabName) {
     select.tabContent(tabName).classList.remove('hidden');
     if (tabs[tabName].multi) {
         tabs[tabName].visualizations.forEach((vizName, index) => {
-            drawVisualization(mapboxDependency, null, undefined, tabName, index, vizName);
+            if (isEmpty(select.mapContainer(tabName, index)) &&
+                isEmpty(select.chartContainer(tabName, index)) &&
+                isEmpty(select.legendContainer(tabName, index)) &&
+                isEmpty(select.listWrapper(tabName, index))) {
+                    drawVisualization(mapboxDependency, null, undefined, tabName, tabVisualizations, index, vizName);
+            }
         });
-        
     } else {
         // Show default visualization for tab is there if no viz already rendered
         if ( tabs[tabName].defaultViz &&

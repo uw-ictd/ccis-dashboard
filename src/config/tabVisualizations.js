@@ -1,5 +1,13 @@
 /*
  * This defines the names of the tabs, and the visualizations for each tab.
+ * Schema:
+ *   tabLabel String [required], a unique identifier for the tab, will be displayed on the tab
+ *   multi boolean [optional], whether this is a multi-tab, containing multiple visualizations
+ *   visualizations [required iff !exportTab], the list of visualizations on this tab
+ *   exportTab boolean [optional], whether this tab only exports data
+ *   defaultViz [required iff !exportTab & !multi] the default visualization displayed for a regular tab
+ *   enabledFilters [required iff !exportTab & !multi] the filters enabled on this tab, not including "regions"
+ *                                    * must match a filter in filterSpecification.js
  */
 
 module.exports = {
@@ -46,13 +54,26 @@ module.exports = {
             'CCE with Electricity availability (pie)',
             'All facilities list'
         ],
-        defaultViz: 'Facility details map'
+        defaultViz: 'Facility details map',
+        enabledFilters: [
+            'facilityTypes',
+            'facilityElectricity',
+            'facilityGridPower',
+            'facilityOwnership',
+            'facilityAuthority',
+            'facilityStatus',
+            'lastUpdateUserFacilities'
+        ]
     },
     'CCE': {
         tabLabel: 'CCE',
         visualizations: [
             'Working status by CCE model',
             'Age by CCE model',
+            'Age by CCE model (normalized)',
+            'Age by CCE type',
+            'Age by CCE type (normalized)',
+            'Age by facility type (normalized)',
             'CCE by working status',
             'CCE by working status (pie)',
             'CCE utilization',
@@ -72,7 +93,19 @@ module.exports = {
             'Facility type by CCE model',
             'All CCE list'
         ],
-        defaultViz: 'Age by CCE model'
+        defaultViz: 'Age by CCE model',
+        enabledFilters: [
+            'facilityTypes',
+            'facilityElectricity',
+            'facilityGridPower',
+            'facilityOwnership',
+            'facilityAuthority',
+            'facilityStatus',
+            'maintenancePriorities',
+            'refrigeratorTypes',
+            'lastUpdateUserFacilities',
+            'lastUpdateUserRefrigerators'
+        ]
     },
     /*
      * // Demo data
@@ -96,7 +129,19 @@ module.exports = {
             'Refrigerator updates by user',
             'Facility updates by user',
         ],
-        defaultViz: 'Update status by facility'
+        defaultViz: 'Update status by facility',
+        enabledFilters: [
+            'facilityTypes',
+            'facilityElectricity',
+            'facilityGridPower',
+            'facilityOwnership',
+            'facilityAuthority',
+            'facilityStatus',
+            'maintenancePriorities',
+            'refrigeratorTypes',
+            'lastUpdateUserFacilities',
+            'lastUpdateUserRefrigerators'
+        ]
     },
     'Temp-Alarms': {
         tabLabel: 'Temp Alarms',
@@ -109,13 +154,37 @@ module.exports = {
             'High alarms by facility level',
             'Low alarms by facility level'
         ],
-        defaultViz: 'Recent alarms map'
+        defaultViz: 'Recent alarms map',
+        enabledFilters: [
+            'facilityTypes',
+            'facilityElectricity',
+            'facilityGridPower',
+            'facilityOwnership',
+            'facilityAuthority',
+            'facilityStatus',
+            'maintenancePriorities',
+            'refrigeratorTypes',
+            'lastUpdateUserFacilities',
+            'lastUpdateUserRefrigerators'
+        ]
     },
     'Maintenance': {
         tabLabel: 'Maintenance',
         visualizations: [
             'Non-functional CCE list'
         ],
-        defaultViz: 'Non-functional CCE list'
+        defaultViz: 'Non-functional CCE list',
+        enabledFilters: [
+            'facilityTypes',
+            'facilityElectricity',
+            'facilityGridPower',
+            'facilityOwnership',
+            'facilityAuthority',
+            'facilityStatus',
+            'maintenancePriorities',
+            'refrigeratorTypes',
+            'lastUpdateUserFacilities',
+            'lastUpdateUserRefrigerators'
+        ]
     }
 };

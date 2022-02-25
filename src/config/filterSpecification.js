@@ -63,6 +63,18 @@ module.exports = {
         column: 'maintenance_priority',
         useInDropdowns: true
     },
+    lastUpdateUserFacilities: {
+        title: 'Last Update User (Facility):',
+        table: 'health_facilities2_odkx',
+        column: 'lastupdateuser_health_facilities',
+        useInDropdowns: true
+    },
+    lastUpdateUserRefrigerators: {
+        title: 'Last Update User (CCE):',
+        table: 'refrigerators_odkx',
+        column: 'lastupdateuser_refrigerators',
+        useInDropdowns: true
+    },
     // There is a special case on the frontend for handling the `regions`
     // filter, since it uses a map
     regions: {

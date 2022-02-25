@@ -9,7 +9,7 @@ describe('getIndexData tests', () => {
     const data = await getIndexData(db);
     expect(Object.keys(data.visualizations).length).toBeGreaterThanOrEqual(1);
     expect(data.filters).toBeDefined();
-    const filters = Object.fromEntries(data.filters);
+    const filters = data.filters;
     expect(filters.facilityTypes).toBeDefined();
     expect(filters.facilityTypes.classes).toBeDefined();
     expect(filters.facilityTypes.classes['No group']).toBeDefined();

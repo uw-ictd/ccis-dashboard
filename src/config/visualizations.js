@@ -68,6 +68,19 @@ module.exports = {
         style: 'bar',
         legendOrder: ['0-5 Years', '6-10 Years', '>10 Years', 'Missing data']
     },
+    'Age by CCE model (normalized)': {
+        type: 'refrigerator',
+        groupBy: 'model_id',
+        colorBy: 'AgeGroups',
+        colorMap: {
+            '0-5 Years': 'blue',
+            '6-10 Years': 'yellow',
+            '>10 Years': 'red',
+            'Missing data': 'gray'
+        },
+        style: 'normalized-bar',
+        legendOrder: ['0-5 Years', '6-10 Years', '>10 Years', 'Missing data']
+    },
     'Age by CCE type': {
         type: 'refrigerator',
         groupBy: 'refrigerator_class',
@@ -79,6 +92,32 @@ module.exports = {
             'Missing data': 'gray'
         },
         style: 'bar',
+        legendOrder: ['0-5 Years', '6-10 Years', '>10 Years', 'Missing data']
+    },
+    'Age by CCE type (normalized)': {
+        type: 'refrigerator',
+        groupBy: 'refrigerator_class',
+        colorBy: 'AgeGroups',
+        colorMap: {
+            '0-5 Years': 'blue',
+            '6-10 Years': 'yellow',
+            '>10 Years': 'red',
+            'Missing data': 'gray'
+        },
+        style: 'normalized-bar',
+        legendOrder: ['0-5 Years', '6-10 Years', '>10 Years', 'Missing data']
+    },
+    'Age by facility type (normalized)': {
+        type: 'refrigerator',
+        groupBy: 'facility_level',
+        colorBy: 'AgeGroups',
+        colorMap: {
+            '0-5 Years': 'blue',
+            '6-10 Years': 'yellow',
+            '>10 Years': 'red',
+            'Missing data': 'gray'
+        },
+        style: 'normalized-bar',
         legendOrder: ['0-5 Years', '6-10 Years', '>10 Years', 'Missing data']
     },
     // CCEM chart 3.4
