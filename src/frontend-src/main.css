@@ -120,6 +120,7 @@ body
     flex-basis: 0;
     flex-grow: 1;
     height: 0;
+    min-height: 0;
 }
 
 .bottom-wrapper
@@ -129,11 +130,13 @@ body
     flex-direction: row;
     height: 100%;
     justify-content: flex-start;
-    margin: 0 2em 0 2em
+    margin: 0 2em 0 2em;
+    gap: 1em;
 }
 
 .bottom-wrapper.multiviz
 {
+    height: auto;
     justify-content: space-around;
     align-content: space-around;
 }
@@ -214,15 +217,19 @@ body
     flex-basis: 0;
     flex-grow: 1;
     height: 100%;
-    width: 0;
+    width: 47vw;
+    /* On a 1920x1080 screen, we'd like to have a great 2x2 layout.
+     * The top bar may have 166px
+     * The gap between the 4 visualizations may be 16px
+     * (1080px-166px-16px)/2 = 449px
+     */
+    min-height: 440px;
+    min-width: 700px;
 }
 
 .multiviz .main-wrapper
 {
-    height: 47%;
-    width: 47%;
     flex-basis: auto;
-    flex-grow: 0;
 }
 
 .viz-title
@@ -315,6 +322,11 @@ body
 .chart-container g, .chart-container text
 {
     font-size: 20px;
+}
+
+.chart-container text.small
+{
+    font-size: 14px;
 }
 
 .legend-container

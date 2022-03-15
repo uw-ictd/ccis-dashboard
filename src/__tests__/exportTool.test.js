@@ -114,7 +114,6 @@ describe('SQL query tests for table export', () =>  {
             'catchment_population',
             'facility_level',
             'facility_status',
-            'facility_storage_requirement',
             'facility_storage_volume',
             'facility_maintanance_priority'
         ].map(s => s.toLowerCase())));

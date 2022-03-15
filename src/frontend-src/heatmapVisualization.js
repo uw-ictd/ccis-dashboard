@@ -1,4 +1,4 @@
-const shapefiles = require('../config/shapefiles');
+const geographicBoundaries = require('../config/geographicBoundaries');
 const default_fill_color = 'purple';
 const default_fill_outline_color = '#555';
 const default_min_opacity = 0.1;
@@ -8,23 +8,20 @@ const missing_data_opacity = 0.5;
 const { getColorFromName } = require('./colorScale');
 
 function makeHeatmap(mapboxgl, map, data, visualization) {
-    const regionLevelIndex = shapefiles.levelNames.indexOf(visualization.regionLevel);
-    const drawBoundary = _drawLayer.bind({}, map, mapboxgl, data, visualization, regionLevelIndex);
+    const thisLevel = geographicBoundaries.levels.find(level => level.levelName === visualization.regionLevel);
+    const drawBoundary = _drawLayer.bind({}, map, mapboxgl, data, visualization, thisLevel);
 
     // Add GeoJSON to the map
-    const boundaries = shapefiles.levels[regionLevelIndex].features;
-    return Object.fromEntries(boundaries.map(drawBoundary));
+    return Object.fromEntries(thisLevel.geoJson.features.map(drawBoundary));
 };
 
-module.exports = { makeHeatmap, default_fill_color, default_fill_outline_color, default_min_opacity,
-                 default_max_opacity, missing_data_fill_color, missing_data_opacity}
-
-function _drawLayer(map, mapboxgl, data, visualization, regionLevelIndex, geoJSONFeature) {
+function _drawLayer(map, mapboxgl, data, visualization, thisLevel, geoJSONFeature) {
     // Get feature name (i.e. district or region name)
-    const source = geoJSONFeature.properties[shapefiles.regionNameKeys[regionLevelIndex]];
+    const source = geoJSONFeature.properties[thisLevel.regionNameKey];
 
     // Calculate numbers
-    const allFacilities = data.filter(x => x[shapefiles.dbLevelNames[regionLevelIndex].toLowerCase()] === source);
+    const dbLevelName = thisLevel.dbLevelName.toLowerCase()
+    const allFacilities = data.filter(facility => facility[dbLevelName] === source);
     const total = allFacilities.length;
     const missingData = allFacilities.filter(x => x.colorlabel === 'Missing data').length;
     const denominator = total - missingData;
@@ -86,3 +83,13 @@ function _createPopup(map, mapboxgl, html, e) {
         .setHTML(html)
         .addTo(map);
 }
+
+module.exports = {
+    makeHeatmap,
+    default_fill_color,
+    default_fill_outline_color,
+    default_min_opacity,
+    default_max_opacity,
+    missing_data_fill_color,
+    missing_data_opacity
+};

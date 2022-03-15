@@ -36,7 +36,6 @@ module.exports = {
              h.spare_fuel_cylinders, h.spare_temp_monitoring_devices, h.savepointTimestamp_health_facilities, h.primary_facility_id, h.secondary_facility_id,
              h.facility_name,
              h.ownership, h.authority, h.location_latitude, h.location_longitude, h.catchment_population, h.facility_level, h.facility_status,
-             (CAST(h.catchment_population as int) *  0.06) as facility_storage_requirement,
              (SELECT COUNT(*) FROM refrigerators_odkx WHERE refrigerators_odkx.facility_row_id = h.id_health_facilities
              AND refrigerators_odkx.functional_status = 'functioning')
              as facility_storage_volume,
@@ -185,19 +184,21 @@ module.exports = {
         name: 'Report: CCE (not cold room) capacity by facility',
         query: `SELECT ${genericGeographyColumns} ${genericFacilityColumns}
                   SUM(CAST(rt.refrigerator_net_volume as numeric)) as "sum(refrigerator_net_volume)",
-                  SUM(CAST(rt.freezer_net_volume AS numeric)) as "sum(freezer_net_volume)"
+                  SUM(CAST(rt.freezer_net_volume AS numeric)) as "sum(freezer_net_volume)",
+                  h.catchment_population as "catchment_population"
             FROM health_facilities2_odkx AS h
             JOIN geographic_regions_odkx AS g ON g.id_geographic_regions = h.admin_region_id
             JOIN refrigerators_odkx AS r ON h.id_health_facilities = r.facility_row_id
             JOIN refrigerator_types_odkx AS rt ON r.model_row_id = rt.id_refrigerator_types
-            GROUP BY ${genericGeographyColumns} ${genericFacilityColumns} h.id_health_facilities`
+            GROUP BY ${genericGeographyColumns} ${genericFacilityColumns} h.id_health_facilities, h.catchment_population`
     },
 
     capacity_by_district: {
         name: 'Report: CCE (not cold room) capacity by district',
         query: `SELECT g.regionLevel1, g.regionLevel2, g.regionLevel3,
                   SUM(CAST(rt.refrigerator_net_volume as numeric)) as "sum(refrigerator_net_volume)",
-                  SUM(CAST(rt.freezer_net_volume AS numeric)) as "sum(freezer_net_volume)"
+                  SUM(CAST(rt.freezer_net_volume AS numeric)) as "sum(freezer_net_volume)",
+                  SUM(CAST(h.catchment_population AS numeric)) as "sum(catchment_population)"
             FROM health_facilities2_odkx AS h
             JOIN geographic_regions_odkx AS g ON g.id_geographic_regions = h.admin_region_id
             JOIN refrigerators_odkx AS r ON h.id_health_facilities = r.facility_row_id
@@ -209,7 +210,8 @@ module.exports = {
         name: 'Report: CCE (not cold room) capacity by region',
         query: `SELECT g.regionLevel1, g.regionLevel2,
                   SUM(CAST(rt.refrigerator_net_volume as numeric)) as "sum(refrigerator_net_volume)",
-                  SUM(CAST(rt.freezer_net_volume AS numeric)) as "sum(freezer_net_volume)"
+                  SUM(CAST(rt.freezer_net_volume AS numeric)) as "sum(freezer_net_volume)",
+                  SUM(CAST(h.catchment_population AS numeric)) as "sum(catchment_population)"
             FROM health_facilities2_odkx AS h
             JOIN geographic_regions_odkx AS g ON g.id_geographic_regions = h.admin_region_id
             JOIN refrigerators_odkx AS r ON h.id_health_facilities = r.facility_row_id
@@ -221,7 +223,8 @@ module.exports = {
         name: 'Report: CCE (not cold room) capacity by country',
         query: `SELECT g.regionLevel1,
                   SUM(CAST(rt.refrigerator_net_volume as numeric)) as "sum(refrigerator_net_volume)",
-                  SUM(CAST(rt.freezer_net_volume AS numeric)) as "sum(freezer_net_volume)"
+                  SUM(CAST(rt.freezer_net_volume AS numeric)) as "sum(freezer_net_volume)",
+                  SUM(CAST(h.catchment_population AS numeric)) as "sum(catchment_population)"
             FROM health_facilities2_odkx AS h
             JOIN geographic_regions_odkx AS g ON g.id_geographic_regions = h.admin_region_id
             JOIN refrigerators_odkx AS r ON h.id_health_facilities = r.facility_row_id
