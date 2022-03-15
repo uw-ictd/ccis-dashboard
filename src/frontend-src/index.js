@@ -12,11 +12,11 @@ const select = require('./selectors');
 const { setupFilters } = require('./filter');
 
 function tabToRegionSelector(tabName) {
-    const shapefiles = import('../config/shapefiles');
+    const geographicBoundaries = import('../config/geographicBoundaries');
     const map = makeMap(mapDisplay, select.mapSelector(tabName));
     const regionNamesContainer = select.regionNamesContainer(tabName);
-    const regionSelector = Promise.all([mapboxDependency, map, shapefiles, regionNamesContainer])
-        .then(([mapboxDependency, map, shapefiles, regionNamesContainer]) => new RegionSelector(mapboxDependency, map, shapefiles, regionNamesContainer));
+    const regionSelector = Promise.all([mapboxDependency, map, geographicBoundaries, regionNamesContainer])
+        .then(([mapboxDependency, map, geographicBoundaries, regionNamesContainer]) => new RegionSelector(mapboxDependency, map, geographicBoundaries, regionNamesContainer));
     return [tabName, regionSelector];
 }
 

@@ -221,19 +221,19 @@ Additionally, you have the option of including `fill_specs`. These include a `mi
 
 Let's take a look at an example:
 ```
-'Percentage of facilities with power source: grid (district)': {
+'Percentage of facilities with power source: grid (region)': {
     type: 'facility',
     style: 'heatmap',
     colorBy: 'electricity_source_grid',
-    regionLevel: 'District (Level 3)',
-    fill_specs: {
+    regionLevel: 'Region (Level 2)',
+    fill_specs: {  // Example usage of fill specs using default specs
         min_opacity: 0.1,
         max_opacity: 0.95,
         fill_color: 'purple'
     }
 }
 ```
-This heatmap should count the proportion of facilities with grid as a source of their electricity. We are doing this by district (our third geographic level), and each district will be filled in purple with a opacity ranging from 0.1 to 0.95.
+This heatmap should count the proportion of facilities with grid as a source of their electricity. We are doing this by region (our second geographic level), and each district will be filled in purple with a opacity ranging from 0.1 to 0.95.
 
 As mentioned, this `colorBy` column must be from `computedColumn` and follow the True / False / Null structure. We can take a look here:
 

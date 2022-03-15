@@ -3,9 +3,10 @@ const computedColumns = require('../config/computedColumns');
 const filterSpecification = require('../config/filterSpecification');
 const findQueryForColumn = require('../util/searchComputedColumns');
 const validate = require('../util/configValidation');
-const shapefiles = require('../config/shapefiles');
+const geographicBoundaries = require('../config/geographicBoundaries');
 const enableDropdownForViz = require('../shared/filterDisable');
 validate('computedColumns', computedColumns);
+validate('regionBoundaries', geographicBoundaries);
 
 const MAP_SEPARATOR = '$';
 
@@ -47,15 +48,18 @@ function missingDataClause(columnName) {
 }
 
 function makeHeatMapSelect(vizSpec) {
-    if (vizSpec.style === 'heatmap' && vizSpec.type === 'facility') {
-        return [shapefiles.dbLevelNames[shapefiles.levelNames.indexOf(vizSpec.regionLevel)], 'id_health_facilities']
-            .map(param => referToColumn(param))
-            .join(',');
-    } else if (vizSpec.style === 'heatmap' && vizSpec.type === 'refrigerator') {
-        return [shapefiles.dbLevelNames[shapefiles.levelNames.indexOf(vizSpec.regionLevel)], 'id_refrigerators']
-            .map(param => referToColumn(param))
-            .join(',');
+    if (vizSpec.style !== 'heatmap') return;
+    const index = geographicBoundaries.levels
+        .map(level => level.levelName)
+        .indexOf(vizSpec.regionLevel);
+    const regionColumn = referToColumn(geographicBoundaries.levels[index].dbLevelName);
+    let idColumn;
+    if (vizSpec.type === 'facility') {
+        idColumn = referToColumn('id_health_facilities');
+    } else if (vizSpec.type === 'refrigerator') {
+        idColumn = referToColumn('id_refrigerators');
     }
+    return `${regionColumn}, ${idColumn}`;
 }
 
 function sumColumn(columnName) {

@@ -77,12 +77,41 @@ const levelMock = [
 ];
 
 const shapesMock = {
-    levelNames: [ 'Level 1', '2', '3', '4', '5', 'Lowest level (6)' ],
-    regionNameKeys: [ null, '2', '3', '4', '5', '6' ],
     topLevel: 'Level 1',
     topLevelName: 'top',
     bottomLevel: '5',
-    levels: levelMock
+    levels: [
+        {
+            levelName: 'Level 1',
+            regionNameKey: null,
+            geoJson: levelMock[0]
+        },
+        {
+            levelName: '2',
+            regionNameKey: '2',
+            geoJson: levelMock[1]
+        },
+        {
+            levelName: '3',
+            regionNameKey: '3',
+            geoJson: levelMock[2]
+        },
+        {
+            levelName: '4',
+            regionNameKey: '4',
+            geoJson: levelMock[3]
+        },
+        {
+            levelName: '5',
+            regionNameKey: '5',
+            geoJson: levelMock[4]
+        },
+        {
+            levelName: 'Lower level (6)',
+            regionNameKey: '6',
+            geoJson: levelMock[5]
+        }
+    ]
 };
 
 const mapboxMock = {
@@ -95,9 +124,7 @@ const mapboxMock = {
 describe('Region selection tests', () => {
     // As the same document is used for multiple tests, the tests implicitly
     // test if the document is cleared everytime a new regionSelector is created.
-    document.body.innerHTML =`
-            <ul id='region-list'></ul>
-            `;
+    document.body.innerHTML ="<ul id='region-list'></ul>";
     const regionNamesContainer = document.getElementById('region-list');
 
     test('Test should be setup correctly', () => {

@@ -25,7 +25,7 @@
  *     1. Count facilities instead of CCE (in bar/pie charts)
  *     2. Include facilities without any CCE
  *     3. Disable the filter options that use the refrigerators or refrigerator_types tables
- * regionLevel 'District (Level 3)' | 'Region (Level 2)' should be used iff style is 'heatmap'
+ * regionLevel 'Region (Level 2)' should be used iff style is 'heatmap'
  *     determines the level of shading for the heatmap
  * fill_specs Object [optional] can be used if style is 'heatmap'
  *     min_opacity: double, 0-1 - minimum opacity of fill color
@@ -42,6 +42,17 @@
  *      integer. If using `sum`, legendNonzeroOnly is recommended
  */
 module.exports = {
+    'Working status by CCE manufacturer': {
+        type: 'refrigerator',
+        groupBy: 'manufacturer',
+        colorBy: 'functional_status',
+        colorMap: {
+            'functioning': 'blue',
+            'not_functioning': 'red',
+            'Missing data': 'gray'
+        },
+        style: 'bar'
+    },
     // CCEM table 3.3
     'Working status by CCE model': {
         type: 'refrigerator',
@@ -84,6 +95,19 @@ module.exports = {
     'Age by CCE type': {
         type: 'refrigerator',
         groupBy: 'refrigerator_class',
+        colorBy: 'AgeGroups',
+        colorMap: {
+            '0-5 Years': 'blue',
+            '6-10 Years': 'yellow',
+            '>10 Years': 'red',
+            'Missing data': 'gray'
+        },
+        style: 'bar',
+        legendOrder: ['0-5 Years', '6-10 Years', '>10 Years', 'Missing data']
+    },
+    'Age by manufacturer': {
+        type: 'refrigerator',
+        groupBy: 'manufacturer',
         colorBy: 'AgeGroups',
         colorMap: {
             '0-5 Years': 'blue',
@@ -304,6 +328,18 @@ module.exports = {
         },
         style: 'bar'
     },
+    'Make of CCE with maintenance needs': {
+        type: 'refrigerator',
+        groupBy: 'manufacturer',
+        colorBy: 'maintenance_priority_filtered',
+        colorMap: {
+            'low': 'yellow',
+            'medium': 'orange',
+            'high': 'red',
+        },
+        legendOrder: [ 'high', 'medium', 'low' ],
+        style: 'bar'
+    },
     'Models of CCE with maintenance needs': {
         type: 'refrigerator',
         groupBy: 'model_id',
@@ -390,6 +426,10 @@ module.exports = {
         mapType: 'alarm_counts',
         style: 'map',
         facilityPopup: {
+            'regionlevel2': 'BY_FACILITY',
+            'regionlevel3': 'BY_FACILITY',
+            'facility_level': 'BY_FACILITY',
+            'ownership': 'BY_FACILITY',
             'faulty_refrigerator_id': 'COUNT'
         }
     },
@@ -423,17 +463,6 @@ module.exports = {
         colorBy: 'lastupdateuser_refrigerators',
         style: 'bar'
     },
-    'Percentage of facilities with power source: grid (district)': {
-        type: 'facility',
-        style: 'heatmap',
-        colorBy: 'electricity_source_grid',
-        regionLevel: 'District (Level 3)',
-        fill_specs: {  // Example usage of fill specs using default specs
-            min_opacity: 0.1,
-            max_opacity: 0.95,
-            fill_color: 'purple'
-        }
-    },
     'Percentage of facilities with power source: grid (region)': {
         type: 'facility',
         style: 'heatmap',
@@ -442,15 +471,6 @@ module.exports = {
         fill_specs: {  // Example usage of fill specs using default specs
             min_opacity: 0.1,
             max_opacity: 0.95,
-            fill_color: 'purple'
-        }
-    },
-    'Percentage of facilities with 4+ hours of grid power (district)': {
-        type: 'facility',
-        style: 'heatmap',
-        colorBy: 'grid_power_at_least_4',
-        regionLevel: 'District (Level 3)',
-        fill_specs: {
             fill_color: 'purple'
         }
     },
@@ -509,6 +529,7 @@ module.exports = {
         columns: [
             'facility_name',
             'regionlevel3',
+            'manufacturer',
             'model_id',
             'year_installed',
             'nonworking_functional_status',

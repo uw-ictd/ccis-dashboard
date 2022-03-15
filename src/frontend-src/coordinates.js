@@ -47,7 +47,7 @@ module.exports = function makeMarkerInfo(data, visualization, colorScale) {
 
         let markerInfo;
         if (visualization.mapType === 'alarm_counts') {
-            markerInfo = getAlarmCountInfo(facility);
+            markerInfo = getAlarmCountInfo(facility, visualization);
         } else if (visualization.mapType === 'colored_facilities') {
             markerInfo = getFacilityColorInfo(facility, visualization, colorScale);
         } else {
@@ -76,8 +76,8 @@ function getAlarmImage(alarms) {
 
 }
 
-function getAlarmCountInfo(facility) {
-    const description = `<p class='facility-info'>${facility['faulty_refrigerator_id']} faulty refrigerator(s)</p>`;
+function getAlarmCountInfo(facility, visualization) {
+    const description = getPopupText(facility, visualization);
     const iconImage = getAlarmImage(facility['faulty_refrigerator_id']);
     const iconSize = ['32px', '32px'];
     return { description, iconImage, iconSize };
@@ -90,18 +90,26 @@ function getPopupTextItem(facilityData, [ propertyName, propertyType ]) {
             const key = `${propertyName}${MAP_SEPARATOR}${item}`;
             return `${propertyName} ${item}: ${facilityData[key]}`;
         });
-    } else {
+    } else if (propertyType === 'BY_FACILITY') {
         // Normal single property
         return `${propertyName}: ${facilityData[propertyName]}`;
+    } else if (propertyType === 'COUNT') {
+        return `Number of ${propertyName}: ${facilityData[propertyName]}`;
+    } else {
+        throw new Error(`propertyType ${propertyType} not recognized`);
     }
 }
 
-function getFacilityColorInfo(facility, visualization, colorScale) {
-    const description = "<p class='facility-info'>" +
+function getPopupText(facility, visualization) {
+    return "<p class='facility-info'>" +
         Object.entries(visualization.facilityPopup)
-        .flatMap(getPopupTextItem.bind({}, facility))
-        .join('<br>') +
+            .flatMap(getPopupTextItem.bind({}, facility))
+            .join('<br>') +
         '</p>';
+}
+
+function getFacilityColorInfo(facility, visualization, colorScale) {
+    const description = getPopupText(facility, visualization);
     const opacity = (visualization.colorSpecs && visualization.colorSpecs.opacity) ?
         visualization.colorSpecs.opacity : 0.5;
     let iconImage;

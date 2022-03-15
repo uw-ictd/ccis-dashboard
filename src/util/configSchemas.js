@@ -77,11 +77,27 @@ const oneSubQueryDefn = Joi.object({
     })
 });
 
+const regionBoundariesDefn = Joi.object({
+    topLevelName: Joi.string(),
+    topLevel: Joi.string(),
+    bottomLevel: Joi.string(),
+    levels: Joi.array().items(Joi.object({
+        dbLevelName: Joi.string(),
+        levelName: Joi.string(),
+        geoJson: Joi.object({
+            // Should follow the GeoJSON spec
+            features: Joi.array().required()
+        }).unknown(true).allow(null),
+        regionNameKey: Joi.string().allow(null)
+    }))
+});
+
 module.exports = {
     // Allow arbitrary visualization/key names, but validate the values against
     // the oneVisualization schema
     visualizations: Joi.object().pattern(/.*/, oneVisualization),
     tabVisualizations: Joi.object().pattern(/.*/, oneTab),
     filterSpecification: Joi.object().pattern(/.*/, oneFilter),
-    computedColumns: Joi.array().items(oneSubQueryDefn)
+    computedColumns: Joi.array().items(oneSubQueryDefn),
+    regionBoundaries: regionBoundariesDefn
 };

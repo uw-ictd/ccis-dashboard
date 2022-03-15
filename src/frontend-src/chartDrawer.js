@@ -6,6 +6,8 @@ const select = require('./selectors');
 const fitCanvasToContents = require('./fitCanvasToContents');
 const drawColorLegend = require('./colorLegend');
 
+const MIN_AXIS_HEIGHT = 50; // pixels
+
 /*
  * data: in the format d3.stack expects, which is an Array representation of a
  *     Map. I think of this as having type Array-Map<Array-Map<Object>>, where
@@ -172,25 +174,33 @@ function drawBarChart(series, { parentElement, parentWidth, parentHeight, title,
     /*
      * First, time to calculate some sizes for the x-axis
      */
-    // Magic constants here were determined experimentally: about 27 pixels for the main x-axis label,
-    // and about 4 pixels per character in the tick labels
-    let axisHeight = parentHeight - 27 - 8.5*Math.max(...fullDomain.map(str => str.length));
+    // Magic constants here were determined experimentally
+    // Regardless of how the labels are laid out, there's about 60 pixels used
+    // up. E.g., by the main x-axis label
+    const USED_VERTICAL_SPACE = 60;
+    const longestXLabel = Math.max(...fullDomain.map(str => str.length));
+    let axisHeight = parentHeight - USED_VERTICAL_SPACE - 8.5*longestXLabel;
     let angle = '-65';
     let xOffset = '-.8em';
     let yOffset = '-.15em';
     let anchor = 'end';
+    let smallFont = false;
     if (series[0].length === 1) { // Number of x-axis items
         angle = '0';
         xOffset = '0em';
         yOffset = '2ex';
         anchor = 'middle';
-        axisHeight = parentHeight - 21;
-    } else if (series[0].length < 12) {
-        angle = '-30';
+        axisHeight = parentHeight - USED_VERTICAL_SPACE;
+    } else if (series[0].length < 20) {
+        angle = '-40';
         xOffset = '0em';
         yOffset = '.6em';
-        axisHeight = parentHeight - 27 - 4.2*Math.max(...fullDomain.map(str => str.length));
+        axisHeight = parentHeight - USED_VERTICAL_SPACE - 6*longestXLabel;
+    } else if (series[0].length > 30) {
+        smallFont = true;
     }
+    // Y axis should get a tiny positive value, at minimum
+    axisHeight = Math.max(axisHeight, MIN_AXIS_HEIGHT);
 
     const canvas = parentElement.append('svg');
     makeTitle(canvas, axisWidth, title);
@@ -213,6 +223,12 @@ function drawBarChart(series, { parentElement, parentWidth, parentHeight, title,
         .attr('dx', xOffset)
         .attr('dy', yOffset)
         .attr('transform', `rotate(${angle})`);
+
+    // If there are too many bars, make the x-axis labels small
+    if (smallFont) {
+        canvas.selectAll('.bar-label text')
+            .classed('small', true);
+    }
 
     const { height } = canvas.selectAll('.bar-label').node().getBBox();
     canvas.append('text')
@@ -338,8 +354,6 @@ function drawPieChart(data, { parentElement, title, colorScale }) {
             .attr('data-tippy-content', (d, i) => `${d.data[0]}: ${d.data[1]}`);
     fitCanvasToContents(canvas);
 }
-
-
 
 function makeTitle(canvas, width, title) {
     if (title) {

@@ -56,9 +56,16 @@ ODKX_TEST_PASSWORD=
 * `ODKX_TEST_USER` and `ODKX_TEST_PASSWORD` are only required for testing. These are credentials for a user on that ODK-X server
 
 ## Deployment Configuration
-For a new deployment, update the files in the `config` folder with your shapefiles, intended visualizations, tab structure
+For a new deployment, update the files in the `config` folder with your GeoJSON for geographic boundaries, intended visualizations, and tab structure.
+Additional documentation in the `docs/` folder describes how to use these config files.
+
+* `visualizations.md` describes the format of the `visualizations.js` config file
+* `geographicBoundaries.md` describes the format of the `geographicBoundaries.js` config file
+
+The config files are also checked at runtime by the code in `src/util/configSchemas.js`.
 
 ## Development installation
+Install [node.js](https://nodejs.org/en/), which will come with the `npm` command.\
 Clone the repository and `cd` into it. Set up your `.env` file.\
 From there run:
 ```
@@ -102,14 +109,17 @@ Notes:
 * If you run into an issue with your BIOS on Windows, check out this [SO post](https://stackoverflow.com/questions/39684974/docker-for-windows-error-hardware-assisted-virtualization-and-data-execution-p/39989990#39989990)
 * Some tests may inconsistently pass due to timeout errors. Run the tests individually for clarity.
 
-## Style Guidelines
-Current code uses the following style
-* Use `require` instead of `import`
-* When defining objects with `{ }`, put spaces inside the braces like `{ logIn }`
-* Single quotes `''` for javascript, double quotes `""` for html
-* In comments, put a space after the `//`
+## Code style
+See `CONTRIBUTING.md` for a detailed summary of how to contribute good code to this project.
+
+Information on the code review process is described in `docs/codeReview.md`, and information on the release process is in `docs/releases.md`.
+
+## End user documentation
+Some notes to support end users of the dashboard are included in `docs/END_USER_DOCUMENTATION.md`
 
 ## Architecture
+The dashboard architecture is described in more detail in `docs/architecture.md`
+
 The following dependency graphs describe the internal structure of the files
 here.
 

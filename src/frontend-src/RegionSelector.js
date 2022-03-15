@@ -23,10 +23,10 @@ function RegionSelector({mapboxgl}, map, shapefiles, regionNamesContainer) {
     this._getIDsFromLevel = getIDsFromLevel;
     this._getCurrentIndex = getCurrentIndex;
     this._updateSelections = updateSelections;
-    this._regionNameKeys = shapefiles.regionNameKeys;
     // The map will only show boundaries between these two levels
-    this._topLevelIndex = shapefiles.levelNames.indexOf(shapefiles.topLevel);
-    this._bottomLevelIndex = shapefiles.levelNames.indexOf(shapefiles.bottomLevel);
+    const levelNames = shapefiles.levels.map(level => level.levelName);
+    this._topLevelIndex = levelNames.indexOf(shapefiles.topLevel);
+    this._bottomLevelIndex = levelNames.indexOf(shapefiles.bottomLevel);
     this._hierarchy = this._makeHierarchy(shapefiles);
 
     this.getSelectedRegions = getSelectedRegions;
@@ -48,7 +48,7 @@ function RegionSelector({mapboxgl}, map, shapefiles, regionNamesContainer) {
     // Add GeoJSON to the map
     const boundaries = shapefiles.levels
         .slice(this._topLevelIndex + 1, this._bottomLevelIndex + 1)
-        .map(level => level.features)
+        .map(level => level.geoJson.features)
     boundaries.flat().forEach(this._addLayerToMap);
     boundaries.flat().forEach((geoJSONFeature => {
         const layerID = this._getRegionID(geoJSONFeature);
@@ -99,12 +99,21 @@ function showMapAtNode(selectedLayerID) {
     }
 }
 
+/*
+ * These instructions have become narrowly tailored to the Uganda CCIS 
+ * deployment. They assume that the levels are Country, Region, District, but
+ * other countries will have other adminstrative hierarchies. Ideally, this
+ * code would be more general, and the instructions specific to one country
+ * would move out into a config file.
+ */
 function showRegionSelectionInstr(mapboxgl) {
+    const numberOfLevels = this._bottomLevelIndex - this._topLevelIndex + 1;
     let customAtt;
-    if (this._shapefiles.levels.length == 2) {
-        customAtt = "Click to select/deselect an area; double click a region to select" +
-        "only its districts; double click again to return to region selection.";
-    } else if (this._shapefiles.levels.length == 1) {
+    if (numberOfLevels == 2) {
+        customAtt = "Double click a region to select just that region. Then" +
+            " you can click to select/deselect regions, or double-click to " +
+            "return to the whole country.";
+    } else if (numberOfLevels == 1) {
         customAtt = "Click to select/deselect an area";
     } else {
         customAtt = "Click to select/deselect an area; double click to select an area's" +
@@ -127,7 +136,7 @@ function makeHierarchy({ levels }) {
     hierarchy[this._TOP] = this._getIDsFromLevel(this._topLevelIndex + 1);
     // We start at 1 since the nodes at level 0 don't have parents
     for (let i = (this._topLevelIndex + 2); i <= this._bottomLevelIndex; i++) {
-        levels[i].features.forEach(geoJSONFeature => {
+        levels[i].geoJson.features.forEach(geoJSONFeature => {
             const thisID = this._getRegionID(geoJSONFeature);
             const parentID = this._getParentRegionID(thisID);
             if (!hierarchy[parentID]) hierarchy[parentID] = [];
@@ -140,8 +149,8 @@ function makeHierarchy({ levels }) {
 // Returns a string like 'Uganda|Kampala|Kampala' (for the Kampala district
 // within the Kampala region)
 function getRegionID(geoJSONFeature) {
-    return this._regionNameKeys
-        .map(key => geoJSONFeature.properties[key])
+    return this._shapefiles.levels
+        .map(level => geoJSONFeature.properties[level.regionNameKey])
         .filter(name => Boolean(name)) // Remove empty strings
         .join(this._SEPARATOR);
 }
@@ -231,10 +240,6 @@ function getCurrentIndex() {
     return this._currentSelection === this._TOP ? this._topLevelIndex : this._currentSelection.split(this._SEPARATOR).length;
 }
 
-// Throughout, but especially in this function, we assume that
-// `shapefiles.regionNameKeys` and `shapefiles.levels` have the same length
-// and that `regionNameKeys[i]` corresponds to `levels[i]` (and to
-// `levelNames[i]`).
 function isLowestLevel(layerID) {
     return layerID.split(this._SEPARATOR).length >= this._bottomLevelIndex;
 }
@@ -263,7 +268,7 @@ function addLayerToMap(geoJSONFeature) {
 }
 
 function getIDsFromLevel(shapefilesIndex) {
-    return this._shapefiles.levels[shapefilesIndex].features
+    return this._shapefiles.levels[shapefilesIndex].geoJson.features
         .map(this._getRegionID);
 }
 
@@ -285,8 +290,7 @@ function getSelectedRegions() {
             return true;
         }
     }
-    // find first non null element
-    const index = this._shapefiles.levels.findIndex(x => x !== null)
+    const index = this._shapefiles.levels.findIndex(x => x.geoJson !== null);
     // We can return regions from the selection that were in levels above
     // `shapefiles.topLevel` with this
     this._getIDsFromLevel(index).forEach(helper);
