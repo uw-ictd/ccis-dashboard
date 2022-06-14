@@ -2,7 +2,6 @@
  * @jest-environment jsdom
  */
  const writeTextInsteadOfChart = require('../frontend-src/resultText');
- 
  beforeEach(() => {
      window.SVGGraphicsElement.prototype.getBBox = function getBBox() {
       return { x: 0, y: 0, height: 0, width: 0 };
@@ -15,17 +14,17 @@
           <div class="viz-wrapper viz-wrapper-0">
             <div class="map-container map-container-0"></div>
             <div class="chart-wrapper chart-wrapper-0"></div>
-            <div class="result-text-container result-text-container-0"></div>
           </div>
         </div>
      </div>`;
  });
- 
+
  describe('Result text tests', () =>  {
-     test('Adds svg with text when function is called', () => {
+     test('Adds svg with text to chartwrapper when function is called', () => {
         writeTextInsteadOfChart("test text", "Vaccines", 0);
-        const textContainer = document.querySelector('.result-text-container svg text');
+        const textContainer = document.querySelector('.chart-wrapper-0 .result-text');
         expect(textContainer).toBeTruthy();
      });
  });
- 
+
+

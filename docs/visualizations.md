@@ -76,7 +76,7 @@ This specification also has the optional property `colorMap`. If you know what t
 
 This produces the following visualization:
 
-![Pie Chart Example](pie_example.png)
+![Pie Chart Example](img/pie_example.png)
 
 Because we have three possible options for `functional_status` ("not_functioning", "functioning", or "Missing data"), there is a slice for each, although the "Missing data" slice is too small to notice. The sizes are proportional to the number of refrigerators of that status. Additionally, the colors follow those assigned in our specification.
 
@@ -103,7 +103,7 @@ Here, we also see the optional propety `colorMap` that defines a mapping from `c
 
 Additionally, we can notice that our `groupBy` and `colorBy` are the same. Because bars are grouped before being stacked into different colors, this means that each "bar group" will only have one color (as there is only one `colorBy` option in each bar group). This is a common design pattern for creating bar charts that do not appear to be stacked. Let's see what this produces:
 
-![Bar Chart Example 1](bar_example1.png)
+![Bar Chart Example 1](img/bar_example1.png)
 
 Because `groupBy` and `colorBy` are the same, we do not create a legend as the x-axis labels serve that purpose. This chart provides the same information as our pie chart example but through a much different visual.
 
@@ -123,11 +123,32 @@ Let's look at a similar example where `groupBy` and `colorBy` are not the same:
 ```
 Here, `groupBy` has been changed to be `model_id`. This means that we expect a "bar group" for each `model_id` present in our dataset. This bar group will then consist of stacked bars for each functional status of that model. Let's take a look:
 
-![Bar Chart Example 2](bar_example2.png)
+![Bar Chart Example 2](img/bar_example2.png)
 
 Now that each bar group is not just one color, we include a legend.
 
 Whereas pie charts can only be used to quantify one piece of information (one column), bar charts can be used for two. Given two columns, the placement of one as `groupBy` and the other as `colorBy` will have a big effect on the chart and should be chosen carefully.
+
+### Normalized bar charts
+The `normalized-bar` style offers all the same options as the regular bar charts. The difference is that a normalized bar chart will scale all the bars to be the same height. This is valuable for comparing proportions, like in a situation where you would like to have multiple pie charts. Here's an example:
+
+```
+'Age by facility type (normalized)': {
+    type: 'refrigerator',
+    groupBy: 'facility_level',
+    colorBy: 'AgeGroups',
+    colorMap: {
+        '0-5 Years': 'blue',
+        '6-10 Years': 'yellow',
+        '>10 Years': 'red',
+        'Missing data': 'gray'
+    },
+    style: 'normalized-bar',
+    legendOrder: ['0-5 Years', '6-10 Years', '>10 Years', 'Missing data']
+}
+```
+
+![Normalized bar chart example](img/normalized_bar_example.png)
 
 ## A Note on Legends
 Both pie charts and bar charts have legends for their colors (except for bar charts where `groupBy` and `colorBy` are the same). We can specify additional properties of the legend for greater control on a visualization-by-visualization basis. Let's look at our options:
@@ -170,7 +191,7 @@ The maintentnace priorities map should keep track of the number of low, medium, 
 
 Here, we describe our maintenance priority as having options of `low`, `medium`, `high`, and `not_applicable`. Because our `mapType` is 'maintenance_priority', we have custom logic for creating these popups, resulting in this:
 
-![Map Example 1](map_example1.png)
+![Map Example 1](img/map_example1.png)
 
 We have the count of refrigerators at each maintenance priority for the specific facility that is clicked.
 
@@ -205,7 +226,7 @@ However, there are two additional optional properties here. One is `colorBy`. Th
 
 Let's take a look at what that produces:
 
-![Map Example 2](map_example2.png)
+![Map Example 2](img/map_example2.png)
 
 As it stands, all of our facilities have update statuses of "never" and are red. As can be seen in the popup, we get the value for each column listed in `facilityPopup`.
 
@@ -260,7 +281,7 @@ As can be seen, we are assigning each health facility TRUE, FALSE, or NULL based
 
 These then produce the following map:
 
-![Heatmap Example 1](heatmap_example1.png)
+![Heatmap Example 1](img/heatmap_example1.png)
 
 Those areas that are completely missing data (i.e. 0 true and 0 false) will be shaded gray. The rest will be part of the purple gradient based on their proportion. Additionally, we can see that the popup includes the fraction described above, the total number of facilities, and the number that are missing data.
 
@@ -282,7 +303,7 @@ For quick reference, these are the options for each style of visualization.
 }
 ```
 
-## Bar
+## Bar and Normalized Bar
 
 ```
 'visualization name': {
@@ -290,7 +311,7 @@ For quick reference, these are the options for each style of visualization.
     groupBy: mandatory, column to split into bar groups
     colorBy: mandatory, column to split bar groups into stacked bars
     colorMap: optional, mapping of options from colorBy column to colors
-    style: 'bar'
+    style: 'bar' or 'normalized-bar'
     sort: optional, 'ASC' or 'DESC'
     disableLegend: optional, boolean
     legendNonzeroOnly: optional, boolean

@@ -1,14 +1,16 @@
+const { URL_PREFIX } = require('../config/routingConstants');
+
 module.exports = {
     loginAuth: function(req, res, next) {
         if (req.isAuthenticated()) {
-            res.redirect('/');
+            res.redirect(URL_PREFIX);
         } else {
             next();
         }
     },
     getAuth: function(req, res, next) {
         if (!req.isAuthenticated()) {
-            res.redirect('/login');
+            res.redirect(URL_PREFIX + '/login');
         } else {
             next();
         }

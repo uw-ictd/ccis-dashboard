@@ -3,6 +3,17 @@
 This repository contains the dashboard component of the CCIS system, along with the dashboard's database. For a complete deployment including a webserver, an ODK-X sync endpoint, and ODK-X authentication server, see one of the server setup repositories:
 * [uganda-ccis-server-setup](https://github.com/uw-ictd/uganda-ccis-server-setup)
 
+## Browser support
+It is recommended to use the dashboard on Chrome/Chromium. We also test on Edge, with experimental support for Firefox and Safari.
+
+Supported browsers:
+* Chrome/Chromium 84+ (tested on 99.0.4844.74-1)
+* Edge 84+ (tested on 99.0.1150.39)
+
+Experimental support:
+* Firefox 63+ (tested on 98.0-2)
+* Safari 13+ (tested on 13.1 and 15.3)
+
 ## Production deployment with Docker
 1. Install [Docker](https://docs.docker.com/get-docker/) and [git](https://git-scm.com/downloads)
 2. Clone this repository and `cd` into it
@@ -61,6 +72,7 @@ Additional documentation in the `docs/` folder describes how to use these config
 
 * `visualizations.md` describes the format of the `visualizations.js` config file
 * `geographicBoundaries.md` describes the format of the `geographicBoundaries.js` config file
+* `tabVisualizations.md` describes the format of the `tabVisualizations.js` config file
 
 The config files are also checked at runtime by the code in `src/util/configSchemas.js`.
 
@@ -121,7 +133,7 @@ Some notes to support end users of the dashboard are included in `docs/END_USER_
 The dashboard architecture is described in more detail in `docs/architecture.md`
 
 The following dependency graphs describe the internal structure of the files
-here.
+here--it's gotten a little complicated.
 
 The server-side:
 

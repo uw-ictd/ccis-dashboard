@@ -10,6 +10,7 @@ const validate = require('../util/configValidation')
 validate('tabVisualizations', tabVisualizations);
 validate('visualizations', visualizations);
 validate('filterSpecification', filterSpecification);
+validate('exportOptions', exportOptions);
 
 async function getIndexData(db)  {
     // buildDropdownData runs simple database queries. To optimize

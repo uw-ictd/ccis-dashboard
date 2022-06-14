@@ -78,9 +78,13 @@ function mapToObject(map) {
 
 
 function makeMetadata(vizSpec, dataTSQL, legendDataTSQL) {
+    let legendOptions = legendDataTSQL.map(d => d.colorlabel);
+    if (vizSpec.legendOrder) {
+        legendOptions = legendOptions.concat(vizSpec.legendOrder);
+    }
     const result = {
         fullDomain: uniq(dataTSQL.map(d => d.xlabel)),
-        fullColorDomain: uniq(legendDataTSQL.map(d => d.colorlabel))
+        fullColorDomain: uniq(legendOptions)
     };
     return result;
 }

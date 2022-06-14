@@ -40,6 +40,8 @@
  *      be appended to the end with arbitrary order.
  * sum String [optional] column name to sum over instead of the usual COUNT(*). Column will be cast to
  *      integer. If using `sum`, legendNonzeroOnly is recommended
+ * heatmapType String [required for heatmaps] either 'quantity' or 'proportion'. Determines whether heatmap
+ *      colors are scaled to absolute quantity or to a proportion out of a whole.
  */
 module.exports = {
     'Working status by CCE manufacturer': {
@@ -176,7 +178,8 @@ module.exports = {
         colorMap: {
             'Missing data': 'gray'
         },
-        style: 'bar'
+        style: 'bar',
+        disableBarNumbers: true
     },
     // CCEM table 1.8
     'CCE with Electricity availability': {
@@ -472,7 +475,8 @@ module.exports = {
             min_opacity: 0.1,
             max_opacity: 0.95,
             fill_color: 'purple'
-        }
+        },
+        heatmapType: 'proportion'
     },
     'Percentage of facilities with 4+ hours of grid power (region)': {
         type: 'facility',
@@ -481,7 +485,8 @@ module.exports = {
         regionLevel: 'Region (Level 2)',
         fill_specs: {
             fill_color: 'purple'
-        }
+        },
+        heatmapType: 'proportion'
     },
     'All facilities list': {
         type: 'facility',
@@ -518,6 +523,7 @@ module.exports = {
             'year_installed',
             'power_source',
             'utilization',
+            'serial_number',
             'functional_status',
             'maintenance_priority',
             'reason_not_working'
@@ -597,7 +603,8 @@ module.exports = {
         regionLevel: 'Region (Level 2)',
         fill_specs: {
             fill_color: 'purple'
-        }
+        },
+        heatmapType: 'proportion'
     },
     'Update status by facility': {
         type: 'facility',
@@ -674,7 +681,8 @@ module.exports = {
         regionLevel: 'Region (Level 2)',
         fill_specs: {
             fill_color: 'purple'
-        }
+        },
+        heatmapType: 'proportion'
     },
     'Percentage of facilities with refrigerator capacity': {
         type: 'facility',
@@ -683,6 +691,65 @@ module.exports = {
         regionLevel: 'Region (Level 2)',
         fill_specs: {
             fill_color: 'purple'
-        }
+        },
+        heatmapType: 'proportion'
+    },
+    'Number of nonfunctional equipment': {
+        type: 'refrigerator',
+        style: 'heatmap',
+        colorBy: 'nonfunctional',
+        regionLevel: 'Region (Level 2)',
+        fill_specs: {
+            fill_color: 'purple'
+        },
+        heatmapType: 'quantity'
+    },
+    'CCE update status by region': {
+        type: 'refrigerator',
+        style: 'bar',
+        groupBy: 'regionlevel2',
+        colorBy: 'cce_update_status',
+        colorMap: {
+            '> 3 months/Never': 'red',
+            '1-3 months': 'yellow',
+            '< 1 month': 'blue'
+        },
+        legendOrder: [ '< 1 month', '1-3 months', '> 3 months/Never' ]
+    },
+    'CCE update status by district (use map to filter by region)': {
+        type: 'refrigerator',
+        style: 'bar',
+        groupBy: 'regionlevel3',
+        colorBy: 'cce_update_status',
+        colorMap: {
+            '> 3 months/Never': 'red',
+            '1-3 months': 'yellow',
+            '< 1 month': 'blue'
+        },
+        legendOrder: [ '< 1 month', '1-3 months', '> 3 months/Never' ]
+    },
+    'Facility update status by region': {
+        type: 'facility',
+        style: 'bar',
+        groupBy: 'regionlevel2',
+        colorBy: 'facility_update_status',
+        colorMap: {
+            '> 3 months/Never': 'red',
+            '1-3 months': 'yellow',
+            '< 1 month': 'blue'
+        },
+        legendOrder: [ '< 1 month', '1-3 months', '> 3 months/Never' ]
+    },
+    'Facility update status by district (use map to filter by region)': {
+        type: 'facility',
+        style: 'bar',
+        groupBy: 'regionlevel3',
+        colorBy: 'facility_update_status',
+        colorMap: {
+            '> 3 months/Never': 'red',
+            '1-3 months': 'yellow',
+            '< 1 month': 'blue'
+        },
+        legendOrder: [ '< 1 month', '1-3 months', '> 3 months/Never' ]
     }
 };

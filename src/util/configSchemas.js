@@ -14,6 +14,7 @@ const oneVisualization = Joi.object({
     columns: Joi.array().items(Joi.string()).optional(),
     sort: Joi.string().valid('ASC', 'DESC').optional(),
     disableLegend: Joi.bool().optional(),
+    disableBarNumbers: Joi.bool().optional(),
     legendNonzeroOnly: Joi.bool().optional(),
     legendOrder: Joi.array().optional(),
     regionLevel: Joi.string().valid('Region (Level 2)', 'District (Level 3)').optional(),
@@ -27,7 +28,8 @@ const oneVisualization = Joi.object({
         opacity: Joi.number().optional(),
         singleColor: Joi.string().optional()
     }).optional(),
-    sum: Joi.string().optional()
+    sum: Joi.string().optional(),
+    heatmapType: Joi.string().valid('proportion','quantity').optional()
 });
 
 const oneTab = Joi.object({
@@ -92,6 +94,26 @@ const regionBoundariesDefn = Joi.object({
     }))
 });
 
+const oneExportOptionsDefn = Joi.object({
+    options: Joi.object().pattern(Joi.string(), Joi.object({
+        name: Joi.string(),
+        query: Joi.string().optional(),
+        usesVaccineStores: Joi.boolean().optional(),
+        rawTable: Joi.boolean().optional(),
+        table: Joi.string().optional(),
+        usesParams: Joi.boolean().optional()
+    })),
+    buttonText: Joi.string(),
+    inputFields: Joi.array().items(Joi.object({
+        label: Joi.string(),
+        id: Joi.string(),
+        type: Joi.string().valid("number", "string"),
+        lowerBound: Joi.number().optional(),
+        upperBound: Joi.number().optional()
+    })).optional(),
+    report: Joi.boolean().optional()
+});
+
 module.exports = {
     // Allow arbitrary visualization/key names, but validate the values against
     // the oneVisualization schema
@@ -99,5 +121,6 @@ module.exports = {
     tabVisualizations: Joi.object().pattern(/.*/, oneTab),
     filterSpecification: Joi.object().pattern(/.*/, oneFilter),
     computedColumns: Joi.array().items(oneSubQueryDefn),
-    regionBoundaries: regionBoundariesDefn
+    regionBoundaries: regionBoundariesDefn,
+    exportOptions: Joi.array().items(oneExportOptionsDefn)
 };

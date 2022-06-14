@@ -4,7 +4,6 @@ const { getServer, closeServer } = require('../server');
 let driver;
 
 const PORT = 30005;
-const URL = `http://localhost:${PORT}`;
 
 beforeAll(async () => {
     await getServer(PORT, dbOptionsSeeded);
@@ -13,7 +12,7 @@ beforeAll(async () => {
         .forBrowser('firefox')
         .build();
 
-    await logIn(By, until, driver, URL);
+    await logIn(By, until, driver, PORT);
 }, 50000);
 
 afterAll(async () => {

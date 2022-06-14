@@ -10,6 +10,9 @@ const mapDisplay = require('../config/mapDisplay').regionSelector;
 const { getIndicators } = require('./indicatorsController');
 const select = require('./selectors');
 const { setupFilters } = require('./filter');
+const browserWarning = require('./browserWarning');
+const { exportClicked, exportOptionChanged } = require('./exportController');
+const { exportFieldChanged } = require('./inputField');
 
 function tabToRegionSelector(tabName) {
     const geographicBoundaries = import('../config/geographicBoundaries');
@@ -21,8 +24,14 @@ function tabToRegionSelector(tabName) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+    browserWarning.display();
+    window.dismissAlert = browserWarning.dismiss;
+
     getIndicators();
-    window.exportTables = require('./exportController');
+    window.exportClicked = exportClicked;
+    window.exportFieldChanged = exportFieldChanged;
+    window.exportOptionChanged = exportOptionChanged; 
+
     setupFilters(window._dropdownFilters, tabVisualizations);
 
     // Create a region selector for each tab

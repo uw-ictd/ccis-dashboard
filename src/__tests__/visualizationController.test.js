@@ -45,10 +45,12 @@ beforeEach(() => {
         <select class="visualization-selector">
             <option value="Age by CCE model"></option>
         </select>
-        <div class="map-container-0"></div>
-        <div class="chart-container-0"></div>
-        <div class="list-wrapper-0"></div>
-        <div class="result-text-container-0"></div>
+        <div class="bar-numbers-container"></div>
+        <div class="chart-wrapper-0">
+            <div class="map-container-0"></div>
+            <div class="chart-container-0"></div>
+            <div class="list-wrapper-0"></div>
+        </div>
     </div>
     <div id="CCE">
         <select id="CCE-facilityTypes-selector" multiple></select>
@@ -103,23 +105,23 @@ describe('Filter UI tests', () =>  {
             }
         };
         const tabToFilters = {
-            'Facilities': { 
-                enabledFilters: ['maintenancePriorities', 'facilityTypes', 'refrigeratorTypes'] 
+            'Facilities': {
+                enabledFilters: ['maintenancePriorities', 'facilityTypes', 'refrigeratorTypes']
             },
-            'CCE': { 
-                enabledFilters: [] 
+            'CCE': {
+                enabledFilters: []
             },
-            'Vaccines': { 
-                enabledFilters: [] 
+            'Vaccines': {
+                enabledFilters: []
             },
-            'System-Use': { 
-                enabledFilters: [] 
+            'System-Use': {
+                enabledFilters: []
             },
-            'Temp-Alarms': { 
-                enabledFilters: [] 
+            'Temp-Alarms': {
+                enabledFilters: []
             },
-            'Maintenance': { 
-                enabledFilters: [] 
+            'Maintenance': {
+                enabledFilters: []
             }
         };
         // Set up the dropdowns, this calls selectAll

@@ -3,8 +3,10 @@ const tippy = require('tippy.js').default;
 const { createSingleton } = require('tippy.js');
 const { makeColorScale } = require('./colorScale');
 const select = require('./selectors');
+const barNumCheckboxTemplate = require('./views/barNumsCheckbox.ejs');
 const fitCanvasToContents = require('./fitCanvasToContents');
 const drawColorLegend = require('./colorLegend');
+const { selectAll } = require('d3');
 
 const MIN_AXIS_HEIGHT = 50; // pixels
 
@@ -43,10 +45,9 @@ const MIN_AXIS_HEIGHT = 50; // pixels
  * groupBy:  String to show to user as axis label
  * repeatBy: undefined|String to show to user in titles of small multiple charts
  */
-function drawAllCharts(data, { fullDomain, fullColorDomain }, { groupBy, repeatBy, type, style, sum, colorMap, colorBy, disableLegend, legendNonzeroOnly, legendOrder }, tabName, index) {
+function drawAllCharts(data, { fullDomain, fullColorDomain }, { groupBy, repeatBy, type, style, sum, colorMap, colorBy, disableLegend, legendNonzeroOnly, legendOrder, disableBarNumbers}, {tabName, multi , index}) {
     const parentElement = d3.select(select.chartContainerStr(tabName, index));
     const colorDomain = !disableLegend && legendNonzeroOnly ? getNonZeroOptions(data) : fullColorDomain;
-
     // Make color scale
     const colorScale = makeColorScale(colorDomain, colorMap);
 
@@ -59,6 +60,7 @@ function drawAllCharts(data, { fullDomain, fullColorDomain }, { groupBy, repeatB
         type,
         style,
         sum,
+        disableBarNumbers,
         parentWidth: parseInt(parentElement.style('width')),
         parentHeight: parseInt(parentElement.style('height'))
     };
@@ -83,7 +85,7 @@ function drawAllCharts(data, { fullDomain, fullColorDomain }, { groupBy, repeatB
             drawBarChart(allStacks[index], {
                 title: repeatBy ? `${repeatBy}: ${repeatlabel}` : '',
                 ...params
-            });
+            }, {tabName, multi});
         });
     } else if (style === 'pie') {
         if (groupBy) throw new Error('Pie charts do not implement groupBy');
@@ -168,7 +170,7 @@ function getNonZeroOptions(data) {
  * title:           String
  */
 function drawBarChart(series, { parentElement, parentWidth, parentHeight, title,
-    fullDomain, fullRange, colorDomain, colorScale, groupBy, type, style, sum }) {
+    fullDomain, fullRange, colorDomain, colorScale, groupBy, type, style, sum, disableBarNumbers}, {tabName, multi} ) {
     const axisWidth = parentWidth - 60; // When the y-axis measures things with 4 digits, it takes up about 60 pixels
 
     /*
@@ -177,7 +179,13 @@ function drawBarChart(series, { parentElement, parentWidth, parentHeight, title,
     // Magic constants here were determined experimentally
     // Regardless of how the labels are laid out, there's about 60 pixels used
     // up. E.g., by the main x-axis label
-    const USED_VERTICAL_SPACE = 60;
+    let barNumsOffset = 35; // vertical offset above bars
+    let normalizedBarNumsOffset = 0;
+    if (style === 'normalized-bar') {
+        normalizedBarNumsOffset = 20; // vertical offset between odd/even bar numbers
+        barNumsOffset += normalizedBarNumsOffset;
+    }
+    const USED_VERTICAL_SPACE = 60 + barNumsOffset;
     const longestXLabel = Math.max(...fullDomain.map(str => str.length));
     let axisHeight = parentHeight - USED_VERTICAL_SPACE - 8.5*longestXLabel;
     let angle = '-65';
@@ -301,7 +309,53 @@ function drawBarChart(series, { parentElement, parentWidth, parentHeight, title,
             .attr('tabindex', '0')
             .attr('data-tippy-content', d => `${d.key}: ${d[1]-d[0]}`)
             .style('outline', 'none');
+
+    canvas.selectAll('.bar-numbers')
+        .data(series[series.length - 1])
+        .enter()
+        .append('text')
+            .attr('class','bar-numbers')
+            .attr('x', d => xScale(d.data[0]) + xScale.bandwidth() / 2)
+            .attr('y',  (d, i) => {
+                let offset = 0;
+                if (style === "normalized-bar" && i % 2 === 0) {
+                    offset = 20;
+                }
+                return getY(style, yScale, d, i, max) - 15 - offset;
+            })
+            .attr('fill', 'black')
+            .attr('text-anchor', 'middle')
+            .text((d, i) => max[i]);
+
+    if (smallFont) {
+        canvas.selectAll('.bar-numbers')
+            .classed('small', true);
+    }
+
+    if (!multi) {
+        const checkboxContainer = select.showBarNumsContainer(tabName);
+        checkboxContainer.innerHTML = barNumCheckboxTemplate({ tabName});
+        const showBarNumsCheckbox = select.showBarNumsCheckbox(tabName);
+
+        if (disableBarNumbers) {
+            showBarNumsCheckbox.checked = false;
+            changeBarNumDisplay("none", tabName);
+        }
+
+        showBarNumsCheckbox.addEventListener("click", function(e) {
+            const displayVal = e.target.checked ? "block" : "none";
+            changeBarNumDisplay(displayVal, tabName);
+            fitCanvasToContents(canvas);
+        });
+    }
+
     fitCanvasToContents(canvas);
+}
+
+function changeBarNumDisplay(displayVal, tabName) {
+    select.barNumbers(tabName).forEach(barNum => {
+        barNum.style.display = displayVal;
+    });
 }
 
 // Get height of bar depending on graph style

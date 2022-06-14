@@ -3,10 +3,11 @@ const d3 = require('d3');
 const fitCanvasToContents = require('./fitCanvasToContents');
 
 function writeTextInsteadOfChart(text, tabName, index) {
-  select.resultTextContainer(tabName, index).style.display = 'flex'
-  const parentElement = d3.select(select.resultTextContainer(tabName, index));
+  select.chartWrapper(tabName, index).style.display = 'flex';
+  const parentElement = d3.select(select.chartWrapper(tabName, index));
   const canvas = parentElement.append('svg');
-  canvas.attr('width', 300)
+  canvas.attr('class','result-text')
+      .attr('width', 300)
       .attr('height', 150);
 
   canvas.append('text')

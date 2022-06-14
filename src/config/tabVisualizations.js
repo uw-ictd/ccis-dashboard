@@ -123,6 +123,10 @@ module.exports = {
     'System-Use': {
         tabLabel: 'System Use',
         visualizations: [
+            'CCE update status by region',
+            'Facility update status by region',
+            'CCE update status by district (use map to filter by region)',
+            'Facility update status by district (use map to filter by region)',
             'Update status by facility',
             'Percentage of facilities updated within 3 months',
             'Refrigerator last update month',
@@ -130,7 +134,7 @@ module.exports = {
             'Refrigerator updates by user',
             'Facility updates by user',
         ],
-        defaultViz: 'Update status by facility',
+        defaultViz: 'CCE update status by region',
         enabledFilters: [
             'facilityTypes',
             'facilityElectricity',
@@ -172,7 +176,8 @@ module.exports = {
     'Maintenance': {
         tabLabel: 'Maintenance',
         visualizations: [
-            'Non-functional CCE list'
+            'Non-functional CCE list',
+            'Number of nonfunctional equipment'
         ],
         defaultViz: 'Non-functional CCE list',
         enabledFilters: [

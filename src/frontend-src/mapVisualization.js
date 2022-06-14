@@ -96,9 +96,10 @@ async function mapVisualization({ mapboxgl, makeMap }, data, { fullColorDomain }
 }
 
 async function heatmapVisualization({ mapboxgl, makeMap }, data, visualization, tabName, mapConfig, vizIndex) {
-    drawHeatmapLegend(d3.select(select.legendContainerStr(tabName, vizIndex)), visualization)
     const map = await setUpMap(makeMap, mapConfig, tabName, vizIndex);
-    maps[tabName][vizIndex].sources = makeHeatmap(mapboxgl, map, data, visualization, vizIndex);
+    const {heatmapData, maxNumerator} = makeHeatmap(mapboxgl, map, data, visualization, vizIndex);
+    maps[tabName][vizIndex].sources = heatmapData;
+    drawHeatmapLegend(d3.select(select.legendContainerStr(tabName, vizIndex)), visualization, maxNumerator)
     return map;
 }
 

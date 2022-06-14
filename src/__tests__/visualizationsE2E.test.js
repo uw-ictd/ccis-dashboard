@@ -5,7 +5,6 @@ const { displayViz, logIn, dbOptionsSeeded } = require('../testUtils');
 let driver;
 
 const PORT = 30003;
-const URL = `http://localhost:${PORT}`;
 
 jest.setTimeout(20000); // These tests are a bit slow
 
@@ -31,7 +30,7 @@ afterAll(async () => {
 
 describe('Visualization end-to-end tests', function () {
     test('Logs in', async () => {
-        await logIn(By, until, driver, URL);
+        await logIn(By, until, driver, PORT);
     });
 
     // Need to click on other non-export tabs after main page renders.
@@ -39,7 +38,7 @@ describe('Visualization end-to-end tests', function () {
     test('Check for visualization after clicking on non-export tab', async () => {
         const tab = driver.wait(until.elementLocated(By.id('CCE-tab')));
         await tab.click();
-        const visualization = driver.wait(until.elementLocated(By.css('#CCE .chart-wrapper svg')));
+        const visualization = driver.wait(until.elementLocated(By.css('#CCE .chart-container svg')));
         const vizDisplayed = await visualization.isDisplayed();
         expect(vizDisplayed).toBe(true);
     });
@@ -49,7 +48,7 @@ describe('Visualization end-to-end tests', function () {
         // Check default rendered
         const tab = driver.wait(until.elementLocated(By.id('CCE-tab')));
         await tab.click();
-        const defaultVisualization = driver.wait(until.elementLocated(By.css('#CCE .chart-wrapper svg')));
+        const defaultVisualization = driver.wait(until.elementLocated(By.css('#CCE .chart-container svg')));
         const defaultVizDisplayed = await defaultVisualization.isDisplayed();
         expect(defaultVizDisplayed).toBe(true);
         // Check non-default map should render

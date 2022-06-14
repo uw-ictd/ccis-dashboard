@@ -20,6 +20,32 @@ body
 
 /* top-wrapper */
 
+#browser-support
+{
+    width: 99%; /* Not 100% because that causes an issue where the page adds a
+                 * horizontal scrollbar
+                 */
+    margin: 0 auto;
+    text-align: center;
+    background: pink;
+    font-weight: bold;
+    padding: 3px;
+    display: none;
+}
+
+#browser-support #dismiss
+{
+    padding-left: 10px;
+    color: blue;
+    text-decoration: underline;
+    font-weight: normal;
+}
+
+#browser-support #dismiss:hover
+{
+    cursor: pointer;
+}
+
 #top-wrapper
 {
     display: flex;
@@ -186,6 +212,11 @@ body
     margin-bottom: 1ex;
 }
 
+#export-div
+{
+    display: block;
+}
+
 .visualization-selector, #export-selector
 {
     margin-right: 10px;
@@ -200,6 +231,23 @@ body
     flex-grow: 1;
     max-width: 128px;
     height: 100%;
+}
+
+.export-input-field-block
+{
+    display: block;
+    float: right
+}
+
+.export-input-field
+{
+    margin-top: 5px;
+}
+
+.export-input-field input
+{
+    float:right;
+    margin-left: 10px;
 }
 
 .map
@@ -308,7 +356,6 @@ body
 
 .chart-container svg
 {
-    max-height: 100%;
     padding: 5px;
     box-sizing: border-box; /* Include padding as part of the height */
 }

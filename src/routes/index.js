@@ -2,6 +2,7 @@ const express = require('express');
 const { getAuth, loginAuth } = require('../util/auth');
 const passport = require('passport');
 const getIndexData = require('../controller/getIndexData');
+const { URL_PREFIX } = require('../config/routingConstants');
 
 function makeRouter(db) {
     const router = express.Router();
@@ -17,7 +18,7 @@ function makeRouter(db) {
     })
 
     router.post('/login', passport.authenticate('local', {
-        successRedirect: '/'
+        successRedirect: URL_PREFIX
     }));
 
     return router;

@@ -4,6 +4,10 @@
 <body>
     <!-- begin top bar -->
     <div id="top-wrapper">
+        <div id="browser-support">
+            For the best experience, we recommend using a recent version of <a href="https://www.google.com/chrome/">Chrome</a> or Chromium
+            <span id="dismiss" onclick="dismissAlert()">Dismiss</span>
+        </div>
         <div id="top-bar">
             <div id="title-version-wrapper">
                 <div id="title">CCIS Dashboard</div>
@@ -15,6 +19,9 @@
             <% Object.keys(tabVisualizations).forEach(x => { %>
             <button id="<%=x%>-tab" class="tabs" onclick="tabSelector('<%=x%>')"><%=tabVisualizations[x].tabLabel%></button>
             <% }); %>
+            <!-- The FAQ link in the tab bar is not actually a dashboard tab, -->
+            <!-- and is hardcoded here -->
+            <a href="/dashboard/faq.html" target="_blank"><button class="tabs">F.A.Q.</button></a>
         </nav>
     </div>
     <!--end top bar -->

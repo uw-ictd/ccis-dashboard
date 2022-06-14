@@ -7,25 +7,47 @@ const missing_data_fill_color = 'gray';
 const missing_data_opacity = 0.5;
 const { getColorFromName } = require('./colorScale');
 
+// Given the data and the region level, reorganizes data into a list
+// of regionData combined with statistics relevant for heatmaps (such as total,
+// numerator, denomerator, etc.). Also returns the maxNumerator out of all 
+// regions.
+function getMax(data, thisLevel) {
+    let maxNumerator = 0;
+    const dbLevelName = thisLevel.dbLevelName.toLowerCase();
+
+    const regionData = thisLevel.geoJson.features.map((geoJSONFeature) => {
+        const source = geoJSONFeature.properties[thisLevel.regionNameKey];
+        const allFacilities = data.filter(facility => facility[dbLevelName] === source);
+        const total = allFacilities.length;
+        const missingData = allFacilities.filter(x => x.colorlabel === 'Missing data').length;
+        const denominator = total - missingData;
+        const numerator = allFacilities.filter(x => x.colorlabel === 'TRUE').length;
+        maxNumerator = Math.max(maxNumerator, numerator);
+        return {geoJSONFeature, missingData, numerator, denominator, total};
+    })
+
+    return { regionData, maxNumerator };
+}
+
 function makeHeatmap(mapboxgl, map, data, visualization) {
     const thisLevel = geographicBoundaries.levels.find(level => level.levelName === visualization.regionLevel);
-    const drawBoundary = _drawLayer.bind({}, map, mapboxgl, data, visualization, thisLevel);
-
+    const { regionData, maxNumerator } = getMax(data, thisLevel);
+    const drawBoundary = _drawLayer.bind({}, map, mapboxgl, visualization, thisLevel, maxNumerator);
+    
     // Add GeoJSON to the map
-    return Object.fromEntries(thisLevel.geoJson.features.map(drawBoundary));
+    return {heatmapData: Object.fromEntries(regionData.map(drawBoundary)), maxNumerator};
 };
 
-function _drawLayer(map, mapboxgl, data, visualization, thisLevel, geoJSONFeature) {
+function _drawLayer(map, mapboxgl, visualization, thisLevel, maxNumerator, regionData) {
     // Get feature name (i.e. district or region name)
+    const geoJSONFeature = regionData.geoJSONFeature;
     const source = geoJSONFeature.properties[thisLevel.regionNameKey];
 
     // Calculate numbers
-    const dbLevelName = thisLevel.dbLevelName.toLowerCase()
-    const allFacilities = data.filter(facility => facility[dbLevelName] === source);
-    const total = allFacilities.length;
-    const missingData = allFacilities.filter(x => x.colorlabel === 'Missing data').length;
-    const denominator = total - missingData;
-    const numerator = allFacilities.filter(x => x.colorlabel === 'TRUE').length;
+    const total = regionData.total;
+    const missingData = regionData.missingData;
+    const denominator = regionData.denominator;
+    const numerator = regionData.numerator;
 
     // Set layer specifications (defines regions/districts with only missing data first)
     let fill_opacity = missing_data_opacity;
@@ -44,10 +66,12 @@ function _drawLayer(map, mapboxgl, data, visualization, thisLevel, geoJSONFeatur
         visualization.fill_specs.fill_color : default_fill_color;
         fill_color = getColorFromName(fill_color_name);
 
-        fill_opacity = (numerator / denominator) * (max_opacity - min_opacity) + min_opacity;
+        fill_opacity = visualization.heatmapType === 'quantity' ? (numerator / maxNumerator) * (max_opacity - min_opacity) + min_opacity:
+                                                                 (numerator / denominator) * (max_opacity - min_opacity) + min_opacity;
+        const displayedNumber = visualization.heatmapType === 'quantity' ? numerator: `${numerator} / ${denominator} = ${Math.floor(numerator / denominator * 100)}%`;
         description = `<p class='popup-info'>
-            Total Number of Facilities: ${total}<br>
-            ${visualization.colorBy}: ${numerator} / ${denominator} = ${Math.floor(numerator / denominator * 100)}%<br>
+            Total Number of ${visualization.type === 'facility' ? "Facilities": "CCE"}: ${total}<br>
+            ${visualization.colorBy}: ${displayedNumber}<br>
             Missing Data: ${missingData}</p>`;
     }
 

@@ -55,10 +55,24 @@ module.exports = function makeQueryRouter(db) {
 
     router.post('/joinedTable', checkSchema(schemas.joinedTableProps, 'body'), async (req, res) => {
         try {
-            const query = exportOptions[req.body.table].query;
+            const query = exportOptions[req.body.index].options[req.body.table].query;
             // functionName is not null because the schema checks that the input
             // table matches exportOptions.joinedTables
             const data = await db.query(query);
+            res.status(200).send(data);
+        } catch(err) {
+            console.error(err);
+            res.status(400).send(err.message);
+        }
+    });
+
+    router.post('/report',  async (req, res) => {
+        // returns a report (like an export but with parameters)
+        try {
+            const index = req.body.index;
+            const table = req.body.table;
+            const query = exportOptions[index].options[table].query;
+            const data = await db.query(query, undefined, req.body.params);
             res.status(200).send(data);
         } catch(err) {
             console.error(err);

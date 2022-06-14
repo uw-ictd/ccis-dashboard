@@ -15,11 +15,13 @@ const schemas = {
 
     rawTableProps: Joi.object().keys({
         // This string is used as part of a SQL query, so we check it strictly to avoid SQL injection
-        table: Joi.any().valid(...rawTableNames)
+        table: Joi.any().valid(...rawTableNames),
+        index: Joi.number().optional()
     }),
 
     joinedTableProps: Joi.object().keys({
-        table: Joi.string().valid(...joinedTableNames).required()
+        table: Joi.string().valid(...joinedTableNames).required(),
+        index: Joi.number().optional()
     })
 };
 

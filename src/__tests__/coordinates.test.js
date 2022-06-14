@@ -47,7 +47,6 @@ const vizSpec = {
 };
 
 function colorScale(maintenancePriority) {
-    console.log(maintenancePriority);
     return {
         high: '#FF0000',
         medium: '#00FF00',

@@ -8,6 +8,7 @@ const configPassport = require('./util/configPassport');
 const index = require('./routes/index');
 const api = require('./routes/api');
 const connectDB = require('./model/db');
+const { URL_PREFIX } = require('./config/routingConstants');
 require('./util/env');
 
 // error and exit if .env file doesn't exist
@@ -27,7 +28,7 @@ function createApp(db) {
 
     // called before every request
     // set path for static assets
-    app.use(express.static(path.join(__dirname, 'public')));
+    app.use(URL_PREFIX, express.static(path.join(__dirname, 'public')));
 
     // parse form data client
     app.use(bodyParser.urlencoded({ extended: true }));
@@ -46,9 +47,9 @@ function createApp(db) {
 
     // these routes use the database
     // router middleware for POST requests to /api
-    app.use('/api', api(db));
+    app.use(URL_PREFIX + '/api', api(db));
     // registering router middleware for the home page & login page
-    app.use('/', index(db));
+    app.use(URL_PREFIX, index(db));
 
     return app;
 }

@@ -14,9 +14,9 @@ const basicFilter = {
     // seedMainTables has 'low' and ' '
     maintenancePriorities: [ 'high', 'medium', 'low', ' ', 'not_applicable' ],
     regions: [
-        [ 'UGANDA', 'SOUTH CENTRAL', 'WAKISO DISTRICT' ],
-        [ 'UGANDA', 'ANKOLE', 'NTUNGAMO DISTRICT' ],
-        [ 'UGANDA', 'LANGO', 'APAC DISTRICT']
+        [ 'UGANDA', 'SOUTH CENTRAL' ],
+        [ 'UGANDA', 'ANKOLE' ],
+        [ 'UGANDA', 'LANGO' ]
     ]
 };
 
@@ -24,8 +24,8 @@ const regionFilter = {
     ...basicFilter,
     // seedMainTables has UGANDA/ANKOLE/NTUNGAMO DISTRICT and UGANDA/SOUTH CENTRAL/WAKISO
     regions: [
-        [ 'UGANDA', 'SOUTH CENTRAL', 'WAKISO DISTRICT' ],
-        [ 'UGANDA', 'LANGO', 'APAC DISTRICT']
+        [ 'UGANDA', 'SOUTH CENTRAL' ],
+        [ 'UGANDA', 'LANGO' ]
     ]
 };
 
