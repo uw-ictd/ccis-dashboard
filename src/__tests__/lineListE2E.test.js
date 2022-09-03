@@ -7,7 +7,6 @@ const path = require('path');
 let driver;
 
 const PORT = 30007;
-const URL = `http://localhost:${PORT}`;
 const filePath = path.join(__dirname, 'lineListTest');
 
 beforeAll(async () => {
@@ -39,7 +38,7 @@ afterAll(async () => {
 
 describe('Line list visualization end-to-end tests', () => {
     test('Logs in', async () => {
-        await logIn(By, until, driver, URL);
+        await logIn(By, until, driver, PORT);
     });
 
     test('lineList can download as CSV', async () => {

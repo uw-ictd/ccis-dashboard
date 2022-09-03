@@ -18,6 +18,22 @@ function makeMap(mapOptions, container) {
         map.on('load', function () {
             map.resize();
             resolve(map);
+            const layers_to_remove = ['road', 'bridge', 'golf', 'airport',
+                'aerial','ferry','tunnel','building','aeroway', 'transit',
+                'hillshade', 'pitch-outline'];
+            // Make unwanted layers invisible
+            // Change color of water and parks/reserves/labels
+            map.getStyle().layers.map(function (layer) {
+                if (layers_to_remove.some(x => layer.id.indexOf(x) >= 0)) {
+                    map.setLayoutProperty(layer.id, 'visibility', 'none');
+                } else if (layer.id == 'water') {
+                    map.setPaintProperty(layer.id, 'fill-color', '#c1e1ec');
+                } else if (layer.id == 'national-park' || layer.id == 'landuse') {
+                    map.setPaintProperty(layer.id, 'fill-color', '#d3d3d3');
+                } else if (layer.id == 'poi-label') {
+                    map.setPaintProperty(layer.id, 'text-color', '#4c4c4c');
+                }
+            });
         });
     });
 }

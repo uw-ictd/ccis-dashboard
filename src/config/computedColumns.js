@@ -62,7 +62,7 @@ module.exports = [
     {
         name: 'BucketedRefrigeratorUpdate',
         query: `SELECT id_refrigerators,
-            TO_CHAR(CAST(savepointtimestamp_refrigerators as timestamp), 'Month') as updatemonth_refrigerators
+            TO_CHAR(CAST(savepointtimestamp_refrigerators as timestamp), 'YYYY-MM') as updatemonth_refrigerators
             FROM refrigerators_odkx`,
         provides: [ 'updatemonth_refrigerators' ],
         joinOn: {
@@ -74,7 +74,7 @@ module.exports = [
     {
         name: 'BucketedFacilityUpdate',
         query: `SELECT id_health_facilities,
-            TO_CHAR(CAST(savepointtimestamp_health_facilities as timestamp), 'Month') as updatemonth_facilities
+            TO_CHAR(CAST(savepointtimestamp_health_facilities as timestamp), 'YYYY-MM') as updatemonth_facilities
             FROM health_facilities2_odkx`,
         provides: [ 'updatemonth_facilities' ],
         joinOn: {
@@ -161,15 +161,34 @@ module.exports = [
         }
     },
     {
+        name: 'CCEUpdateStatus',
+        query: `SELECT id_refrigerators,
+            CASE
+                 WHEN lastupdateuser_refrigerators = 'init' OR
+                      savepointtimestamp_refrigerators::timestamp::date < current_date - '3 months'::interval
+                      THEN '> 3 months/Never'
+                 WHEN savepointtimestamp_refrigerators::timestamp::date <= current_date - '1 months'::interval THEN '1-3 months'
+                 WHEN savepointtimestamp_refrigerators::timestamp::date > current_date - '1 months'::interval THEN '< 1 month'
+                 ELSE 'Data format error'
+            END AS cce_update_status
+            FROM refrigerators_odkx`,
+        provides: ['cce_update_status'],
+        joinOn: {
+            table: 'refrigerators_odkx',
+            localColumn: 'id_refrigerators',
+            foreignColumn: 'id_refrigerators'
+        }
+    },
+    {
         name: 'FacilityUpdateStatus',
         query: `SELECT id_health_facilities,
             CASE
-                 WHEN lastupdateuser_health_facilities = 'init' OR 
+                 WHEN lastupdateuser_health_facilities = 'init' OR
                       savepointtimestamp_health_facilities::timestamp::date < current_date - '3 months'::interval
                       THEN '> 3 months/Never'
                  WHEN savepointtimestamp_health_facilities::timestamp::date <= current_date - '1 months'::interval THEN '1-3 months'
                  WHEN savepointtimestamp_health_facilities::timestamp::date > current_date - '1 months'::interval THEN '< 1 month'
-                 ELSE 'Error'
+                 ELSE 'Data format error'
             END AS facility_update_status
             FROM health_facilities2_odkx`,
         provides: ['facility_update_status'],
@@ -374,6 +393,24 @@ module.exports = [
             table: 'health_facilities2_odkx',
             localColumn: 'id_health_facilities',
             foreignColumn: 'id_health_facilities'
+        }
+    },
+    {
+        name: 'NonfunctionalRefrigerators',
+        query: `
+        SELECT id_refrigerators as nonfunctional_id,
+        CASE
+            WHEN functional_status = 'not_functioning' THEN 'TRUE'
+            WHEN functional_status is NULL then null
+            ELSE 'FALSE'
+        END AS nonfunctional
+        FROM refrigerators_odkx
+        `,
+        provides: [ 'nonfunctional_id', 'nonfunctional' ],
+        joinOn: {
+            table: 'refrigerators_odkx',
+            localColumn: 'nonfunctional_id',
+            foreignColumn: 'id_refrigerators'
         }
     }
 ];

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="utf-8" http-equiv="encoding">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Cold Chain Information System - Dashboard FAQ</title>
+
+    <link rel="icon" href="images/logo.png">
+    <link rel="stylesheet" href="faq.css">
+</head>
+
+<body>
+<h1>CCIS Dashboard Frequently Asked Questions</h1>
+
+<h2>Q: How do I export data?</h2>
+<p>
+From the export tab, you can download any of the CCIS data as a CSV (comma-separated value) file, which you can load into Excel or another spreadsheet program. The options labeled "ODK-X format" is an exact replica of the data as it is in the dashboard's database. The options labeled "CCIS format" may be a little more useful. The "CCIS format" tables have joined some of the underlying tables together; for instance, the CCIS refrigerator table also includes some limited information about facilities and geographic regions. The CCIS format tables leave out some of the columns that are present in the raw "ODK-X format" tables
+</p>
+
+<p>
+The health facilities table is named "health_facilities2_odkx". The 2 here is a historical quirk and can be ignored. (In a future version of CCIS we should just remove the 2)
+</p>
+
+<h2>Q: How do you use the geographic filter?</h2>
+<p>
+On the tabs displaying a single visualization (e.g. CCE), the filter on the left includes an option to filter by geographic areas. To use it, you'll need to double-click on a region.
+</p>
+
+<p>
+The geographic filter has two levels (or "modes"): country mode (the default) and region mode. Double-clicking on the map toggles levels from country to region to country.  In country mode, the filter is not particularly useful, since we only have one country's data here. In region mode you can select one or more regions to be included by single-clicking.
+</p>
+
+<p>
+For example: from the initial country mode, double click on Acholi to enter region mode with just Acholi selected. Then you can click any region to select/de-select it.
+</p>
+
+<p>
+After setting the filter as you want it, you'll need to click "Display" again to reload the visualization
+</p>
+
+<p>
+The text below the filter shows which regions are currently selected
+</p>
+
+<h2>Q: How can you get a summary of how data is being updated in CCIS?</h2>
+<p>
+The "System use" tab is where visualizations about use of CCIS can be found.
+Some charts will show the last user to update a facility or CCE; on these, the "init" user is the CCIS system. If a facility or CCE was last updated by "init", this means that it has not been updated by a human since CCIS imported that data.
+</p>
+
+
+<h2>Q: How is temperature alarm data reported?</h2>
+
+<p>
+There are two tables with temperature data, one with data reported daily, and one with data in 30-day buckets. Aggregating data from both tables together is challenging. Currently the visualizations only reflect data from the table with 30-day buckets
+</p>
+
+<h2>Q: Why are some regions greyed out in the heatmaps?</h2>
+
+<p>
+Regions that have no data to display will be gray in the heatmaps.
+</p>
+
+<h2>Q: What does the update status by facility map mean?</h2>
+
+<p>
+On this map, facilities are color-coded by their update status, which is divided into three buckets:
+</p>
+<ul>
+    <li>red: never updated</li>
+    <li>yellow: updated more than 3 months ago</li>
+    <li>green: updated within the last 3 months</li>
+</ul>
+
+</body>
+</html>

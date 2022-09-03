@@ -1,8 +1,8 @@
 const { runSQL, dbOptionsEmpty } = require('../testUtils');
 const db = require('../model/db')(dbOptionsEmpty);
 const exportOptions = require('../shared/exportOptions');
-const refrigeratorQuery = exportOptions['refrigerator_joined'].query;
-const facilityQuery = exportOptions['facility_joined'].query;
+const refrigeratorQuery = exportOptions[0].options['refrigerator_joined'].query;
+const facilityQuery = exportOptions[0].options['facility_joined'].query;
 let transaction;
 
 beforeAll(async () => {

@@ -2,33 +2,74 @@ const exportOptions = require('../shared/exportOptions');
 const { rawTableNames } = require('../shared/exportOptionsMetadata');
 const downloadAsCSV = require('./downloadAsCSV');
 const { post } = require('./httpTools');
-const API_RAW = './api/rawTable';
-const API_JOINED = './api/joinedTable';
+const API_RAW = '/api/rawTable';
+const API_JOINED = '/api/joinedTable';
+const API_REPORT = '/api/report';
+const { exportFieldChanged, getValues } = require('./inputField');
+const vaccineStores = require('../config/vaccineStores');
+const select = require('./selectors');
 
-function exportTables() {
-    const tableName = getTableName();
+/**
+ * Clicks the button for a particular export group
+ * @param {*} index into exportOptions.js
+ */
+function exportClicked(index) {
+    if (exportOptions[index].report) {
+        getReport(index);
+    } else {
+        exportTables(index);
+    }
+}
+
+/**
+ * Export table as CSV
+ * @param {*} index into exportOptions.js
+ */
+function exportTables(index) {
+    const tableName = getTableName(index);
     if (tableName === 'all_odkx_tables') { // all odk tables
         rawTableNames.forEach(table => {
             getTableData(API_RAW, table);
         });
-    } else if (!exportOptions[tableName].rawTable) {
+    } else if (!exportOptions[index].options[tableName].rawTable) {
         // Joined tables
-        getTableData(API_JOINED, tableName);
+        getTableData(API_JOINED, tableName, index);
     } else { // individual tables
-        getTableData(API_RAW, tableName)
+        getTableData(API_RAW, tableName, index)
     }
 }
 
-function getTableData(apiPath, tableName) {
+/**
+ * Perform a report, using input fields
+ * @param {*} index into exportOptions.js
+ */
+function getReport(index) {
+    tableName = getTableName(index);
+    params = exportOptions[index].options[tableName].usesParams ? getValues(index): [];
+    if (exportOptions[index].options[tableName].usesVaccineStores) {
+        params.push(vaccineStores);
+    }
+    getTableData(API_REPORT, tableName, index, additionalParams={params});
+}
+
+function getTableData(apiPath, tableName, index, additionalParams={}) {
     post(apiPath, {
-        table: tableName
+        table: tableName,
+        index,
+        ...additionalParams
     }).then(body => {
         downloadAsCSV(body, tableName + '.csv');
     });
 }
 
-function getTableName() {
-    return document.getElementById('export-selector').value;
+function getTableName(index) {
+    return select.exportDropdown(index).value;
 }
 
-module.exports = exportTables;
+function exportOptionChanged(index) {
+    const tableName = getTableName(index);
+    select.exportButton(index).disabled = exportOptions[index].options[tableName].usesParams;
+    if (exportOptions[index].options[tableName].usesParams) exportFieldChanged(index)
+}
+
+module.exports = { exportClicked, exportOptionChanged };

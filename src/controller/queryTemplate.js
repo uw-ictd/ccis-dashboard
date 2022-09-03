@@ -226,6 +226,9 @@ function makeOrderBy(vizSpec) {
         return 'ORDER BY count ASC';
     } else if (vizSpec.sort === 'DESC') {
         return 'ORDER BY count DESC';
+    } else if (vizSpec.groupBy) {
+        // Default to alphabetical order, useful when each bar is a month in YYYY-MM format
+        return `ORDER BY ${vizSpec.groupBy}`;
     } else {
         return '';
     }

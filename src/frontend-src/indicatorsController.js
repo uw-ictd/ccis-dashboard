@@ -1,7 +1,7 @@
 const { post } = require('./httpTools');
 
 function getIndicators() {
-     post('./api/keyIndicators', {}).then(injectIndicators);
+     post('/api/keyIndicators', {}).then(injectIndicators);
 }
 
 function injectIndicators(body){

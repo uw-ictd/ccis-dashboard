@@ -5,7 +5,6 @@ const { logIn, dbOptionsSeeded } = require('../testUtils');
 let driver;
 
 const PORT = 30002;
-const URL = `http://localhost:${PORT}`;
 
 beforeAll(async () => {
     await getServer(PORT, dbOptionsSeeded);
@@ -25,7 +24,7 @@ afterAll(async () => {
 
 describe('Map end-to-end tests', function () {
     test('Logs in', async () => {
-        await logIn(By, until, driver, URL);
+        await logIn(By, until, driver, PORT);
     }, 10000);
 
     // After logging in, wait for the main page to render

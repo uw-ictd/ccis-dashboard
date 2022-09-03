@@ -4,18 +4,32 @@
     <div class="left-wrapper">
         <!-- Export div -->
         <% if (tab.exportTab) { %>
-        <div id="export-div" class="display-export">
-            <!-- Export selection and button -->
-            <div>
-                Select the data you would like to export:
-                <select id="export-selector">
-                    <% Object.entries(exportOptions).forEach(([ key, options ]) => { %>
-                    <option value="<%=key%>"><%=options.name%></option>
+        <% exportOptions.forEach((obj, index) => { %>
+            <div id="export-div" class="display-export">
+                <!-- Export selection and button -->
+                <div>
+                    Select the data you would like to export:
+                    <select id="export-selector-<%=index%>" onchange="exportOptionChanged('<%=index%>')">
+                        <% Object.entries(exportOptions[index].options).forEach(([ key, options ]) => { %>
+                            <option value="<%=key%>"><%=options.name%></option>
+                            <% }); %>
+                    </select>
+                    <% if (Object.values(exportOptions[index].options)[0].usesParams) { %>
+                        <button id="export-<%=index%>" type="button" onclick="exportClicked('<%=index%>')" disabled="true"><%=exportOptions[index].buttonText%></button>
+                    <% } else { %>
+                        <button id="export-<%=index%>" type="button" onclick="exportClicked('<%=index%>')" ><%=exportOptions[index].buttonText%></button> 
+                    <% }  %> 
+                </div>
+                <br/>
+                <div class="export-input-field-block">
+                    <% exportOptions[index].inputFields.forEach((field, fieldIndex) => { %>
+                        <div class="export-input-field">
+                            <label><%=field.label%></label> <input id="<%=field.id%>" onchange="exportFieldChanged('<%=index%>')"/>
+                        </div>
                     <% }); %>
-                </select>
+                </div>
             </div>
-            <button id="export" type="button" onclick="exportTables()">Export</button>
-        </div>
+            <% }); %>
         <% } %>
     </div>
     <!-- end left filter -->

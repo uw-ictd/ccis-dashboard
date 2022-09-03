@@ -1,9 +1,14 @@
 const path = require('path');
 const fs = require('fs').promises;
+const { URL_PREFIX } = require('./config/routingConstants');
 require('./util/env');
 
 const TEST_USER = process.env.ODKX_TEST_USER;
 const TEST_PASSWORD = process.env.ODKX_TEST_PASSWORD;
+
+function url(port) {
+    return `http://localhost:${port}${URL_PREFIX}`;
+}
 
 const dbOptionsEmpty = {
     user: 'tester',
@@ -46,8 +51,8 @@ async function displayViz(By, until, driver, vizName, tabLabel) {
     return driver.findElement(By.css(`#${tabLabel} .display`)).click();
 }
 
-async function logIn(By, until, driver, URL) {
-    await driver.get(URL);
+async function logIn(By, until, driver, port) {
+    await driver.get(url(port));
     const username = driver.wait(until.elementLocated(By.id('username')));
     const password = driver.findElement(By.id('password'));
     const loginSubmit = driver.findElement(By.id('login-submit'));

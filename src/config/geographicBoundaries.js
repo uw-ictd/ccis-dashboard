@@ -1,5 +1,4 @@
 const level2Uganda = require('./Uganda_Regions_2020.json');
-const level3Uganda = require('./Uganda_Districts_2020.json');
 
 // `geographicBoundaries.regionNameKeys` and `geographicBoundaries.levels` have the same length.
 // `regionNameKeys[i]` corresponds to `levels[i]` and to `levelNames[i]`.
@@ -30,12 +29,6 @@ module.exports = {
             // This defines where to look up the level names: the strings here are keys
             // to the `properties` object of an individual geoJSON Feature
             regionNameKey: 'ccisRegionName'
-        },
-        {
-            dbLevelName: 'regionlevel3',
-            levelName: 'District (Level 3)',
-            geoJson: level3Uganda,
-            regionNameKey: 'ccisDistrictName'
         }
     ]
 };

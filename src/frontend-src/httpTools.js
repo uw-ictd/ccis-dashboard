@@ -1,5 +1,7 @@
+const { URL_PREFIX } = require('../config/routingConstants');
+
 function post(path, body) {
-    return fetch(path, {
+    return fetch(URL_PREFIX + path, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

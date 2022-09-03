@@ -15,7 +15,7 @@ const ticks = height / 64;
 // Given a parentElement and the visualisation specification for 
 // a heatmap, will draw the legend for that heatmap and append
 // it to the parent element.
-function drawHeatmapLegend(parentElement, visualization) {
+function drawHeatmapLegend(parentElement, visualization, maxNumerator) {
     const fill_color_name = (visualization.fill_specs && visualization.fill_specs.fill_color) ?
     visualization.fill_specs.fill_color : default_fill_color;
     const fill_color_hex = getColorFromName(fill_color_name);
@@ -30,8 +30,9 @@ function drawHeatmapLegend(parentElement, visualization) {
         visualization.fill_specs.max_opacity : default_max_opacity;
         return `rgba(${fill_color_rgb.r},${fill_color_rgb.g},${fill_color_rgb.b},${x * (max_opacity - min_opacity) + min_opacity})`;
     }
+    const range = visualization.heatmapType === 'quantity' ? maxNumerator: 100;
 
-    const color = d3.scaleSequentialQuantile(d3.range(101), turnPercentToColor)
+    const color = d3.scaleSequentialQuantile(d3.range(range + 1), turnPercentToColor)
 
     // this function draws the individual pieces of the gradient that
     // each have a different opacity
@@ -65,7 +66,7 @@ function drawHeatmapLegend(parentElement, visualization) {
 
     // create percent scale for left axis
     var scale = d3.scaleLinear()
-                  .domain([0, 100])
+                  .domain([0, range])
                   .range([marginTop, height - marginBottom]);
 
     const tickAdjust = g => g.selectAll(".tick line").attr("x1", width - marginLeft - marginRight).attr('stroke', 'black');
@@ -76,7 +77,7 @@ function drawHeatmapLegend(parentElement, visualization) {
       .attr("transform", `translate(${marginLeft},0)`)
       .call(d3.axisLeft(scale)
           .ticks(ticks)
-          .tickFormat(n => `${n}%`)
+          .tickFormat(n => `${visualization.heatmapType === 'quantity' ? n.toFixed(2) : `${n}%`}`)
           .tickSize(tickSize)
           .tickValues(tickValues))
       .call(tickAdjust)

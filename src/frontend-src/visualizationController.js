@@ -23,7 +23,7 @@ function drawVisualization(mapboxDependency, dropdownFilters, regionSelector, ta
         tearDownMap(tabName, index);
         writeTextInsteadOfChart('Visualization is loading...', tabName, index);
     }
-    return post('./api/query', {
+    return post('/api/query', {
         visualization: vizName,
         filter: getFilterParams(dropdownFilters, regionSelector, tabName, tabToFilters)
     }).then(async (body) => {
@@ -55,11 +55,12 @@ function drawVisualization(mapboxDependency, dropdownFilters, regionSelector, ta
         } else {
             // Make the containing div element visible
             select.chartContainer(tabName, index).style.display = 'block';
-            await drawAllCharts(body.data, body.metadata, visualization, tabName, index);
+            const multi = tabVisualizations[tabName].multi;
+            await drawAllCharts(body.data, body.metadata, visualization, {tabName, multi, index});
         }
     }).catch(async (error) => {
         console.log(error);
-        await removeText(tabName, index);
+        await removeTextContainer(tabName, index);
         writeTextInsteadOfChart('Error attempting to retrieve data', tabName, index);
     }).finally(() => {
         select.vizTitleElt(tabName, index).innerText = vizName;
@@ -89,10 +90,9 @@ function getFilterParams(dropdownFilters, regionSelector, tabName, tabToFilters)
     return params;
 }
 
-function removeText(tabName, index) {
-    select.resultTextContainer(tabName, index).style.display = 'none';
-    const resultTextContainerSvgStr = select.resultTextContainerStr(tabName, index) + ' svg';
-    d3.selectAll(resultTextContainerSvgStr).remove();
+function removeTextContainer(tabName, index) {
+    const resultTextContainerResultStr = select.chartWrapperStr(tabName, index) + ' .result-text';
+    d3.selectAll(resultTextContainerResultStr).remove();
 }
 
 function tearDownVisualizationsNonMap(tabName, index) {
@@ -100,7 +100,8 @@ function tearDownVisualizationsNonMap(tabName, index) {
     d3.selectAll(chartWrapperSvgStr).remove(); // clear previous charts/legend
     select.chartContainer(tabName, index).style.display = 'none';
     select.listWrapper(tabName, index).style.display = 'none';
-    removeText(tabName, index);
+    select.showBarNumsContainer(tabName).innerHTML = '';
+    removeTextContainer(tabName, index);
 }
 
 function tearDownMap(tabName, index) {

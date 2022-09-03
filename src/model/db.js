@@ -80,8 +80,9 @@ function connect(options) {
  * queryStr: String The text of a SQL query
  * transaction: [optional] the mssql transaction object this requests should be
  *   part of
+ * parameters: [optional] list of query params to insert into queryStr
  */
-async function query(queryStr, transactionRequest) {
+async function query(queryStr, transactionRequest, parameters=[]) {
     await this.poolConnect; // ensures that the pool has been created
     let result;
     try {
@@ -91,7 +92,7 @@ async function query(queryStr, transactionRequest) {
         } else {
             request = this.pool;
         }
-        result = request.query(queryStr);
+        result = request.query(queryStr, parameters);
         return (await result).rows;
     } catch (err) {
         console.error('SQL error for query:', queryStr);

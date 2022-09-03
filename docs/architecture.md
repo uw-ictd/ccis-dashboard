@@ -1,4 +1,5 @@
 # Deployment Architecture
+```
 Dashboard server (Dockerized) -- nginx -- user browser
   |           |
   |           |
@@ -6,9 +7,10 @@ database    ODK-X LDAP server
   |
   |
 sync program with ODK-X database
-
+```
 
 # Testing Architecture
+```
             Test harness (Jest) -- Selenium
               |                      | (end-to-end tests only)
               |                      |
@@ -16,7 +18,7 @@ sync program with ODK-X database
               |             |
               |             | (end-to-end tests only)
 Test database (in Docker)  ODK-X LDAP server
-
+```
 
 # Backend Routes
 * /: Builds the HTML for the dashboard using EJS templates based on the config files

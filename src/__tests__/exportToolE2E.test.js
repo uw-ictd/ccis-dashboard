@@ -9,7 +9,6 @@ const filePath = path.join(__dirname, 'exportTest');
 let driver;
 
 const PORT = 30004;
-const URL = 'http://localhost:' + PORT;
 
 beforeAll(async () => {
     await getServer(PORT, dbOptionsSeeded);
@@ -41,31 +40,33 @@ afterAll(async () => {
 
 describe('Export tests', function () {
     test('Logs in', async () => {
-        await logIn(By, until, driver, URL);
+        await logIn(By, until, driver, PORT);
     }, 10000);
 
     // After logging in, wait for the main page to render, then click `export`
     test('Export button should render', async () => {
         const tab = driver.wait(until.elementLocated(By.id('Export-tab')));
         await tab.click();
-        const exportButton = driver.wait(until.elementLocated(By.id('export')));
+        const exportButton = driver.wait(until.elementLocated(By.id('export-1')));
     }, 10000);
 
     // Check that a file is downloading and contains data when the corresponding
     // export button is clicked for each option in exportOptions.js
-    Object.keys(exportOptions).forEach(tableName => {
+    // can only test those without input fields
+    exportOptions.filter(obj => !obj.inputFields || obj.inputFields.length === 0).forEach(obj => Object.keys(obj.options).forEach(tableName => {
         if (tableName === 'all_odkx_tables') return;
+        const index = exportOptions.indexOf(obj);
         test(`${tableName} downloaded with data`, async () => {
-            await selectAndExportTable(tableName);
+            await selectAndExportTable(tableName, index);
         }, 60000);
-    });
+    }));
 
     // checks to make sure main ODK-X tables are downloaded when this is clicked. Other tables not seeded
     test('All raw tables downloaded with data', async () => {
         const dropdownElement = await driver.wait(until.elementLocated(By.css('[value=all_odkx_tables]')));
         dropdownElement.click();
 
-        const exportButton = await driver.wait(until.elementLocated(By.css('[id=export]')));
+        const exportButton = await driver.wait(until.elementLocated(By.css('[id=export-0]')));
         exportButton.click();
         await checkFileDownloadedWithData(driver, filePath, 'health_facilities2_odkx');
         await checkFileDownloadedWithData(driver, filePath, 'refrigerators_odkx');
@@ -85,11 +86,10 @@ describe('Export tests', function () {
  * @param table the table to be exported. must be a key in exportOptions.js
  *
 */
-async function selectAndExportTable(table) {
+async function selectAndExportTable(table, index) {
     const dropdownElement = await driver.wait(until.elementLocated(By.css('[value=' + table + ']')));
     dropdownElement.click();
-
-    const exportButton = await driver.wait(until.elementLocated(By.css('[id=export]')));
+    const exportButton = await driver.wait(until.elementLocated(By.css(`[id=export-${index}]`)));
     exportButton.click();
     // check if file exists in download folder
     await checkFileDownloadedWithData(driver, filePath, table);
