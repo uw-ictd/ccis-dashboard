@@ -1,0 +1,50 @@
+<%- include('partials/head.ejs') -%>
+<!-- <link rel="stylesheet" type="text/css" href="./style.css">
+<link rel="stylesheet" type="text/css" href="./login.css"> -->
+<link rel="stylesheet" type="text/css" href="./bootstrap.min.css">
+<link rel="icon" href="images/logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+        .container{
+            font-family: 'Roboto', sans-serif;    
+        }
+    </style>
+
+<body style="background-color:lightcyan;">
+    <div class="container">
+        <div class="row">
+            
+            <div class="col-sm-8 col-md-8 col-lg-8 mx-auto">
+            <div class="card my-5">
+                <div class="card-body">
+                <h5 class="card-title text-center">Request for a CCIS demo account</h5>
+                <form action="./request-account" method="post">
+                    <br>
+                    <div>
+                    <input type="text" id="names" class="form-control" placeholder="Names" name="names" required autofocus>
+                    </div>
+                    <br>
+                    <div>
+                    <input type="email" id="email" class="form-control" placeholder="Email Address" name="email" required>
+                    </div>
+                    <br>
+                    <div>
+                    <textarea id="email" rows="4" class="form-control" placeholder="Message (optional)" name="message" required></textarea>
+                    </div>
+                    <br>
+                    <button id="login-submit" class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">CONTACT US</button>
+
+                </form>
+                </div>
+            </div>
+            <a href="/dashboard/login"><p style="text-align: center;">Back to Login page</p></a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

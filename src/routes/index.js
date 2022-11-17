@@ -17,7 +17,18 @@ function makeRouter(db) {
         res.render('login');
     })
 
+    router.get('/register', (req, res) => {
+        res.render('register');
+    })
+    router.get('/instructions', (req, res) => {
+        res.render('instructions');
+    })
+
     router.post('/login', passport.authenticate('local', {
+        successRedirect: URL_PREFIX
+    }));
+
+    router.post('/request-account', passport.authenticate('local', {
         successRedirect: URL_PREFIX
     }));
 
