@@ -38,6 +38,7 @@
     "async": "^3.2.4",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "cookie-session": "^2.0.0",
+    "cross-fetch": "^3.1.5",
     "css-loader": "^6.7.1",
     "d3": "^6.0.0",
     "d3-array": "^2.12.1",
