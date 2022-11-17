@@ -67,6 +67,7 @@ function connect(options) {
         host: process.env.DB_SERVER,
         database: process.env.DB_NAME,
         ssl: process.env.DB_SSL,
+        port: process.env.DB_PORT || 5432,
         // configuring the pool
         max: 10,
         idleTimeoutMillis: 2*60000 // 45s - 2min
