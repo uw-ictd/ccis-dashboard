@@ -28,6 +28,10 @@ function makeRouter(db) {
         successRedirect: URL_PREFIX
     }));
 
+    router.post('/request-account', passport.authenticate('local', {
+        successRedirect: URL_PREFIX
+    }));
+
     return router;
 }
 
