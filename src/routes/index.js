@@ -6,7 +6,7 @@ const { URL_PREFIX } = require('../config/routingConstants');
 const {fetch} = require('cross-fetch');
 
 
-const token = "patlpOIg99GVB6Tsq.b4c842a0ff138d5791fdbc497365b0875cffb0cab2cab15592417d34dc1813f0";
+const AIRTABLE_TOKEN = process.env.AIRTABLE_TOKEN;
 
 function makeRouter(db) {
     const router = express.Router();
@@ -35,7 +35,7 @@ function makeRouter(db) {
     router.post('/request-account', async (req, res) => {
         console.log(req.body);
         const response = await fetch('https://api.airtable.com/v0/appRmEYChnaez5sIQ/Requests',{
-            headers:{"Content-Type":"application/json", "Authorization": `Bearer ${token}`},
+            headers:{"Content-Type":"application/json", "Authorization": `Bearer ${AIRTABLE_TOKEN}`},
             body: JSON.stringify({records:[{fields: {"Names": req.body.names, "Email": req.body.email, "Message": req.body.message}}]}),
             method:'POST'
         });
