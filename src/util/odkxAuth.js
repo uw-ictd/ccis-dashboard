@@ -24,7 +24,7 @@ async function lookupUser(username, password) {
 
 async function authorizeUser(username, password) {
     const user = await lookupUser(username, password);
-    return true || Boolean(user.user_id);
+    return Boolean(user.user_id);
 }
 
 module.exports = authorizeUser;

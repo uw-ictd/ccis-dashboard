@@ -3,6 +3,10 @@ const { getAuth, loginAuth } = require('../util/auth');
 const passport = require('passport');
 const getIndexData = require('../controller/getIndexData');
 const { URL_PREFIX } = require('../config/routingConstants');
+const {fetch} = require('cross-fetch');
+
+
+const AIRTABLE_TOKEN = process.env.AIRTABLE_TOKEN;
 
 function makeRouter(db) {
     const router = express.Router();
@@ -28,9 +32,17 @@ function makeRouter(db) {
         successRedirect: URL_PREFIX
     }));
 
-    router.post('/request-account', passport.authenticate('local', {
-        successRedirect: URL_PREFIX
-    }));
+    router.post('/request-account', async (req, res) => {
+        console.log(req.body);
+        const response = await fetch('https://api.airtable.com/v0/appRmEYChnaez5sIQ/Requests',{
+            headers:{"Content-Type":"application/json", "Authorization": `Bearer ${AIRTABLE_TOKEN}`},
+            body: JSON.stringify({records:[{fields: {"Names": req.body.names, "Email": req.body.email, "Message": req.body.message}}]}),
+            method:'POST'
+        });
+        console.log((await response.json()));
+        res.render('register');
+        return
+    });
 
     return router;
 }
