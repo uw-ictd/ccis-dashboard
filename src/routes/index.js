@@ -35,12 +35,28 @@ function makeRouter(db) {
         return;
     })
 
+    router.get('/signups', async (req, res) => {
+        let _users = await prisma.registration.findMany({
+            select: {
+                names: true, organization: true, message: true, updatedAt: true, email: true
+            }
+        })
+        let users = _users.map((user) => {
+            return { names: user.names, updatedAt: new Date(user.updatedAt).toDateString(), email: user.email, message: user.message, organization: user.organization }
+        })
+        res.render('signups', {
+            users: users
+        });
+        return;
+    })
+
     router.post('/login', passport.authenticate('local', {
         successRedirect: URL_PREFIX
     }));
 
     router.post('/request-account', async (req, res) => {
         console.log(req.body);
+        const body = req.body;
         // const response = await fetch('https://api.airtable.com/v0/appRmEYChnaez5sIQ/Requests', {
         //     headers: { "Content-Type": "application/json", "Authorization": `Bearer ${AIRTABLE_TOKEN}` },
         //     body: JSON.stringify({ records: [{ fields: { "Names": req.body.names, "Email": req.body.email, "Organization": req.body.organization, "Message": req.body.message } }] }),
@@ -53,7 +69,9 @@ function makeRouter(db) {
         })
         // console.log((await ));
         console.log(signUp.id);
-        res.render('register');
+        res.render('register', {
+            success: true
+        });
         return
     });
 

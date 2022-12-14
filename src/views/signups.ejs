@@ -19,46 +19,36 @@
 <body style="background-color:lightcyan;">
     <div class="container">
         <div class="row">
-            <div class="col-sm-8 col-md-7 col-lg-6 mx-auto">
+            <div class="col-sm-12 col-md-10 col-lg-10 mx-auto">
                 <div style="text-align: center;">
                     <p></p>
-            <h3 >Cold Chain Inventory System </h3>
-            <h3 >(CCIS)</h3>
             <p></p>
-            <h5 style="text-decoration: underline;">*Demonstration Site*</h5>
+            <h5 style="text-decoration: underline;">Requested Accounts</h5>
         </div>
-            <div class="card my-5">
-                <div class="card-body">
-                <h5 class="card-title text-center">Sign In</h5>
-                <form action="./login" method="post">
-                    <div>
-                    <input type="text" id="username" class="form-control" placeholder="Username" name="username" required autofocus>
-                    </div>
-                    <br/>
-                    <div>
-                    <input type="password" id="password" class="form-control" placeholder="Password" name="password" required>
-                    </div>
-                    <br/>
-                    <button id="login-submit" class="btn btn-primary btn-block text-uppercase" type="submit">Sign in</button>
-                </form>
-                </div>
-            </div>
+        <br/>
             
-                <div class="card my-5">
-                    <div class="card-body">
-                    <h5 class="card-title text-center">Click below to request for a CCIS demo account</h5>
-                    <p></p>
-                    <div class="d-flex justify-content-center">
-                        <a id="login-submit" href="/dashboard/register" class="btn btn-primary btn-block text-uppercase" style="margin:auto;" type="submit">Request Account</a>
-                    </div>
-                    </div>
-            </div> 
-           
-                <div class="d-flex justify-content-center">
-                    <a href="./Cold Chain Tutorial.pdf" class="btn btn-primary btn-block text-uppercase" style="margin:auto;" type="submit">Download CCIS Android App Setup Guide</a>
-                </div>
+        <table class="table">
+            <tr>
+               <th scope="col">Names</th>
+               <th scope="col">Email</th>
+               <th scope="col">Organization</th>
+               <th scope="col">Date</th>
+               <th scope="col">Message</th>
+            </tr>
+         
+            <% for (var i = 0; i < users.length; i++) { %>
+             <tr>
+               <td><%= users[i].names %></td>
+               <td><%= users[i].email %></td>
+               <td><%= users[i].organization %></td>
+               <td><%= users[i].updatedAt %></td>
+               <td><%= users[i].message %></td>
+             </tr>    
+            <% } %>
+         </table>
+            
 
-                    <a href="./TEST QR CODES.pdf" class="d-flex justify-content-center text-uppercase" style="margin:auto;" type="submit">Test Credentials (QR Code)</a>
+                    
                 
         </div>  
           
