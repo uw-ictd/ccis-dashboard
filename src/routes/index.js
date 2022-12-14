@@ -18,17 +18,21 @@ function makeRouter(db) {
         // page loading, these results could potentially be cached
         const indexData = await getIndexData(db);
         res.render('index', indexData);
+        return;
     });
 
     router.get('/login', loginAuth, (req, res) => {
         res.render('login');
+        return;
     })
 
     router.get('/register', (req, res) => {
         res.render('register');
+        return;
     })
     router.get('/instructions', (req, res) => {
         res.render('instructions');
+        return;
     })
 
     router.post('/login', passport.authenticate('local', {
