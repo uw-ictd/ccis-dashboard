@@ -12,6 +12,10 @@
     "linux-test": "npx jest --silent --maxConcurrency=5 || true",
     "postlinux-test": "sudo docker-compose down",
     "build": "webpack --config webpack.prod.js",
+    "prisma:migrate": "yarn prisma migrate dev --preview-feature",
+    "prisma:deploy": "yarn prisma migrate deploy",
+    "prisma:studio": "yarn prisma studio",
+    "prisma:generate": "yarn prisma generate",
     "dev-build": "webpack --config webpack.dev.js",
     "_comment": "The dependency-graph script requires that you have graphviz installed (https://graphviz.org)",
     "dependency-graph-frontend": "dependency-cruiser --exclude \"(^node_modules)\" -p cli-feedback --output-type dot src/frontend-src/index.js | dot -T svg > docs/dependenciesFrontend.svg",
@@ -35,6 +39,7 @@
   "author": "",
   "license": "BSD-3-Clause",
   "dependencies": {
+    "@prisma/client": "4.7.1",
     "async": "^3.2.4",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "cookie-session": "^2.0.0",
@@ -70,6 +75,7 @@
     "geckodriver": "^3.0.1",
     "jest": "^27.0.6",
     "nodemon": "^2.0.20",
+    "prisma": "^4.7.1",
     "selenium-webdriver": "^4.2.0",
     "supertest": "^6.2.3"
   },
