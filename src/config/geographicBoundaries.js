@@ -6,7 +6,7 @@ const level2Uganda = require('./Uganda_Regions_2020.json');
 // config/filterSpecification.js which describes how to look up these levels
 // in the database
 module.exports = {
-    topLevelName: 'UGANDA',
+    topLevelName: 'CASCADIA',
     // The map will only show boundaries between these two levels
     // Each must be an value of levelName in one of the objects below
     // `topLevel` must come before `bottomLevel` in `levels`
