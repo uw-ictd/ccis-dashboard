@@ -27,7 +27,9 @@ function makeRouter(db) {
     })
 
     router.get('/register', (req, res) => {
-        res.render('register');
+        res.render('register', {
+            success: false
+        });
         return;
     })
     router.get('/instructions', (req, res) => {
