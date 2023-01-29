@@ -37,6 +37,12 @@ function makeRouter(db) {
         return;
     })
 
+    router.get('/logout', (req, res) => {
+        req.logout();
+        res.redirect('/dashboard');
+        return;
+    })
+
     router.get('/signups', async (req, res) => {
         let _users = await prisma.registration.findMany({
             select: {

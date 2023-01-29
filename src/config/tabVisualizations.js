@@ -15,6 +15,7 @@ module.exports = {
         tabLabel: 'Summary',
         multi: true,
         visualizations: [
+            'CCE by functionality status (Table)',
             'CCE by working status',
             'CCE utilization (bar)',
             'Age by manufacturer',
