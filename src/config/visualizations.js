@@ -751,5 +751,18 @@ module.exports = {
             '< 1 month': 'blue'
         },
         legendOrder: [ '< 1 month', '1-3 months', '> 3 months/Never' ]
+    },
+    'CCE by functionality status (Table)': {
+        type: 'refrigerator',
+        style: 'list',
+        columns: [
+            'facility_name',
+            'facility_level',
+            'regionlevel2',
+            'regionlevel3',
+            'year_installed',
+            'utilization',
+            'functional_status',
+        ]
     }
 };
