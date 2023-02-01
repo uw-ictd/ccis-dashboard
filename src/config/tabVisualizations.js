@@ -16,6 +16,7 @@ module.exports = {
         multi: true,
         visualizations: [
             'CCE by functionality status (Table)',
+            // 'Most common repairs',
             'CCE by working status',
             'CCE utilization (bar)',
             'Age by manufacturer',
