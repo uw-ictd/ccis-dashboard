@@ -7,7 +7,6 @@ const { fetch } = require('cross-fetch');
 const { PrismaClient } = require('@prisma/client');
 
 
-const AIRTABLE_TOKEN = process.env.AIRTABLE_TOKEN;
 
 const prisma = new PrismaClient()
 

@@ -270,7 +270,7 @@ module.exports = {
         },
         facilityPopup: {
             'facility_maintenance_priority': 'BY_FACILITY',
-            'maintenance_priority': [ 'high', 'medium', 'low' ],
+            'maintenance_priority': ['high', 'medium', 'low'],
             'regionlevel2': 'BY_FACILITY',
             'regionlevel3': 'BY_FACILITY'
         }
@@ -340,7 +340,7 @@ module.exports = {
             'medium': 'orange',
             'high': 'red',
         },
-        legendOrder: [ 'high', 'medium', 'low' ],
+        legendOrder: ['high', 'medium', 'low'],
         style: 'bar'
     },
     'Models of CCE with maintenance needs': {
@@ -352,7 +352,7 @@ module.exports = {
             'medium': 'orange',
             'high': 'red',
         },
-        legendOrder: [ 'high', 'medium', 'low' ],
+        legendOrder: ['high', 'medium', 'low'],
         style: 'bar'
     },
     'CCE facility power availability by model': {
@@ -421,7 +421,7 @@ module.exports = {
             'regionlevel3': 'BY_FACILITY',
             'facility_level': 'BY_FACILITY',
             'ownership': 'BY_FACILITY',
-            'refrigerator_class': [ 'ILR', 'Absorption', 'Freezer', 'Solar', 'Other' ],
+            'refrigerator_class': ['ILR', 'Absorption', 'Freezer', 'Solar', 'Other'],
         }
     },
     'Recent alarms map': {
@@ -714,7 +714,7 @@ module.exports = {
             '1-3 months': 'yellow',
             '< 1 month': 'blue'
         },
-        legendOrder: [ '< 1 month', '1-3 months', '> 3 months/Never' ]
+        legendOrder: ['< 1 month', '1-3 months', '> 3 months/Never']
     },
     'CCE update status by district (use map to filter by region)': {
         type: 'refrigerator',
@@ -726,7 +726,7 @@ module.exports = {
             '1-3 months': 'yellow',
             '< 1 month': 'blue'
         },
-        legendOrder: [ '< 1 month', '1-3 months', '> 3 months/Never' ]
+        legendOrder: ['< 1 month', '1-3 months', '> 3 months/Never']
     },
     'Facility update status by region': {
         type: 'facility',
@@ -738,7 +738,7 @@ module.exports = {
             '1-3 months': 'yellow',
             '< 1 month': 'blue'
         },
-        legendOrder: [ '< 1 month', '1-3 months', '> 3 months/Never' ]
+        legendOrder: ['< 1 month', '1-3 months', '> 3 months/Never']
     },
     'Facility update status by district (use map to filter by region)': {
         type: 'facility',
@@ -750,7 +750,7 @@ module.exports = {
             '1-3 months': 'yellow',
             '< 1 month': 'blue'
         },
-        legendOrder: [ '< 1 month', '1-3 months', '> 3 months/Never' ]
+        legendOrder: ['< 1 month', '1-3 months', '> 3 months/Never']
     },
     'CCE by functionality status (Table)': {
         type: 'refrigerator',
@@ -764,5 +764,10 @@ module.exports = {
             'utilization',
             'functional_status',
         ]
+    },
+    'Most common repairs': {
+        type: 'refrigerator',
+        style: 'pie',
+        colorBy: 'type_of_repair',
     }
 };
