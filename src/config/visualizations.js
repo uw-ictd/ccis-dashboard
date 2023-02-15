@@ -540,7 +540,6 @@ module.exports = {
             'year_installed',
             'nonworking_functional_status',
             'nonworking_maintenance_priority',
-            'reason_not_working'
         ]
     },
     'Refrigeration volume vs requirements map (demo)': {
