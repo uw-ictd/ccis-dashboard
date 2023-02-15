@@ -241,7 +241,10 @@ body {
     flex-basis: 0;
     flex-grow: 1;
     height: 100%;
-    width: 47vw;
+    width:50%;
+    padding: 3px;
+    border: black solid 2px;
+    border-radius: 7px;
     /* On a 1920x1080 screen, we'd like to have a great 2x2 layout.
      * The top bar may have 166px
      * The gap between the 4 visualizations may be 16px

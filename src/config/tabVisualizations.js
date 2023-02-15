@@ -17,9 +17,12 @@ module.exports = {
         visualizations: [
             'CCE by functionality status (Table)',
             // 'Most common repairs',
+            'High alarms by facility level',
+            'Low alarms by facility level',
             'CCE by working status',
             'CCE utilization (bar)',
             'Age by manufacturer',
+            'Recent alarms map',
             'Update status by facility'
         ]
     },
