@@ -1,4 +1,5 @@
 const level2Uganda = require('./Uganda_Regions_2020.json');
+const regionsUsa = require('./US.json')
 
 // `geographicBoundaries.regionNameKeys` and `geographicBoundaries.levels` have the same length.
 // `regionNameKeys[i]` corresponds to `levels[i]` and to `levelNames[i]`.
@@ -6,7 +7,7 @@ const level2Uganda = require('./Uganda_Regions_2020.json');
 // config/filterSpecification.js which describes how to look up these levels
 // in the database
 module.exports = {
-    topLevelName: 'CASCADIA',
+    topLevelName: 'UNITED STATES',
     // The map will only show boundaries between these two levels
     // Each must be an value of levelName in one of the objects below
     // `topLevel` must come before `bottomLevel` in `levels`
@@ -25,6 +26,7 @@ module.exports = {
         {
             dbLevelName: 'regionlevel2',
             levelName: 'Region (Level 2)',
+            // geoJson: level2Uganda,
             geoJson: level2Uganda,
             // This defines where to look up the level names: the strings here are keys
             // to the `properties` object of an individual geoJSON Feature

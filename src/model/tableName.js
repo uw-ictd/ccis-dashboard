@@ -64,5 +64,6 @@ module.exports = {
     regionlevel2: 'geographic_regions_odkx',
     regionlevel3: 'geographic_regions_odkx',
     regionlevel4: 'geographic_regions_odkx',
-    regionlevel5: 'geographic_regions_odkx'
+    regionlevel5: 'geographic_regions_odkx',
+    spare_parts_electrical: 'maintenance_logs_odkx'
 };

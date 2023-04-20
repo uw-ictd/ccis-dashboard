@@ -529,6 +529,14 @@ module.exports = {
             'reason_not_working'
         ]
     },
+    'Repairs and spare parts': {
+        type: 'refrigerator',
+        style: 'list',
+        columns: [
+            'type_of_repair',
+            'type_of_maintenance'
+        ]
+    },
     'Non-functional CCE list': {
         type: 'refrigerator',
         style: 'list',
@@ -764,9 +772,15 @@ module.exports = {
             'functional_status',
         ]
     },
-    'Most common repairs': {
+    'Repairs': {
         type: 'refrigerator',
-        style: 'pie',
-        colorBy: 'type_of_repair',
+        style: 'list',
+        columns: [
+            'facility_name',
+            'facility_level',
+            'regionlevel2',
+            'regionlevel3',
+            'type_of_repair'
+        ]
     }
 };

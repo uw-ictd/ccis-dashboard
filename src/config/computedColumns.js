@@ -332,6 +332,17 @@ module.exports = [
         }
     },
     {
+        name: 'RefrigeratorMaintenance',
+        query: `SELECT refrigerator_id, type_of_repair as type_of_repair, type_of_maintenance as type_of_maintenance
+            FROM maintenance_logs_odkx`,
+        provides: [ 'type_of_repair', 'type_of_maintenance', 'refrigerator_id' ],
+        joinOn: {
+            table: 'refrigerators_odkx',
+            localColumn: 'refrigerator_id',
+            foreignColumn: 'id_refrigerators'
+        }
+    },
+    {
         name: 'TempAlarmsLastMonth',
         query: `SELECT refrigerator_id, days_temp_below_2_30, days_temp_above_8_30, number_of_high_alarms_30, number_of_low_alarms_30
             FROM refrigerator_temperature_data_odkx
@@ -412,5 +423,6 @@ module.exports = [
             localColumn: 'nonfunctional_id',
             foreignColumn: 'id_refrigerators'
         }
-    }
+    },
+    
 ];
