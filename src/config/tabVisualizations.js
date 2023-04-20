@@ -21,9 +21,11 @@ module.exports = {
             'Low alarms by facility level',
             'CCE by working status',
             'CCE utilization (bar)',
+            'Repairs and spare parts',
             'Age by manufacturer',
             'Recent alarms map',
             'Update status by facility'
+
         ]
     },
     maintenanceoverview: {

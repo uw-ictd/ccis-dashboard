@@ -5,8 +5,7 @@
  * files with an `.sql` extension are run only the first time the container
  * starts.
  */
-create table cold_room_maintenance_logs_odkx
-(
+create table cold_room_maintenance_logs_odkx (
 	rowETag varchar,
 	dataETagAtModification varchar,
 	deleted varchar,
@@ -37,9 +36,7 @@ create table cold_room_maintenance_logs_odkx
 	type_of_repair varchar,
 	id_cold_room_maintenance_logs varchar
 );
-
-create table cold_rooms_odkx
-(
+create table cold_rooms_odkx (
 	rowETag varchar,
 	dataETagAtModification varchar,
 	deleted varchar,
@@ -74,9 +71,7 @@ create table cold_rooms_odkx
 	year varchar,
 	id_cold_rooms varchar
 );
-
-create table geographic_regions_odkx
-(
+create table geographic_regions_odkx (
 	rowETag varchar,
 	dataETagAtModification varchar,
 	deleted varchar,
@@ -104,12 +99,8 @@ create table geographic_regions_odkx
 	regionName varchar,
 	id_geographic_regions varchar(255)
 );
-
-create index geographic_regions_odkx_index
-	on geographic_regions_odkx (id_geographic_regions);
-
-create table health_facilities2_odkx
-(
+create index geographic_regions_odkx_index on geographic_regions_odkx (id_geographic_regions);
+create table health_facilities2_odkx (
 	rowETag varchar,
 	dataETagAtModification varchar,
 	deleted varchar,
@@ -158,15 +149,9 @@ create table health_facilities2_odkx
 	vaccine_supply_mode varchar,
 	id_health_facilities varchar(255)
 );
-
-create index health_facilities2_odkx_index
-	on health_facilities2_odkx (id_health_facilities);
-
-create index health_facilities2_odkx_region_index
-	on health_facilities2_odkx (admin_region_id);
-
-create table maintenance_logs_odkx
-(
+create index health_facilities2_odkx_index on health_facilities2_odkx (id_health_facilities);
+create index health_facilities2_odkx_region_index on health_facilities2_odkx (admin_region_id);
+create table maintenance_logs_odkx (
 	rowETag varchar,
 	dataETagAtModification varchar,
 	deleted varchar,
@@ -200,9 +185,7 @@ create table maintenance_logs_odkx
 	type_of_repair varchar,
 	id_maintenance_logs varchar
 );
-
-create table refrigerator_moves_odkx
-(
+create table refrigerator_moves_odkx (
 	rowETag varchar,
 	dataETagAtModification varchar,
 	deleted varchar,
@@ -220,9 +203,7 @@ create table refrigerator_moves_odkx
 	refrigerator_id varchar,
 	id_refrigerator_moves varchar
 );
-
-create table refrigerator_temperature_data_odkx
-(
+create table refrigerator_temperature_data_odkx (
 	rowETag varchar,
 	dataETagAtModification varchar,
 	deleted varchar,
@@ -240,18 +221,12 @@ create table refrigerator_temperature_data_odkx
 	number_of_low_alarms_30 varchar,
 	refrigerator_id varchar(255),
 	reporting_period varchar,
-    ft_serial_number varchar(255),
+	ft_serial_number varchar(255),
 	id_refrigerator_temperature_data varchar(255)
 );
-
-create index refrigerator_temperature_data_odkx_index
-	on refrigerator_temperature_data_odkx (id_refrigerator_temperature_data);
-
-create index refrigerator_temperature_data_odkx_refrigerator_index
-	on refrigerator_temperature_data_odkx (refrigerator_id);
-
-create table refrigerator_types_odkx
-(
+create index refrigerator_temperature_data_odkx_index on refrigerator_temperature_data_odkx (id_refrigerator_temperature_data);
+create index refrigerator_temperature_data_odkx_refrigerator_index on refrigerator_temperature_data_odkx (refrigerator_id);
+create table refrigerator_types_odkx (
 	rowETag varchar,
 	dataETagAtModification varchar,
 	deleted varchar,
@@ -277,12 +252,8 @@ create table refrigerator_types_odkx
 	refrigerator_picture_uriFragment varchar,
 	id_refrigerator_types varchar(255)
 );
-
-create index refrigerator_types_odkx_index
-	on refrigerator_types_odkx (id_refrigerator_types);
-
-create table refrigerators_odkx
-(
+create index refrigerator_types_odkx_index on refrigerator_types_odkx (id_refrigerator_types);
+create table refrigerators_odkx (
 	rowETag varchar,
 	dataETagAtModification varchar,
 	deleted varchar,
@@ -320,50 +291,42 @@ create table refrigerators_odkx
 	year_procured varchar,
 	id_refrigerators varchar
 );
-
-create index refrigerators_odkx_facility_index
-	on refrigerators_odkx (facility_row_id);
-
-create index refrigerators_odkx_model_index
-	on refrigerators_odkx (model_row_id);
-
-create table ft_daily_temp_records_odkx
-(
-    rowETag varchar,
-    dataETagAtModification varchar,
-    deleted varchar,
-    createUser varchar,
-    formId varchar,
-    locale varchar,
-    savepointType varchar,
-    savepointCreator varchar,
-    selfUri varchar,
-    lastUpdateUser_ft_daily_temp_records varchar,
-    savepointTimestamp_ft_daily_temp_records varchar,
-    android_sys_time varchar,
-    avg_temp varchar,
-    battery varchar,
-    checked_time varchar,
-    data_source varchar,
-    date varchar,
-    date_read varchar,
-    ft_serial_number varchar,
-    h_cond varchar,
-    high_alarm varchar,
-    high_duration varchar,
-    high_trigger_time varchar,
-    l_cond varchar,
-    low_alarm varchar,
-    low_duration varchar,
-    low_trigger_time varchar,
-    max_temp varchar,
-    max_temp_time varchar,
-    min_temp varchar,
-    min_temp_time varchar,
-    refrigerator_id varchar(255),
-    units varchar,
-    id_ft_daily_temp_records varchar(255)
+create index refrigerators_odkx_facility_index on refrigerators_odkx (facility_row_id);
+create index refrigerators_odkx_model_index on refrigerators_odkx (model_row_id);
+create table ft_daily_temp_records_odkx (
+	rowETag varchar,
+	dataETagAtModification varchar,
+	deleted varchar,
+	createUser varchar,
+	formId varchar,
+	locale varchar,
+	savepointType varchar,
+	savepointCreator varchar,
+	selfUri varchar,
+	lastUpdateUser_ft_daily_temp_records varchar,
+	savepointTimestamp_ft_daily_temp_records varchar,
+	android_sys_time varchar,
+	avg_temp varchar,
+	battery varchar,
+	checked_time varchar,
+	data_source varchar,
+	date varchar,
+	date_read varchar,
+	ft_serial_number varchar,
+	h_cond varchar,
+	high_alarm varchar,
+	high_duration varchar,
+	high_trigger_time varchar,
+	l_cond varchar,
+	low_alarm varchar,
+	low_duration varchar,
+	low_trigger_time varchar,
+	max_temp varchar,
+	max_temp_time varchar,
+	min_temp varchar,
+	min_temp_time varchar,
+	refrigerator_id varchar(255),
+	units varchar,
+	id_ft_daily_temp_records varchar(255)
 );
-
-create index ft_daily_temp_records_odkx_refrigerator_index
-    on ft_daily_temp_records_odkx (refrigerator_id);
+create index ft_daily_temp_records_odkx_refrigerator_index on ft_daily_temp_records_odkx (refrigerator_id);
