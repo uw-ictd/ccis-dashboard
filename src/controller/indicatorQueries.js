@@ -5,7 +5,8 @@ function getIndicatorsQuery() {
     // 126 is the date time code for times stored in ISO8601 format
         // list of other SQL-supported date time codes: https://www.w3schools.com/sql/func_sqlserver_convert.asp
     const DATE_TIME_CODE = 126;
-    return `SELECT (SELECT COUNT(h.id_health_facilities) FROM health_facilities2_odkx as h) as num_hf,
+    return `SELECT(SELECT COUNT(DISTINCT f.id_health_facilities) FROM health_facilities2_odkx AS f
+    JOIN refrigerators_odkx AS r ON f.id_health_facilities = r.facility_row_id) AS num_hf,
                     MAX(CAST(r.savepointTimestamp_refrigerators as timestamp)) as last_updated_ref,
                     (SELECT MAX(CAST(h.savepointTimestamp_health_facilities as timestamp)) FROM health_facilities2_odkx as h) as last_updated_fac,
                     COUNT(r.id_refrigerators) as num_ref,
